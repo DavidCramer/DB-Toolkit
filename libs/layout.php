@@ -25,34 +25,49 @@
 class Layout {
 
     static $layoutString;
-    static $data;
+    static $html;
 
     function Layout() {
-        $this->data = array();
+        $this->html = array();
     }
     public function setLayout($str) {
         $this->layoutString = $str;
     }
-    public function setData($html, $index) {
-        $this->data[$index] = $html;
+    public function gethtml($index) {
+        if(isset($this->html[$index])){
+            return $this->html[$index];
+        }else{
+            return false;
+        }
     }
-    public function appendData($html, $index) {
-        $this->data[$index] = $this->data[$index].$html;
+    public function html($html, $index) {
+        $this->html[$index] = $html;
     }
-    public function prependData($html, $index) {
-        $this->data[$index] = $this->data[$index].$html;
+    public function append($html, $index) {
+        if(isset($this->html[$index])){
+            $this->html[$index] = $this->html[$index].$html;
+        }else{
+            $this->html[$index] = $html;
+        }
     }
-
+    public function prepend($html, $index) {
+        if(isset($this->html[$index])){
+            $this->html[$index] = $html.$this->html[$index];
+        }else{
+            $this->html[$index] = $html;
+        }
+    }
 
     public function renderLayout() {
         $lastChar = '';
-        $output = '';
-        $areaIndex = 0;
+        //start row
+        $output = "<div class=\"row\">\n";
+        $contentIndex = 0;
         for ($i = 0; $i <= strlen($this->layoutString); $i++) {
 
             //// Get the current character
             $char = substr($this->layoutString, $i, 1);
-            //echo $char.'-';
+            //$output .=$char.'-';
             if (!empty($lastChar)) {
                 if ($lastChar == '320') {
                     $Class = "span-one-third";
@@ -61,45 +76,73 @@ class Layout {
                 } elseif ($lastChar != '640' || $lastChar != '320') {
                     $Class = "span" . ($lastChar / 960 * 16) . "";
                 }
-            }
-
+            }            
             switch ($char) {
                 case ':';
-                    if (!empty($rowStarted)) {
-                        echo ']';
-                        echo '[';
-                        $rowStarted = false;
+                    if(!empty($lastChar)){
+                        $output .= "<div class=\"".$Class."\">\n";
+                        if(isset($this->html[$contentIndex])){
+                            $output .= $this->html[$contentIndex];
+                        }else{
+                            $output .= '&nbsp;';
+                        }
+                        $output .= "</div>\n";
                     }
-
-                    echo $lastChar;
                     $lastChar = '';
+                    $openCol = true;
                     break;
                 case '|';
-                    if (!empty($rowStarted)) {
-                        echo ']';
+                    if(!empty($lastChar)){
+                        $output .= "<div class=\"".$Class."\">\n";
+                        if(isset($this->html[$contentIndex])){
+                            $output .= $this->html[$contentIndex];
+                        }else{
+                            $output .= '&nbsp;';
+                        }
+                        $output .= "</div>\n";
                     }
-                    echo '[' . $lastChar;
-                    $rowStarted = true;
+                    $output .= "</div>\n<div class=\"row show-grid\">\n";
+
                     $lastChar = '';
                     break;
                 case '[';
-
+                    $output .= "<div class=\"".$Class."\">\n";
+                    $output .= "<div class=\"row show-grid\">\n";
                     $lastChar = '';
                     break;
                 case ']';
-
+                    if(!empty($lastChar)){
+                        $output .= "<div class=\"".$Class."\">\n";
+                        if(isset($this->html[$contentIndex])){
+                            $output .= $this->html[$contentIndex];
+                        }else{
+                            $output .= '&nbsp;';
+                        }
+                        $output .= "</div>\n";
+                    }
+                    $output .= "</div>\n";
+                    $output .= "</div>\n";
                     $lastChar = '';
                     break;
                 default:
                     $lastChar .= $char;
+                    $contentIndex--;
                     break;
             }
+            $contentIndex++;
         }
 
         // End the last Column if there is one
         if (!empty($lastChar)) {
-            echo '/' . $lastChar;
-            echo ']';
+            $output .= "<div class=\"".$Class."\">\n";
+            if(isset($this->html[$contentIndex])){
+                $output .= $this->html[$contentIndex];
+            }else{
+                $output .= '&nbsp;';
+            }
+            $output .= "</div>\n";
+
+            $output .="</div>\n";
         }
 
         return $output;
