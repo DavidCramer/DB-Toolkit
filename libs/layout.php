@@ -47,33 +47,6 @@ class Layout {
     public function renderLayout() {
         $lastChar = '';
         $output = '';
-
-
-        if (!empty($_GET['debug'])) {
-            $output .= '<style>.show-grid {
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
-.show-grid [class*="span"] {
-    background: none repeat scroll 0 0 #EEEEEE;
-    border-radius: 3px 3px 3px 3px;
-    line-height: 30px;
-    min-height: 30px;
-    text-align: center;
-}
-.show-grid:hover [class*="span"] {
-    background: none repeat scroll 0 0 #DDDDDD;
-}
-.show-grid .show-grid {
-    margin-bottom: 0;
-    margin-top: 0;
-}
-.show-grid .show-grid [class*="span"] {
-    background-color: #CCCCCC;
-}</style>';
-        }
-
-
         $areaIndex = 0;
         for ($i = 0; $i <= strlen($this->layoutString); $i++) {
 
