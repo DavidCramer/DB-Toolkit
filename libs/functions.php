@@ -541,8 +541,8 @@ function dbt_header($template){
     if(!is_admin()){
         global $wp_query, $wp_rewrite, $post, $pages, $page, $wp_scripts, $wp_styles;
 
-            wp_enqueue_style('bootstrap-grid', DBT_URL . 'styles/grid.css');
-            wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/form.css');
+            wp_enqueue_style('bootstrap-grid', DBT_URL . 'styles/grid.bootstrap.min.css');
+            wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/form.bootstrap.min.css');
 
         //wp_enqueue_script('dbt-frontJS', 'http://scritps!', false, false, true);
         //wp_enqueue_style('dbt-frontCSS', 'http://styles!');
@@ -576,7 +576,7 @@ function dbt_header($template){
             }
             
             if(!empty($Config['_includeBootstrap'])){
-                wp_enqueue_style('dbt-frontend', DBT_URL . 'styles/dbt_frontend.css');
+                wp_enqueue_style('dbt-frontend', DBT_URL . 'styles/frontend.bootstrap.min.css');
             }
             foreach($Config['_Field'] as $Field=>$FieldType){
                 $Config['_fieldType'][$Field] = explode('_', $FieldType);
@@ -658,8 +658,12 @@ function dbt_styles(){
     }
     wp_enqueue_style('dbt_adminStyle', DBT_URL . 'styles/core.css');
     wp_enqueue_style('jquery-ui-custom', DBT_URL . 'styles/jqueryui/jquery-ui.css');
-    wp_enqueue_style('bootstrap-grid', DBT_URL . 'styles/grid.css');
-    wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/form.css');
+    wp_enqueue_style('bootstrap-grid', DBT_URL . 'styles/grid.bootstrap.min.css');
+    if(!empty($_GET['action'])){
+        if($_GET['action'] == 'render'){
+            wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/form.bootstrap.min.css');
+        }
+    }
 
 }
 function dbt_scripts(){

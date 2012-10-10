@@ -3,9 +3,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-echo dbt_configOption('data_source', 'data_source', 'dropdown', 'Data Source|Select a data source;null,Internal;internal,Interface;interface,Database Table;table,API (OAuth 2 Based);api,Remote Database;remote', $Config);
 ?>
-<span class="description">Please note: Data source is locked to Table for testing.</span>
 <div id="dataSourceInternal" class="hidden">
     <input type="text" value="" id="intenalDB" name="data[_internalDB]" />
 </div>

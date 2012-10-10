@@ -4,7 +4,7 @@
         return;
     }
     
-    echo "<div class=\"dbt-toolbar btn-group\" id=\"".$Config['_ID']."\">\n";
+    echo "<div class=\"dbt-toolbar ".$Config['_toolBarClass']."\" id=\"".$Config['_ID']."\">\n";
         // Buttons
         if(!empty($Config['_addItem']) && !empty($Config['_addItemName'])){
 

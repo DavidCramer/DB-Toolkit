@@ -418,8 +418,18 @@
     float: left;
     padding: 3px;
 }
+.dbt-infopanel .dbt_configTitle{
+    width: 100px;
+}
+.dbt_configHelp{
+    color: #888;
+    font-size: 0.8em;
+}
 .dbt_configField{
     float: left;
+}
+.dbt-infopanel .dbt_configField input[type="text"]{
+    width: 215px;
 }
 .dbt_configOption{
     padding: 5px 0;

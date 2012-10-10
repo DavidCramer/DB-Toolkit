@@ -116,6 +116,15 @@ function dbt_createNewTable($TableName){
     die;
         
 }
+
+// Builds the fieldtype options panel.
+function dbt_fieldTypeConfig($options, $field, $config=false){
+    foreach($options as $key=>$option){
+        echo dbt_configOption($key.'_'.$field, $key.'_'.$field, $option['type'], $option['label'], $config, $option['help']);
+    }
+    
+}
+
 function dbt_addSortingField($Table, $Config = false, $Index = false){
     global $wpdb, $footerscripts;
     
@@ -831,9 +840,8 @@ if(!empty($Config['_primaryField'])){
                     include DBT_PATH.'fieldtypes/'.$FieldType[0].'/conf.php';
                     include_once DBT_PATH.'fieldtypes/'.$FieldType[0].'/functions.php';
                     if(!empty($FieldType[1])){
-                        $func = $FieldTypes[$FieldType[1]]['func'];
-                        if(function_exists($func)){
-                            echo $func($Field, $Config['_main_table'], $Config);
+                        if(!empty($FieldTypes[$FieldType[1]]['options'])){
+                            echo dbt_fieldTypeConfig($FieldTypes[$FieldType[1]]['options'],$Field, $Config);
                         }else{
                             echo 'This fieldtype has no config options.';
                         }
@@ -1331,21 +1339,22 @@ function dbt_configOption($ID, $Name, $Type, $Title, $Config, $Caption=false, $f
             if (!empty($Config['_' . $Name])) {
                 $Val = htmlentities($Config['_' . $Name]);
             }
-            $Return .= '<div class="dbt_configTitle">'.$Title.'</div> <div class="dbt_configField">'.$function($ID, $Name, $Type, $Title, $Config).'</div>';
+            $Return .= '<div class="dbt_configTitle">'.$Title.'</div> <div class="dbt_configField">'.$function($ID, $Name, $Type, $Title, $Config).'<div class="dbt_configHelp">'.$Caption.'</div></div>';
             break;
+        case 'text':
         case 'textfield':
             $Val = '';
             if (!empty($Config['_' . $Name])) {
                 $Val = htmlentities($Config['_' . $Name]);
             }
-            $Return .= '<div class="dbt_configTitle">'.$Title.'</div> <div class="dbt_configField"><input type="text" class="regular-text" name="data[_' . $Name . ']" id="' . $ID . '" value="' . $Val . '" /></div>';
+            $Return .= '<div class="dbt_configTitle">'.$Title.'</div> <div class="dbt_configField"><input type="text" class="regular-text" name="data[_' . $Name . ']" id="' . $ID . '" value="' . $Val . '" /><div class="dbt_configHelp">'.$Caption.'</div></div>';
             break;
         case 'textarea':
             $Val = '';
             if (!empty($Config['_' . $Name])) {
                 $Val = htmlentities($Config['_' . $Name]);
             }
-            $Return .= '<div class="dbt_configTitle">'.$Title . '</div> <textarea name="data[_' . $Name . ']" id="' . $ID . '" cols="70" rows="25">' . htmlentities($Val) . '</textarea>';
+            $Return .= '<div class="dbt_configTitle">'.$Title . '</div> <textarea name="data[_' . $Name . ']" id="' . $ID . '" cols="70" rows="25">' . htmlentities($Val) . '</textarea><div class="dbt_configHelp">'.$Caption.'</div>';
             break;
         case 'radio':
             $parts = explode('|', $Title);
@@ -1366,11 +1375,12 @@ function dbt_configOption($ID, $Name, $Type, $Title, $Config, $Caption=false, $f
                     }
                 }
 
-                $Return .= ' <div><input type="radio" name="data[_' . $Name . ']" id="' . $ID . '" value="' . strtolower($option) . '" ' . $sel . '/> <label for="' . $ID . '_' . $index . '">' . ucwords($option) . '</label></div>';
+                $Return .= ' <div><input type="radio" name="data[_' . $Name . ']" id="' . $ID . '" value="' . strtolower($option) . '" ' . $sel . '/> <label for="' . $ID . '_' . $index . '">' . ucwords($option) . '</label><div class="dbt_configHelp">'.$Caption.'</div></div>';
                 $index++;
             }
             $Return .= '</div>';
             break;
+        case 'select':
         case 'dropdown':
             $parts = explode('|', $Title);
             $options = explode(',', $parts[1]);
@@ -1401,7 +1411,7 @@ function dbt_configOption($ID, $Name, $Type, $Title, $Config, $Caption=false, $f
                 $Return .= ' <option value="'. strtolower($option).'" ' . $sel . '>' . ucwords($label) . '</option>';
                 $index++;
             }
-            $Return .= '</select></div>';
+            $Return .= '</select><div class="dbt_configHelp">'.$Caption.'</div></div>';
             break;
         case 'checkbox':
                 
@@ -1410,7 +1420,7 @@ function dbt_configOption($ID, $Name, $Type, $Title, $Config, $Caption=false, $f
                     $sel = 'checked="checked"';
                 }
 
-                $Return .= '<div class="dbt_configTitle">'.$Title . '</div> <div class="dbt_configField"><input type="checkbox" name="data[_' . $Name . ']" id="' . $ID . '" value="1" ' . $sel . '/> </div>';
+                $Return .= '<div class="dbt_configTitle">'.$Title . '</div> <div class="dbt_configField"><input type="checkbox" name="data[_' . $Name . ']" id="' . $ID . '" value="1" ' . $sel . '/> <div class="dbt_configHelp">'.$Caption.'</div></div>';
                 
             break;
         case 'permission':

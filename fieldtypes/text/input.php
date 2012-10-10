@@ -2,10 +2,10 @@
 /// This creates the actual input fields for capturing. this will handle the occurance of the setting
 
 if($type[1] == 'integer'){      
-	echo '<input tabindex="'.$columnNo.'" name="dataForm['.$Config['_ID'].']['.$Field.']" type="text" id="entry_'.$Config['_ID'].'_'.$Field.'" value="'.$Val.'" class="'.$Req.' '.$Span.'" '.$disabled.' />';
+	echo '<input tabindex="'.$columnNo.'" name="'.$Field.'" type="text" id="'.$Field.'" value="'.$Val.'" class="'.$Req.' span12" '.$disabled.' />';
 }
 if($type[1] == 'singletext'){        
-	echo '<input tabindex="'.$columnNo.'" name="dataForm['.$Config['_ID'].']['.$Field.']" type="text" id="entry_'.$Config['_ID'].'_'.$Field.'" value="'.$Val.'" class="'.$Req.' '.$Span.'" '.$disabled.' />';
+	echo '<input tabindex="'.$columnNo.'" name="'.$Field.'" type="text" id="'.$Field.'" value="'.$Val.'" class="'.$Req.' span12" '.$disabled.' />';
 }
 if($type[1] == 'emailaddress'){
     $disabled = '';
@@ -21,12 +21,12 @@ if($type[1] == 'emailaddress'){
         }
     }
     if(empty($Config['_FormFieldWidth'][$Field])){
-       $Span = 'span'.(str_replace('span', '', $Span)-2);
+       //$Span = 'span10';
     }
 
 
     $Return = '<div class="input-append">';
-    $Return .= '<input tabindex="'.$columnNo.'" name="dataForm['.$Config['_ID'].']['.$Field.']" type="textfield" id="entry_'.$Config['_ID'].'_'.$Field.'" value="'.$Val.'" class="'.$Req.' '.$Span.'" '.$disabled.' />';
+    $Return .= '<input tabindex="'.$columnNo.'" name="'.$Field.'" type="text" id="'.$Field.'" value="'.$Val.'" class="'.$Req.' span12" '.$disabled.' />';
     //$Return .= "<button type=\"button\" class=\"btn\">Add New Item</button>\n";
     $Return .= '<span class="add-on"><i class="icon-envelope"></i></span>';
     $Return .= '</div>';
@@ -34,7 +34,7 @@ if($type[1] == 'emailaddress'){
     echo $Return;
 }
 if($type[1] == 'textarea'){        
-	echo '<textarea tabindex="'.$columnNo.'" id="entry_'.$Config['_ID'].'_'.$Field.'" name="dataForm['.$Config['_ID'].']['.$Field.']" class="'.$Req.' '.$Span.'" style="height:109px" '.$disabled.' >'.$Val.'</textarea>';
+	echo '<textarea tabindex="'.$columnNo.'" id="'.$Field.'" name="'.$Field.'" class="'.$Req.' span12" style="height:109px" '.$disabled.' >'.$Val.'</textarea>';
 }
 
 ?>

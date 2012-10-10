@@ -1,6 +1,5 @@
 <?php
 // Run View Processes    
-
     if(!empty($Config['_viewProcessors'])){
 
         foreach($Config['_viewProcessors'] as $viewProcess){
@@ -24,7 +23,9 @@
     echo "  <thead>\n";
     ob_start();
     echo "      <tr>\n";
-    echo "          <th style=\"\" class=\"manage-column column-cb check-column\" id=\"_cb\" scope=\"col\"><input type=\"checkbox\"></th>\n";
+    if(!empty($Config['_showDeleteAll'])){
+        echo "          <th style=\"width:10px;\" class=\"manage-column column-cb check-column\" id=\"_cb\" scope=\"col\"><input type=\"checkbox\"></th>\n";
+    }
     // Headers
     foreach($cols as $Field){
         $Width = '';
@@ -35,16 +36,18 @@
 
     }
     if(!empty($Config['_showView']) || !empty($Config['_showEdit']) || !empty($Config['_showDelete'])){
-        echo "          <th style=\"\" class=\"manage-column column-action dbt-column-action\" id=\"action\" scope=\"col\"><span>Action</span></th>\n";
+        $actionsWidth = 0;
         if(!empty($Config['_showView'])){
-
+            $actionsWidth = $actionsWidth+16;
         }
         if(!empty($Config['_showEdit'])){
-
+            $actionsWidth = $actionsWidth+16;
         }
         if(!empty($Config['_showDelete'])){
-
+            $actionsWidth = $actionsWidth+16;
         }
+        
+        echo "          <th style=\"width:".$actionsWidth."px\" class=\"manage-column column-action dbt-column-action\" id=\"action\" scope=\"col\"><span>Action</span></th>\n";
     }
     echo "      </tr>\n";
     $heads = ob_get_clean();
@@ -68,7 +71,9 @@
     }else{
         foreach($Data as $row){
             echo "      <tr class=\"".$rowClass."\">\n";
-            echo "          <th class=\"check-column dbt-check-column\" scope=\"row\"><input type=\"checkbox\" value=\"".$row['__primary__']."\" name=\"_cb[]\"></th>\n";
+            if(!empty($Config['_showDeleteAll'])){
+                echo "          <th class=\"check-column dbt-check-column\" scope=\"row\"><input type=\"checkbox\" value=\"".$row['__primary__']."\" name=\"_cb[]\"></th>\n";
+            }
             $actionCheck = false;
             foreach($cols as $Field){
                 echo "          <td class=\"column-entry\" style=\"text-align:".$Config['_Justify'][$Field].";\">\n";
@@ -87,33 +92,21 @@
             }
             // render action
             if(!empty($Config['_showView']) || !empty($Config['_showEdit']) || !empty($Config['_showDelete'])){
-                echo "          <td style=\"text-align:center\" class=\"column-action dbt-column-action\">";
+                echo "          <td style=\"text-align:center\" class=\"column-action dbt-column-action\"><div class=\"btn-group\">";
                 if(!empty($Config['_showView'])){
                     $linkURL = get_permalink($Config['_viewItemPost']);
-                    $linkText = '';
-                    if(empty($Config['_includeBootstrap'])){
-                        $linkText = 'View';
-                    }
-                    echo "<a href=\"".$linkURL.urlencode($row['__primary__'])."\" class=\"icon-eye-open\">".$linkText."</a> ";
+                    echo "<a href=\"".$linkURL.urlencode($row['__primary__'])."\" class=\"btn btn-mini\"><i class=\"icon-eye-open\"></i></a> ";
                 }
                 if(!empty($Config['_showEdit'])){
-                    $linkText = '';
-                    if(empty($Config['_includeBootstrap'])){
-                        $linkText = 'Edit';
-                    }
                     $linkURL = get_permalink($Config['_editItemPost']);
-                    echo " <a href=\"".$linkURL.urlencode($row['__primary__'])."\" class=\"icon-edit\">".$linkText."</a> ";
+                    echo " <a href=\"".$linkURL.urlencode($row['__primary__'])."\" class=\"btn btn-mini\"><i class=\"icon-edit\"></i></a> ";
                 }
                 if(!empty($Config['_showDelete'])){
-                    $linkText = '';
-                    if(empty($Config['_includeBootstrap'])){
-                        $linkText = 'Delete';
-                    }
                     $nounce = wp_create_nonce('dbt_nounce_delete');
                     $linkURL = get_permalink($Config['_basePost']);
-                    echo " <a href=\"".$linkText."?delsel=".$nounce."&_cb%5B%5D=".urlencode($row['__primary__'])."\" class=\"icon-remove\" onclick=\"return confirm('Are you sure you want to delete this entry?');\">".$linkText."</a>";
+                    echo " <a href=\"".$linkURL."?delsel=".$nounce."&_cb%5B%5D=".urlencode($row['__primary__'])."\" class=\"btn btn-mini\"><i class=\"icon-remove\" onclick=\"return confirm('Are you sure you want to delete this entry?');\"></i></a>";
                 }
-                echo "</td>\n";
+                echo "</div></td>\n";
             }
 
             echo "      </tr>\n";

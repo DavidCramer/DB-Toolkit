@@ -1,6 +1,117 @@
 <?php
-
 function dbt_buildFormView($Config, $viewType, $formOnly = false){
+
+    
+    //dump($Config,0);    
+    include_once DBT_PATH.'libs/caldera-layout.php';
+    $layout = new dbt_calderaLayout();
+    
+    //combine all rows first.
+    if(empty($Config['_formLayout'])){
+        $Config['_formLayout'] = array(1=>1);
+        $autoLayout = true;
+        $layout->setLayout(12);
+    }else{
+        $layoutStr = implode('|', $Config['_formLayout']);
+        $layout->setLayout($layoutStr);
+    }
+    // breakup the fields into a structure we can use for the from layout
+    
+    //prepare our field Layout variable
+    $fieldLayout = array();
+    foreach($Config['_fieldLayout'] as $field=>$location){        
+        // only work with a field that has a location
+        // if no layout has been made, auto locate
+        if(isset($autoLayout)){
+            $location = '1_1';
+        }
+        
+        if(!empty($location)){
+            //break location into Row & Column
+            $location = explode('_', $location);
+            // $fieldLayout[row][column] = field
+            $fieldLayout[$location[0]][$location[1]][] = $field;
+        }
+    }
+    
+    // go through the rows and append thier column structures
+    $row = 0; //since its an ID, here we make an incremental index for row 0,2,3,4,etc...
+    $columnNo = 1;
+    foreach($Config['_formLayout'] as $rowID=>$columnStructure){
+        
+        // append the row to the layout
+        //$layout->appendRow($columnStructure);
+        // go through the fieldLayouts and push the field to its column
+        //but only if its got fields
+        if(!empty($fieldLayout[$rowID])){
+            foreach($fieldLayout[$rowID] as $column=>$fields){
+                foreach($fields as $Field){
+                    $type = explode('_', $Config['_Field'][$Field]);
+                    if(file_exists(DBT_PATH.'fieldtypes/'.$type[0].'/conf.php') && !empty($type[1])){
+                        include(DBT_PATH.'fieldtypes/'.$type[0].'/conf.php');
+                        if($FieldTypes[$type[1]]['visible'] === true){
+                            if(file_exists(DBT_PATH.'fieldtypes/'.$type[0].'/input.php')){
+                                $isValid = '';
+                                if(!empty($Validation['missing'][$Field])){
+                                    $isValid = 'fail';
+                                }
+
+                                $Val = '';
+                                if(!empty($Defaults[$Field])){
+                                    $Val = $Defaults[$Field];
+                                }
+                                if(!empty($_POST['dataForm'][$Config['_ID']][$Field])){
+                                    $Val = $_POST['dataForm'][$Config['_ID']][$Field];
+                                }
+                                $Span = '';
+                                if(!empty($Config['_FormFieldWidth'][$Field])){
+                                    $Span = $Config['_FormFieldWidth'][$Field];
+                                }
+                                $disabled = '';
+                                if(!empty($Config['_readOnly'][$Field])){
+                                    $disabled = 'disabled="disabled"';
+                                }
+                                $Req = '';
+                                ob_start();
+                                if($viewType == 'form'){
+                                    include DBT_PATH.'fieldtypes/'.$type[0].'/input.php';
+                                }
+                                if($viewType == 'view'){
+                                    $Out = '';
+                                    include DBT_PATH.'fieldtypes/'.$type[0].'/output.php';
+                                    echo $Out;
+                                }
+                                $input = ob_get_clean();
+
+                                $formhtml = "<div id=\"".$Field."_control\" class=\"control-group ".$isValid." ".$Span."\">\n";
+                                $lableType = 'label';
+                                if($viewType == 'view'){
+                                    $lableType = 'strong';
+                                }
+                                $formhtml .= "<".$lableType." class=\"control-label\" for=\"".$Field."\">".$Config['_FieldTitle'][$Field]."</".$lableType.">";
+                                $formhtml .= "<div class=\"controls\">\n";
+                                $formhtml .= $input;
+                                if(!empty($Config['_FieldCaption'][$Field])){
+                                    $formhtml .= "<span class=\"help-block\">".$Config['_FieldCaption'][$Field]."</span>\n";
+                                }
+                                $formhtml .= "</div>\n";
+                                $formhtml .= "</div>\n";
+                                $layout->append($formhtml, $row, $column-1);                                
+                            }
+                        }
+                    }
+                 $columnNo++;
+                }
+            }
+        }
+        $row++;        
+    }
+    $layout->debug();
+    echo $layout->renderLayout();
+    
+}
+
+function olddbt_buildFormView($Config, $viewType, $formOnly = false){
     if(!is_admin()){
         global $post;
     }
@@ -54,7 +165,7 @@ function dbt_buildFormView($Config, $viewType, $formOnly = false){
     }
 
 
-    include_once DBT_PATH.'libs/phpscaffold.php';
+    include_once DBT_PATH.'libs/caldera-layout.php';
     $isFluid = false;
     if(!empty($Config['_formWidth'])){
         if($Config['_formWidth'] != 960){
@@ -72,7 +183,7 @@ function dbt_buildFormView($Config, $viewType, $formOnly = false){
         $isFluid = 'fluid';
     }
 
-    $form = new Layout('fluid');
+    $form = new calderaLayout('fluid');
     $form->setLayout(implode('|',$Config['_formLayout']));
 
     $columnNo = 1;

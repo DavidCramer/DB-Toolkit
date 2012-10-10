@@ -27,7 +27,7 @@
         return;
     }
     
-    echo "<div class=\"dbt-toolbar\" id=\"".$Config['_ID']."\">\n";
+    echo "<div class=\"dbt-toolbar well well-small\" id=\"".$Config['_ID']."\">\n";
         // Buttons
         if(!empty($Config['_addItem']) && !empty($Config['_addItemName'])){
             $addLink = false;
