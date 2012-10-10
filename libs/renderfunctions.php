@@ -49,55 +49,37 @@ function dbt_buildFormView($Config, $viewType, $formOnly = false){
                     $type = explode('_', $Config['_Field'][$Field]);
                     if(file_exists(DBT_PATH.'fieldtypes/'.$type[0].'/conf.php') && !empty($type[1])){
                         include(DBT_PATH.'fieldtypes/'.$type[0].'/conf.php');
-                        if($FieldTypes[$type[1]]['visible'] === true){
-                            if(file_exists(DBT_PATH.'fieldtypes/'.$type[0].'/input.php')){
-                                $isValid = '';
-                                if(!empty($Validation['missing'][$Field])){
-                                    $isValid = 'fail';
-                                }
-
-                                $Val = '';
-                                if(!empty($Defaults[$Field])){
-                                    $Val = $Defaults[$Field];
-                                }
-                                if(!empty($_POST['dataForm'][$Config['_ID']][$Field])){
-                                    $Val = $_POST['dataForm'][$Config['_ID']][$Field];
-                                }
-                                $Span = '';
-                                if(!empty($Config['_FormFieldWidth'][$Field])){
-                                    $Span = $Config['_FormFieldWidth'][$Field];
-                                }
-                                $disabled = '';
-                                if(!empty($Config['_readOnly'][$Field])){
-                                    $disabled = 'disabled="disabled"';
-                                }
-                                $Req = '';
-                                ob_start();
-                                if($viewType == 'form'){
-                                    include DBT_PATH.'fieldtypes/'.$type[0].'/input.php';
-                                }
-                                if($viewType == 'view'){
-                                    $Out = '';
-                                    include DBT_PATH.'fieldtypes/'.$type[0].'/output.php';
-                                    echo $Out;
-                                }
-                                $input = ob_get_clean();
-
-                                $formhtml = "<div id=\"".$Field."_control\" class=\"control-group ".$isValid." ".$Span."\">\n";
-                                $lableType = 'label';
-                                if($viewType == 'view'){
-                                    $lableType = 'strong';
-                                }
-                                $formhtml .= "<".$lableType." class=\"control-label\" for=\"".$Field."\">".$Config['_FieldTitle'][$Field]."</".$lableType.">";
-                                $formhtml .= "<div class=\"controls\">\n";
-                                $formhtml .= $input;
-                                if(!empty($Config['_FieldCaption'][$Field])){
-                                    $formhtml .= "<span class=\"help-block\">".$Config['_FieldCaption'][$Field]."</span>\n";
-                                }
-                                $formhtml .= "</div>\n";
-                                $formhtml .= "</div>\n";
-                                $layout->append($formhtml, $row, $column-1);                                
+                        if(isset($FieldTypes[$type[1]]['display'])){
+                            // Validation Start
+                            $isValid = '';
+                            if(!empty($Validation['missing'][$Field])){
+                                $isValid = 'fail';
                             }
+                            // Setup Default value (for editing)
+                            $Val = '';
+                            if(!empty($Defaults[$Field])){
+                                $Val = $Defaults[$Field];
+                            }
+                            // Override default if submited and returned for validation
+                            if(!empty($_POST['dataForm'][$Config['_ID']][$Field])){
+                                $Val = $_POST['dataForm'][$Config['_ID']][$Field];
+                            }
+                            //Override field Width
+                            $Span = '';
+                            if(!empty($Config['_FormFieldWidth'][$Field])){
+                                $Span = $Config['_FormFieldWidth'][$Field];
+                            }
+                            // set field to disabled for read only fields
+                            $disabled = '';
+                            if(!empty($Config['_readOnly'][$Field])){
+                                $disabled = 'disabled="disabled"';
+                            }
+                            $Req = '';
+                            $formhtml = "<div id=\"".$Field."_control\" class=\"control-group ".$isValid." ".$Span."\">\n";
+                                $formhtml .= dbt_makeFormField($Field, $FieldTypes[$type[1]]['display'], $Config['_FieldTitle'][$Field], $Config['_FieldCaption'][$Field], $Val, false);
+                            $formhtml .= "</div>\n";                            
+                            
+                            $layout->append($formhtml, $row, $column-1);
                         }
                     }
                  $columnNo++;
@@ -109,6 +91,102 @@ function dbt_buildFormView($Config, $viewType, $formOnly = false){
     $layout->debug();
     echo $layout->renderLayout();
     
+}
+function dbt_makeFormField($field, $options, $title, $caption, $value, $template=false){
+    //process over the template if provided
+    
+    
+    
+    
+    //auto field building
+    $formhtml = '';
+    
+    $displayOptions = array(
+        'title'=>true,
+        'placeholder'=>false,
+        'caption'=>true,
+        'type'=>'text',
+        'span'=> 12,
+        'rows'=> 4,
+        'addon-prepend'=>false,
+        'addon-prepend-class'=>'add-on',
+        'addon-prepend-element'=>'span',
+        'addon-append'=>false,
+        'addon-append-class'=>'add-on',
+        'addon-append-element'=>'span',
+        'preprocessor'=>false,
+        'processor'=>false,
+        'postprocessor'=>false,
+        'displayhandler'=>false
+    );
+    
+    // set the options against the defaults
+    foreach($displayOptions as $option=>&$config){
+        if(isset($options[$option])){
+            $config = $options[$option];
+        }
+    }
+    
+    // Place the title down
+    if(!empty($title) && !empty($displayOptions['title']) && empty($displayOptions['placeholder'])){        
+        $formhtml .= "<label class=\"control-label\" for=\"".$field."\">".$title."</label>";
+    }elseif(!empty($title) && !empty($displayOptions['title']) && !empty($displayOptions['placeholder'])){
+        $placeHolderTitle = $title;
+    }
+    
+    $formhtml .= "<div class=\"controls\">\n";
+    
+    // wrap input with addons if specified
+    if(!empty($displayOptions['addon-prepend']) || !empty($displayOptions['addon-append'])){
+        if($displayOptions['addon-prepend']){
+            $addonClass[] = 'input-prepend';
+            if($displayOptions['span'] == 12){
+                $displayOptions['span']--;
+            }
+        }
+        if($displayOptions['addon-append']){
+            if($displayOptions['span'] == 12 || $displayOptions['span'] == 11){
+                $displayOptions['span']--;
+            }
+            $addonClass[] = 'input-append';
+        }
+        $formhtml .= '<div class="'.implode(' ', $addonClass).'">';
+        if($displayOptions['addon-prepend']){
+            $formhtml .= '<'.$displayOptions['addon-prepend-element'].' class="'.$displayOptions['addon-prepend-class'].'">'.$displayOptions['addon-prepend'].'</'.$displayOptions['addon-prepend-element'].'>';
+        }
+    }
+    switch ($displayOptions['type']){
+        case 'text':
+            $placeHolder = '';
+            if(!empty($placeHolderTitle)){
+                $placeHolder = 'placeholder="'.htmlentities($placeHolderTitle).'"';
+            }
+            $formhtml .= '<input class="span'.$displayOptions['span'].'" id="'.$field.'" id="'.$name.'" type="text" '.$placeHolder.' value="'.$value.'">';
+            break;
+        case 'textarea':
+            $placeHolder = '';
+            if(!empty($placeHolderTitle)){
+                $placeHolder = 'placeholder="'.htmlentities($placeHolderTitle).'"';
+            }
+            $formhtml .= '<textarea class="span'.$displayOptions['span'].'" rows="'.$displayOptions['rows'].'" id="'.$field.'" id="'.$name.'" type="text" '.$placeHolder.'>'.  htmlentities($value).'</textarea>';
+            break;
+    }
+    
+    // close addons
+    if(!empty($displayOptions['addon-prepend']) || !empty($displayOptions['addon-append'])){
+        if($displayOptions['addon-append']){
+            $formhtml .= '<'.$displayOptions['addon-append-element'].' class="'.$displayOptions['addon-append-class'].'">'.$displayOptions['addon-append'].'</'.$displayOptions['addon-append-element'].'>';
+        }        
+        $formhtml .= "</div>";
+    }
+    if(!empty($caption) && !empty($options['caption'])){
+        $formhtml .= "<span class=\"help-block\">".$caption."</span>\n";
+    }
+    $formhtml .= "</div>\n";
+    
+    //dump($formhtml);
+    //dump($options);
+    return $formhtml;
 }
 
 function olddbt_buildFormView($Config, $viewType, $formOnly = false){

@@ -26,9 +26,18 @@ $FieldTypes['singletext'] = array(
             'type'=>'select'
         )
     ),
-    'visible' => true,
+    'display'=>array(
+        'title'=>true,
+        'caption'=>true,        
+        'type'=>'text',
+        'preprocessor'=>false,
+        'processor'=>'text_process',
+        'postprocessor'=>false,
+        'displayhandler'=>'text_viewValue'
+    ),
     'baseType'  => 'VARCHAR(255)'
     );
+
 $FieldTypes['textarea'] 	= array(
     'name' => 'Text Area',
     'options' => array(
@@ -39,14 +48,25 @@ $FieldTypes['textarea'] 	= array(
             'type'=>'text'
         )
     ),    
+    'display'=>array(
+        'title'=>true,
+        'caption'=>true,       
+        'type'=>'textarea',
+    ),
     'visible' => true,
     'baseType'  => 'TEXT'
     );
+
 $FieldTypes['telephonenumber'] 	= array(
     'name' => 'Telephone Number',
+    'field'=>array(
+        'type'=>'text',
+        'handler'=>'text_process'
+    ),
     'visible' => true,
     'baseType'  => 'VARCHAR(45)'
     );
+
 $FieldTypes['emailaddress'] 	= array(
     'name' => 'Email Address',
     'options' => array(
@@ -69,7 +89,9 @@ $FieldTypes['emailaddress'] 	= array(
             'type'=>'text'
         )
     ),
-    'visible' => true,
+    'display'=>array(
+        'addon-prepend'=>'@'
+    ),
     'baseType'  => 'VARCHAR(100)'
     );
 $FieldTypes['integer']          = array(

@@ -27,9 +27,10 @@ global $footerscripts;
             if($_GET['mode'] == 'view'){
                 include DBT_PATH.'modes/view.php';
             }
-        }
-        if($Config['_ViewMode'] == 'form'){
-            include DBT_PATH.'modes/form.php';
+        }else{
+            if($Config['_ViewMode'] == 'form'){
+                include DBT_PATH.'modes/form.php';
+            }
         }
     }else{
         
