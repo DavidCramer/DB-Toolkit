@@ -988,11 +988,20 @@ function dbt_getFieldTypes($Field, $Config){
 function dbt_loadFieldTypeConfig($Field, $FieldType, $Table, $Config = false){
     $type = explode('_', $FieldType);
     include_once DBT_PATH.'fieldtypes/'.$type[0].'/conf.php';
-    if($FieldTypes[$type[1]]['func'] != 'null'){
-        echo $FieldTypes[$type[1]]['func']($Field, $Table, $Config);
+    
+    if(!empty($FieldTypes[$type[1]]['options'])){
+        echo dbt_fieldTypeConfig($FieldTypes[$type[1]]['options'],$Field, $Config);
     }else{
-        echo 'No config options available for this fieldtype';
+        echo 'This fieldtype has no config options.';
     }
+    
+    
+    
+    //if($FieldTypes[$type[1]]['func'] != 'null'){
+    //    echo $FieldTypes[$type[1]]['func']($Field, $Table, $Config);
+    //}else{
+    //    echo 'No config options available for this fieldtype';
+    //}
     //echo DBT_PATH.'fieldtypes/'.$type[0].'/'.$type[1];
 }
 function dbt_toggleButton($ID, $Name, $Field, $Title, $Config, $Icon=false, $straight = false){

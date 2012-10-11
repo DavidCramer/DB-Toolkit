@@ -1,6 +1,7 @@
 <?php
 
-global $footerscripts;
+global $footerscripts, $page, $post;
+
     if(empty($_GET['interface'])){
         return;
     }
@@ -20,8 +21,11 @@ global $footerscripts;
     }
 
     if(!empty($_GET['mode']) || $Config['_ViewMode'] == 'form'){
-        if(!empty($_GET['mode'])){
+        if(!empty($_GET['mode'])){            
             if($_GET['mode'] == 'form'){
+                include DBT_PATH.'modes/form.php';
+            }
+            if($_GET['mode'] == 'edit'){                
                 include DBT_PATH.'modes/form.php';
             }
             if($_GET['mode'] == 'view'){
@@ -33,9 +37,10 @@ global $footerscripts;
             }
         }
     }else{
-        
-        $post->post_name = $Config['_ReportDescription'];
-        $post->post_title = $Config['_ReportDescription'];
+        if(!empty($post)){
+            $post->post_name = $Config['_ReportDescription'];
+            $post->post_title = $Config['_ReportDescription'];
+        }
 
         $Count = dbt_buildQuery($Config, 'count');
         if(empty($Config['_Items_Per_Page'])){

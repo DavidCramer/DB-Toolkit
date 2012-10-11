@@ -20,7 +20,7 @@ function dbt_ajaxloadForm($ID){
 
     $Config = get_option($ID);
     //vardump($Config);
-    dbt_buildFormView($Config, 'form', true);
+    dbt_buildFormView($Config, 'form');
     exit;
 }
 
@@ -163,7 +163,7 @@ function dbt_start(){
     dbt_add_rewrite_rules($wp_rewrite);
 }
 function dbt_process(){
-
+    
     if(!empty($_POST['_createApp'])){
         if(!empty($_POST['_appTitle'])){
             $_GET['loadapp'] = dbt_saveApp($_POST);
@@ -225,6 +225,10 @@ function dbt_process(){
         exit();
     }
     
+    
+    
+    
+    // Process entry deleting
     if((!empty($_GET['_cb']) && !empty($_GET['delsel']) && !empty($_GET['interface'])) || (!empty($_POST['_cb']) && !empty($_POST['delsel']))){
         if(is_admin()){
             if(wp_verify_nonce($_GET['delsel'],'dbt_nounce_delete')){
@@ -243,6 +247,8 @@ function dbt_process(){
     if(!empty($_GET['_cb']) && !empty($_GET['delsel'])){
         if(wp_verify_nonce($_GET['delsel'],'dbt_nounce_delete')){
             add_action('get_header', 'dbt_processFrontend');
+        }else{
+            echo 'not valid';
         }
     }
     if(!empty($_POST['dbt_filter'])){
@@ -258,7 +264,97 @@ function dbt_process(){
         //vardump($_SERVER);
     }
     
-    // process form
+    // new form process hook
+    if(!empty($_POST['_dbt_nounce'])){        
+        //check the referer is the insert page
+        if(!empty($_POST['_wp_http_referer'])){
+            $postID = url_to_postid($_POST['_wp_http_referer']);
+        }else{
+            return;
+        }
+        //return if the referer cannot be found
+        if(empty($postID)){
+            return;
+        }
+        // get the interface from the page mete
+        $interface = get_post_meta($postID,'_dbt_app_page', true);
+        //get the interface config
+        $Config = get_option($interface);
+        
+        // Verify an Insert or Update
+        if(wp_verify_nonce($_POST['_dbt_nounce'],'_dbt_insert')){
+            // unset the nounce and referrer
+            unset($_POST['_dbt_nounce']);
+            unset($_POST['_wp_http_referer']);
+            //push data ro be processed
+            $result = dbt_processInput($_POST, $Config, 'insert');
+        }elseif(wp_verify_nonce($_POST['_dbt_nounce'],'_dbt_update')){
+            // get the primary value from the referer.
+            $primaryID = basename($_POST['_wp_http_referer']);
+            // unset the nounce and referrer
+            unset($_POST['_dbt_nounce']);
+            unset($_POST['_wp_http_referer']);
+            //push data ro be processed
+            $result = dbt_processInput($_POST, $Config, 'update', $primaryID);
+        }else{        
+            return;
+        }
+                
+        // After a result has been issued, redirect to result page
+        if($Config['_redirect'] != '_EDIT' && $Config['_redirect'] != '_VIEW' && $Config['_redirect'] != '_LIST' && $Config['_redirect'] != '_ADD'){
+            if($Config['_redirect'] == '_URL' && !empty($Config['_customRedirect'])){                    
+                $redirect = $Config['_customRedirect'];
+            }else{
+                $redirectTo = get_option($Config['_redirect']);
+                if(!empty($redirectTo['_basePost'])){
+                    $redirect = get_permalink($redirectTo['_basePost']);
+                }else{
+                    $redirect = get_permalink($Config['_basePost']);
+                }
+            }
+        }else{
+            switch ($Config['_redirect']){
+                case '_EDIT':
+                    $redirect = get_permalink($Config['_editItemPost']).$result['passback'][$Config['_primaryField']].'/';
+                    unset($result['passback'][$Config['_primaryField']]);
+                    break;
+                case '_VIEW':
+                    $redirect = get_permalink($Config['_viewItemPost']).$result['passback'][$Config['_primaryField']].'/';
+                    unset($result['passback'][$Config['_primaryField']]);
+                    break;
+                case '_ADD':
+                    $redirect = get_permalink($Config['_addItemPost']);
+                    break;
+                case '_LIST':
+                    $redirect = get_permalink($Config['_basePost']);
+                    break;
+
+            }
+        }
+        $url = parse_url($redirect);
+        if(!empty($url['query'])){
+            parse_str($url['query'], $oldvars);
+            $result['passback'] = array_merge($oldvars, $result['passback']);
+            $redirect = $url['scheme'].'://'.$url['host'].$url['path'];
+        }
+        if(!empty($result['passback'])){
+            $passbackvars = http_build_query($result['passback']);
+            $redirect = $redirect.'?'.$passbackvars;
+        }
+        //dump($result);
+        //dump($Config);
+        //dump($redirect);
+        wp_redirect($redirect);
+        die;        
+        // update processes
+        
+    }
+    //post meta - _dbt_app_page
+    
+    
+    
+    
+    
     if(!empty($_POST['dataForm'])){
         if(is_admin()){
             if(wp_verify_nonce($_POST['_wpnonce'],'dbt-interface-form')){
@@ -310,6 +406,7 @@ function dbt_process(){
     }
 }
 function dbt_processFrontend(){
+    
     
     if(empty($_POST['interface']) || empty($_GET['interface'])){
         return;
@@ -373,13 +470,18 @@ function dbt_deleteEntry($ID, $Config){
     return true;
 
 }
-function dbt_processInput($Data, $processType = false){
+function dbt_processInput($Data, $Config, $processType = false, $primary = false){
     global $wpdb;
-    $Interface = get_option($Data['master']);
+    
     if($processType == 'update'){
-        $Primary = $Data['primary'];
+        // Get original data.
+        // bring in the render functions to get access to dbt_buildQuery.
+        include_once DBT_PATH . 'libs/renderfunctions.php';        
+        $currentData = dbt_buildQuery($Config, 'rawdata', false, false, false, false, $primary);
+        //dump($currentData);
     }
-    if($processType == 'insert' && empty($Interface['_addItem'])){
+    if($processType == 'insert' && empty($Config['_addItem'])){
+        // need to make a clean fail
         $return['status'] = 'invalid';
         return $return;
     }
@@ -387,21 +489,23 @@ function dbt_processInput($Data, $processType = false){
     $required = array();
     $passBackFields = array();
     
-    foreach($Interface['_IndexType'] as $Field=>$Indexes){
-        if(!empty($Interface['_IndexType'][$Field]['Required'])){
-            if(empty($Data['dataForm'][$Data['master']][$Field])){
-                $type = explode('_', $Interface['_Field'][$Field]);
+    // run validation on fields to ensure they have been entered correctly.
+    foreach($Config['_IndexType'] as $Field=>$Indexes){
+        if(!empty($Config['_IndexType'][$Field]['Required'])){
+            if(empty($Data[$Field])){
+                $type = explode('_', $Config['_Field'][$Field]);
                 if(!empty($type[1])){
                     if(file_exists(DBT_PATH.'fieldtypes/'.$type[0].'/conf.php')){
                         include DBT_PATH.'fieldtypes/'.$type[0].'/conf.php';
-                        if(!empty($FieldTypes[$type[1]]['visible'])){
+                        if(!empty($FieldTypes[$type[1]]['display'])){
                             $required[$Field] = 1;
                         }
                     }
                 }
             }
-        }        
-        if(!empty($Interface['_IndexType'][$Field]['PassbackValue'])){
+        }
+        // add passback fields to return list
+        if(!empty($Config['_IndexType'][$Field]['PassbackValue'])){
             $passBackFields[$Field] = 1;
         }
     }
@@ -412,18 +516,14 @@ function dbt_processInput($Data, $processType = false){
         $return['missing'] = $required;
         return $return;
     }
-    // Reset Into Data Order
-    $DataSets = array();
-    $DataSets[$Data['master']] = $Data['dataForm'][$Data['master']];
-    unset($Data['dataForm'][$Data['master']]);
-    if(!empty($Data['dataForm'])){
-        foreach($Data['dataForm'] as $IID=>$DataSet){
-            $DataSets[$IID] = $DataSet;
-        }
-    }
 
-    foreach($DataSets as $IID=>$Data){
-        $Config = get_option($IID);
+    // place data into an array to prepare for a for a future feature
+    // of having a form within a form. so it can handle both forms in a single
+    // submit
+   
+    $DataSets[]=$Data;
+    foreach($DataSets as $Data){
+        //$Config = get_option($IID);
         // form pre-processors
         if(!empty($Config['_formprocessor'])){
             foreach($Config['_formprocessor'] as $ProcessorID=>$Processor){
@@ -446,17 +546,18 @@ function dbt_processInput($Data, $processType = false){
             case 'insert':
                 $wpdb->insert(str_replace('`', '', $Config['_main_table']), $Data);
                 $Data[$Config['_primaryField']] = $wpdb->insert_id;
+                $passBackFields[$Config['_primaryField']] = $wpdb->insert_id;
                 break;
             case 'update':
-                //workout the WHERE struct
-                $where = array($Config['_primaryField'] => $Primary);
+                $where = array($Config['_primaryField'] => $primary);
                 $wpdb->update(str_replace('`', '', $Config['_main_table']), $Data, $where);
-                $Data[$Config['_primaryField']] = $Primary;
+                $Data[$Config['_primaryField']] = $primary;
+                $passBackFields[$Config['_primaryField']] = $primary;
                 break;
 
         }
         
-        if(empty($primaryReturn)){            
+        if(empty($primaryReturn)){
             $primaryReturn = $Data[$Config['_primaryField']];
             foreach($Data as $Field=>$Val){
                 if(!empty ($passBackFields[$Field])){
@@ -485,7 +586,7 @@ function dbt_processInput($Data, $processType = false){
     }
     $Return['status'] = 'success';
     $Return['passback'] = $passBackFields;
-    return$Return;
+    return $Return;
 }
 function dbt_menus(){
     add_menu_page("Application Builder", "DB-Toolkit", 'activate_plugins', "app_builder", "dbt_adminPage");
@@ -539,7 +640,7 @@ function dbt_menus(){
 
 function dbt_header($template){
     if(!is_admin()){
-        global $wp_query, $wp_rewrite, $post, $pages, $page, $wp_scripts, $wp_styles;
+        global $wp_query, $wp_rewrite, $post, $pages, $page, $wp_scripts, $wp_styles, $wpdb;
 
             wp_enqueue_style('bootstrap-grid', DBT_URL . 'styles/grid.bootstrap.min.css');
             wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/form.bootstrap.min.css');
@@ -547,6 +648,9 @@ function dbt_header($template){
         //wp_enqueue_script('dbt-frontJS', 'http://scritps!', false, false, true);
         //wp_enqueue_style('dbt-frontCSS', 'http://styles!');
 
+            
+        // DBT currently requires permalinks to be on.
+        // will do the other option is its off later
         if ($wp_rewrite->using_permalinks()) {            
             //$wp_query->is_404 = '';
             //vardump($wp_query);            
@@ -566,14 +670,49 @@ function dbt_header($template){
             }
             $_GET['interface'] = $Config['_ID'];
             $_GET['app'] = $Interface;
-            if($mode = get_post_meta($post->ID, '_dbt_app_mode', true)){
-                $_GET['mode'] = $mode;
-            }
+            
+            include_once DBT_PATH . 'libs/utilities.php';
+            include_once DBT_PATH . 'libs/renderfunctions.php';
+            
             if(!empty($wp_query->query_vars['page'])){
                 $_GET[$Config['_primaryField']] = $wp_query->query_vars['page'];
                 $wp_query->query_vars['page'] = 0;
                 $page = 1;
             }
+            if($mode = get_post_meta($post->ID, '_dbt_app_mode', true)){
+                $_GET['mode'] = $mode;
+                // if the interface allows viewing an entry and the primary is set , set mode to view
+                if($mode == 'view' && !empty($Config['_showView']) && !empty($_GET[$Config['_primaryField']])){
+                    // load entry for viewing
+                    $Data = dbt_buildQuery($Config, 'data', false, false, false, false, $_GET[$Config['_primaryField']]);
+                    if(!empty($Data[0])){
+                        foreach($Data[0] as $field=>$entry){
+                            $Config['_viewEntryText'] = str_replace('{{'.$field.'}}', $entry, $Config['_viewEntryText']);
+                        }
+                    }
+                    // Set the page title
+                    $post->post_title = $Config['_viewEntryText'];
+                    $wp_query->posts[0]->post_title = $Config['_viewEntryText'];
+                    $wp_query->queried_object->post_title = $Config['_viewEntryText'];
+                    
+                }
+                // if the interface allows editing and the primary value is set, the set the mode to edit
+                if($mode == 'form' && !empty($Config['_showEdit']) && !empty($_GET[$Config['_primaryField']])){
+                    $_GET['mode'] = 'edit';
+                    // load entry data for editing
+                    $Data = dbt_buildQuery($Config, 'rawdata', false, false, false, false, $_GET[$Config['_primaryField']]);
+                    if(!empty($Data[0])){
+                        foreach($Data[0] as $field=>$entry){
+                            $Config['_editFormText'] = str_replace('{{'.$field.'}}', $entry, $Config['_editFormText']);
+                        }
+                    }
+                    // Set the page title
+                    $post->post_title = $Config['_editFormText'];
+                    $wp_query->posts[0]->post_title = $Config['_editFormText'];
+                    $wp_query->queried_object->post_title = $Config['_editFormText'];
+                }
+            }
+            
             
             if(!empty($Config['_includeBootstrap'])){
                 wp_enqueue_style('dbt-frontend', DBT_URL . 'styles/frontend.bootstrap.min.css');
@@ -632,12 +771,15 @@ function dbt_header($template){
                 $template = $baseTemplate;
             }
             ob_start();
-            include_once DBT_PATH . 'libs/utilities.php';
-            include_once DBT_PATH . 'libs/renderfunctions.php';
             include DBT_PATH . 'render.php';
 
             $content = ob_get_clean();
-            $post->post_content .= $content;            
+            $newContent = $post->post_content.$content;
+            // set the queried object content to the interface
+            $post->post_content = $newContent;
+            $wp_query->posts[0]->post_content = $newContent;
+            $wp_query->queried_object->post_content = $newContent;
+            
             if(!empty($pages[0])){
                 $pages[0] .= $content;
             }

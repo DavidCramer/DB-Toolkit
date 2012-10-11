@@ -1,8 +1,7 @@
 <?php
-function dbt_buildFormView($Config, $viewType, $formOnly = false){
+function dbt_buildFormView($Config, $viewType, $entry=false){
 
-    
-    //dump($Config,0);    
+        
     include_once DBT_PATH.'libs/caldera-layout.php';
     $layout = new dbt_calderaLayout();
     
@@ -57,8 +56,8 @@ function dbt_buildFormView($Config, $viewType, $formOnly = false){
                             }
                             // Setup Default value (for editing)
                             $Val = '';
-                            if(!empty($Defaults[$Field])){
-                                $Val = $Defaults[$Field];
+                            if(!empty($entry[$Field])){
+                                $Val = $entry[$Field];
                             }
                             // Override default if submited and returned for validation
                             if(!empty($_POST['dataForm'][$Config['_ID']][$Field])){
@@ -76,7 +75,7 @@ function dbt_buildFormView($Config, $viewType, $formOnly = false){
                             }
                             $Req = '';
                             $formhtml = "<div id=\"".$Field."_control\" class=\"control-group ".$isValid." ".$Span."\">\n";
-                                $formhtml .= dbt_makeFormField($Field, $FieldTypes[$type[1]]['display'], $Config['_FieldTitle'][$Field], $Config['_FieldCaption'][$Field], $Val, false);
+                                $formhtml .= dbt_makeFormField($Field, $FieldTypes[$type[1]]['display'], $Config['_FieldTitle'][$Field], $Config['_FieldCaption'][$Field], $Val, $viewType, false);
                             $formhtml .= "</div>\n";                            
                             
                             $layout->append($formhtml, $row, $column-1);
@@ -92,7 +91,7 @@ function dbt_buildFormView($Config, $viewType, $formOnly = false){
     echo $layout->renderLayout();
     
 }
-function dbt_makeFormField($field, $options, $title, $caption, $value, $template=false){
+function dbt_makeFormField($field, $options, $title, $caption, $value, $type, $template=false){
     //process over the template if provided
     
     
@@ -126,16 +125,15 @@ function dbt_makeFormField($field, $options, $title, $caption, $value, $template
             $config = $options[$option];
         }
     }
-    
+        
+    if($type == 'form'){
     // Place the title down
     if(!empty($title) && !empty($displayOptions['title']) && empty($displayOptions['placeholder'])){        
         $formhtml .= "<label class=\"control-label\" for=\"".$field."\">".$title."</label>";
     }elseif(!empty($title) && !empty($displayOptions['title']) && !empty($displayOptions['placeholder'])){
         $placeHolderTitle = $title;
-    }
-    
+    }        
     $formhtml .= "<div class=\"controls\">\n";
-    
     // wrap input with addons if specified
     if(!empty($displayOptions['addon-prepend']) || !empty($displayOptions['addon-append'])){
         if($displayOptions['addon-prepend']){
@@ -161,14 +159,14 @@ function dbt_makeFormField($field, $options, $title, $caption, $value, $template
             if(!empty($placeHolderTitle)){
                 $placeHolder = 'placeholder="'.htmlentities($placeHolderTitle).'"';
             }
-            $formhtml .= '<input class="span'.$displayOptions['span'].'" id="'.$field.'" id="'.$name.'" type="text" '.$placeHolder.' value="'.$value.'">';
+            $formhtml .= '<input class="span'.$displayOptions['span'].'" id="'.$field.'" name="'.$field.'" type="text" '.$placeHolder.' value="'.$value.'">';
             break;
         case 'textarea':
             $placeHolder = '';
             if(!empty($placeHolderTitle)){
                 $placeHolder = 'placeholder="'.htmlentities($placeHolderTitle).'"';
             }
-            $formhtml .= '<textarea class="span'.$displayOptions['span'].'" rows="'.$displayOptions['rows'].'" id="'.$field.'" id="'.$name.'" type="text" '.$placeHolder.'>'.  htmlentities($value).'</textarea>';
+            $formhtml .= '<textarea class="span'.$displayOptions['span'].'" rows="'.$displayOptions['rows'].'" id="'.$field.'" name="'.$field.'" type="text" '.$placeHolder.'>'.  htmlentities($value).'</textarea>';
             break;
     }
     
@@ -183,6 +181,12 @@ function dbt_makeFormField($field, $options, $title, $caption, $value, $template
         $formhtml .= "<span class=\"help-block\">".$caption."</span>\n";
     }
     $formhtml .= "</div>\n";
+    }elseif($type == 'view'){
+        if(!empty($title) && !empty($displayOptions['title']) && empty($displayOptions['placeholder'])){        
+            $formhtml .= "<h4>".$title."</h4>";
+        }        
+        $formhtml .= $value;
+    }
     
     //dump($formhtml);
     //dump($options);

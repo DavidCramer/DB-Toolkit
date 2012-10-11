@@ -6,6 +6,7 @@
     echo dbt_configOption('updateFailText', 'updateFailText', 'textfield', 'Update Fail Text', $Config);
     echo dbt_configOption('submitText', 'submitText', 'textfield', 'Submit Button Text', $Config);
     echo dbt_configOption('updateText', 'updateText', 'textfield', 'Update Button Text', $Config);
+    echo dbt_configOption('cancelText', 'cancelText', 'textfield', 'Cancel Button Text', $Config);
     echo dbt_configOption('addItemName', 'addItemName', 'textfield', 'Add Button Text', $Config);
     echo dbt_configOption('addItemText', 'addItemText', 'textfield', 'Add Form Title', $Config);
     echo dbt_configOption('addItemSubText', 'addItemSubText', 'textfield', 'Add Form Breadcrumb', $Config);

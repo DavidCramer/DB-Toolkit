@@ -49,8 +49,8 @@
     echo dbt_configOption('showImporter', 'showImporter', 'checkbox', 'Show Importer', $Config);
     echo dbt_configOption('showSelect', 'showSelect', 'checkbox', 'Show Select All', $Config);
     echo dbt_configOption('showDeleteAll', 'showDeleteAll', 'checkbox', 'Show Delete Selected', $Config);
-    echo dbt_configOption('showReset', 'showReset', 'checkbox', 'Show Reset Button', $Config);
-    echo dbt_configOption('buttonAlignment', 'buttonAlignment', 'radio', 'Form Button Alignment|left,right', $Config);
+    //echo dbt_configOption('showReset', 'showReset', 'checkbox', 'Show Reset Button', $Config);
+    //echo dbt_configOption('buttonAlignment', 'buttonAlignment', 'radio', 'Form Button Alignment|left,right', $Config);
 ?>
 <h2>Filters</h2>
 <div><span class="description">Setup how filters are displayed.</span></div>
@@ -146,6 +146,7 @@
     echo dbt_configOption('cancelClass', 'cancelClass', 'textfield', 'Cancel Button Class', $Config);
     echo dbt_configOption('listClass', 'listClass', 'textfield', 'Default List Table Class', $Config);
     echo dbt_configOption('formClass', 'formClass', 'textfield', 'Form Class', $Config);
+    echo dbt_configOption('formActionClass', 'formActionClass', 'textfield', 'Form Action Class', $Config);
     echo dbt_configOption('toolBarClass', 'toolBarClass', 'textfield', 'Toolbar Class', $Config);
     echo dbt_configOption('filterBarClass', 'filterBarClass', 'textfield', 'Filters Bar Class', $Config);
 

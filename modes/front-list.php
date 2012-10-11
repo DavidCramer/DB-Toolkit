@@ -102,9 +102,9 @@
                     echo " <a href=\"".$linkURL.urlencode($row['__primary__'])."\" class=\"btn btn-mini\"><i class=\"icon-edit\"></i></a> ";
                 }
                 if(!empty($Config['_showDelete'])){
-                    $nounce = wp_create_nonce('dbt_nounce_delete');
+                    $nounce = wp_create_nonce('dbt_nounce_delete');                    
                     $linkURL = get_permalink($Config['_basePost']);
-                    echo " <a href=\"".$linkURL."?delsel=".$nounce."&_cb%5B%5D=".urlencode($row['__primary__'])."\" class=\"btn btn-mini\"><i class=\"icon-remove\" onclick=\"return confirm('Are you sure you want to delete this entry?');\"></i></a>";
+                    echo " <a href=\"".$linkURL."?delsel=".$nounce."&i=".$Config['_ID']."&_cb%5B%5D=".urlencode($row['__primary__'])."\" class=\"btn btn-mini\"><i class=\"icon-remove\" onclick=\"return confirm('Are you sure you want to delete this entry?');\"></i></a>";
                 }
                 echo "</div></td>\n";
             }

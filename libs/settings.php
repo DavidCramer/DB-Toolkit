@@ -33,18 +33,34 @@ echo dbt_configOption('ViewMode', 'ViewMode', 'radio', 'Mode|list,form,filters,a
         <select id="Redirect" name="data[_redirect]">
             <?php
             $sel = '';
-            if(empty($Config['_redirect'])){
-                $sel = 'selected="selected"';
+            if(!empty($Config['_redirect'])){
+                if($Config['_redirect'] == '_LIST' || $Config['_redirect'] == ''){
+                    $sel = 'selected="selected"';
+                }
             }
-            echo "<option value=\"\" ".$sel.">Self</option>\n";
+            echo "<option value=\"_SELF\" ".$sel.">Self - List</option>\n";
+            $sel = '';
+            if(!empty($Config['_redirect'])){
+                if($Config['_redirect'] == '_VIEW'){
+                    $sel = 'selected="selected"';
+                }
+            }
+            echo "<option value=\"_VIEW\" ".$sel.">Self - View Entry</option>\n";
+            $sel = '';
+            if(!empty($Config['_redirect'])){
+                if($Config['_redirect'] == '_EDIT'){
+                    $sel = 'selected="selected"';
+                }
+            }
+            echo "<option value=\"_EDIT\" ".$sel.">Self - Edit Entry</option>\n";
             $sel = '';
             if(!empty($Config['_redirect'])){
                 if($Config['_redirect'] == '_URL'){
                     $sel = 'selected="selected"';
                 }
             }
-
             echo "<option value=\"_URL\" ".$sel.">URL</option>\n";
+
             foreach($interfaceGroups as $group=>$interfaces){                
                 echo "<optgroup label=\"".$group."\">/n";
                 foreach($interfaces as $ID=>$interface){
