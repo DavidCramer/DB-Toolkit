@@ -767,31 +767,27 @@
 
 /*formlayout*/
 .dbt-formlayout-fields #formFields{
-    padding: 4px 10px 8px;
-    min-height: 100px;
-    width: 120px;
+    min-height: 30px;
 }
 #formFields .formElementRemove{
     display:none;
 }
-#formFields div{
-    display: block;
-    margin: 2px 0;
+
+#formFields .formFieldElement, #formFields .formLayoutShadow{
+    float:left;
+    margin: 2px;
     width: 102px;
     cursor: move;
 }
 .dbt-formlayout-fields{
-    width: 140px;
-    float:left;
     background-color: #efefef;
-    min-height: 100px;
     margin-top: 5px;
     border-radius: 5px;
     box-shadow: 0px 1px 15px -10px #444444 inset;
 }
 .dbt-formlayout-board{
-    width: 650px;
-    float:right;    
+/*    width: 650px;
+    float:right;    */
 }
 #formLayoutBoard .formRow .fieldHolder{
     min-height: 40px;
@@ -810,8 +806,7 @@
 }
 #formLayoutBoard .formRow{
     clear: both;
-    float: left;
-    width: 530px;
+    margin-right: 120px;
 }
 #formLayoutBoard .formRowControls{
     float: right;
@@ -852,7 +847,19 @@
     text-shadow: 0 0 0 transparent, 0 1px 0 #FFFFFF;
 }
 
-
+.fieldFineTune{
+    display: none;
+    font-weight: normal;
+    float:none !important;
+}
+.fieldFineTune .fieldFineTuneTitle{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #efefef;
+    font-weight: bold;
+    float:none !important;
+}
 
 .dbt-formlayout-fields h2{
     font-size: 10px !important;

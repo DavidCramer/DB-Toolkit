@@ -1,15 +1,17 @@
 <?php
 function dbt_buildFormView($Config, $viewType, $entry=false){
-
         
     include_once DBT_PATH.'libs/caldera-layout.php';
-    $layout = new dbt_calderaLayout();
     
+    $grid = 12;    
+    $layout = new dbt_calderaLayout();
+    //dump($Config['_formLayout'],0);
+    //dump($Config);
     //combine all rows first.
     if(empty($Config['_formLayout'])){
         $Config['_formLayout'] = array(1=>1);
         $autoLayout = true;
-        $layout->setLayout(12);
+        $layout->setLayout($grid);
     }else{
         $layoutStr = implode('|', $Config['_formLayout']);
         $layout->setLayout($layoutStr);
@@ -44,11 +46,19 @@ function dbt_buildFormView($Config, $viewType, $entry=false){
         //but only if its got fields
         if(!empty($fieldLayout[$rowID])){
             foreach($fieldLayout[$rowID] as $column=>$fields){
+                if(isset($openSpanRow)){
+                    $layout->append('</div>', $row, $column-2);                    
+                    unset($openSpanRow);
+                }
+                // setup subspanning counter
+                $subspan = 0;
                 foreach($fields as $Field){
                     $type = explode('_', $Config['_Field'][$Field]);
                     if(file_exists(DBT_PATH.'fieldtypes/'.$type[0].'/conf.php') && !empty($type[1])){
                         include(DBT_PATH.'fieldtypes/'.$type[0].'/conf.php');
                         if(isset($FieldTypes[$type[1]]['display'])){
+                            //prepare new template
+                            $formhtml = '';
                             // Validation Start
                             $isValid = '';
                             if(!empty($Validation['missing'][$Field])){
@@ -67,6 +77,20 @@ function dbt_buildFormView($Config, $viewType, $entry=false){
                             $Span = '';
                             if(!empty($Config['_FormFieldWidth'][$Field])){
                                 $Span = $Config['_FormFieldWidth'][$Field];
+                                $thisSpan = floatval(str_replace('span', '', $Span));
+                                $subspan = $subspan+$thisSpan;                                
+                                if(!isset($openSpanRow)){
+                                    $openSpanRow = '<div class="row-fluid">';
+                                }
+                                if(isset($openSpanRow) && $subspan > $grid){
+                                    $openSpanRow = '</div><div class="row-fluid">';
+                                    $subspan = $thisSpan;
+                                }
+                            }else{
+                                if(isset($openSpanRow)){
+                                    $formhtml .= '</div>';
+                                    unset($openSpanRow);
+                                }                                
                             }
                             // set field to disabled for read only fields
                             $disabled = '';
@@ -74,9 +98,16 @@ function dbt_buildFormView($Config, $viewType, $entry=false){
                                 $disabled = 'disabled="disabled"';
                             }
                             $Req = '';
-                            $formhtml = "<div id=\"".$Field."_control\" class=\"control-group ".$isValid." ".$Span."\">\n";
+                            if(!empty($openSpanRow)){
+                                $formhtml = $openSpanRow;
+                                $openSpanRow = '';
+                            }                            
+                            if(empty($FieldTypes[$type[1]]['display']['placeholder']) && !empty($Config['_placeHolders'])){
+                                $FieldTypes[$type[1]]['display']['placeholder'] = true;
+                            }
+                            $formhtml .= "<div id=\"".$Field."_control\" class=\"control-group ".$isValid." ".$Span."\">\n";
                                 $formhtml .= dbt_makeFormField($Field, $FieldTypes[$type[1]]['display'], $Config['_FieldTitle'][$Field], $Config['_FieldCaption'][$Field], $Val, $viewType, false);
-                            $formhtml .= "</div>\n";                            
+                            $formhtml .= "</div>\n";
                             
                             $layout->append($formhtml, $row, $column-1);
                         }
@@ -95,7 +126,7 @@ function dbt_makeFormField($field, $options, $title, $caption, $value, $type, $t
     //process over the template if provided
     
     
-    
+    $grid = 12;
     
     //auto field building
     $formhtml = '';
@@ -105,7 +136,7 @@ function dbt_makeFormField($field, $options, $title, $caption, $value, $type, $t
         'placeholder'=>false,
         'caption'=>true,
         'type'=>'text',
-        'span'=> 12,
+        'span'=> $grid,
         'rows'=> 4,
         'addon-prepend'=>false,
         'addon-prepend-class'=>'add-on',
@@ -138,12 +169,12 @@ function dbt_makeFormField($field, $options, $title, $caption, $value, $type, $t
     if(!empty($displayOptions['addon-prepend']) || !empty($displayOptions['addon-append'])){
         if($displayOptions['addon-prepend']){
             $addonClass[] = 'input-prepend';
-            if($displayOptions['span'] == 12){
+            if($displayOptions['span'] == $grid){
                 $displayOptions['span']--;
             }
         }
         if($displayOptions['addon-append']){
-            if($displayOptions['span'] == 12 || $displayOptions['span'] == 11){
+            if($displayOptions['span'] == $grid || $displayOptions['span'] == $grid-1){
                 $displayOptions['span']--;
             }
             $addonClass[] = 'input-append';
@@ -675,12 +706,12 @@ function dbt_buildQuery($Config, $Format = 'data', $SortField = false, $SortDir 
             // apply field templates
             foreach($Data as $Key=>$Set){
                 foreach($Set as $Field=>$Value){
-                    if(!empty($Config['_FieldTemplate'][$Field]['before']) || !empty($Config['_FieldTemplate'][$Field]['before'])){
+                    if((!empty($Config['_FieldTemplate'][$Field]['before']) || !empty($Config['_FieldTemplate'][$Field]['before'])) && $Value != ''){
                         $Before = $Config['_FieldTemplate'][$Field]['before'];
                         $After = $Config['_FieldTemplate'][$Field]['after'];
-                        foreach($Set as $innerField=>$InnerValue){
-                            $Before = str_replace('{{'.$innerField.'}}', $InnerValue, $Before);
-                            $After = str_replace('{{'.$innerField.'}}', $InnerValue, $After);
+                        foreach($Set as $innerField=>$InnerValue){                            
+                                $Before = str_replace('{{'.$innerField.'}}', $InnerValue, $Before);
+                                $After = str_replace('{{'.$innerField.'}}', $InnerValue, $After);
                         }
                         ob_start();
                         eval(' ?> '.$Before.$Data[$Key][$Field].$After.' <?php ');
@@ -707,7 +738,7 @@ function dbt_toolbarButton($Title, $Script = false, $Class = 'noicon', $Type = '
     if(is_admin ()){
         return '<span class="fbutton"><'.$Type.' '.$linkStart.' class="button" '.$onClick.' ><span class="'.$Class.'"></span> '.$Title.'</'.$Type.'></span>';
     }else{
-        return '<'.$Type.' '.$linkStart.' class="btn" '.$onClick.' ><span class="'.$Class.'"></span> '.$Title.'</'.$Type.'>';
+        return '<'.$Type.' '.$linkStart.' class="btn" '.$onClick.' ><i class="'.$Class.'"></i> '.$Title.'</'.$Type.'>';
     }
 }
 ?>
