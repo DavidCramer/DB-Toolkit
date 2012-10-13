@@ -27,7 +27,7 @@ if(!$hide){
 
     <input type="hidden" name="page" value="<?php echo $_GET['page']; ?>" />
     <input type="hidden" name="action" value="<?php echo $_GET['action']; ?>" />
-    <input type="hidden" name="interface" value="<?php echo $_GET['interface']; ?>" />
+    <input type="hidden" name="interface" value="<?php echo $dbt_interface['_ID']; ?>" />
     <?php
     if(!empty($_GET['s'])){
     ?>
