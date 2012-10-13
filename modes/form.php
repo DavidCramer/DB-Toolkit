@@ -30,13 +30,5 @@
         echo "</div>";        
     echo "</form>";
 
-  return;      
+        
 ?>
-
-<button class="btn">Button Default</button>
-<button class="btn btn-success">Button Success</button>
-<button class="btn btn-warning">Button Warning</button>
-<button class="btn btn-info">Button Info</button>
-<button class="btn btn-danger">Button Danger</button>
-<button class="btn btn-inverse">Button Inverse</button>
-<button class="btn btn-primary">Button Primary</button>

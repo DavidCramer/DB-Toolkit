@@ -24,7 +24,7 @@
     ob_start();
     echo "      <tr>\n";
     if(!empty($Config['_showDeleteAll'])){
-        echo "          <th style=\"width:20px;\" class=\"manage-column column-cb check-column\" id=\"_cb\" scope=\"col\"><input type=\"checkbox\"></th>\n";
+        echo "          <th style=\"width:10px;\" class=\"manage-column column-cb check-column\" id=\"_cb\" scope=\"col\"><input type=\"checkbox\"></th>\n";
     }
     // Headers
     foreach($cols as $Field){

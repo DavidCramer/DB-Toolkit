@@ -1,9 +1,10 @@
-<?php    
+<?php
+
     if(empty($Config['_enableToolbar'])){
         return;
     }
     
-    echo "<div class=\"dbt-toolbar btn-group ".$Config['_toolBarClass']."\" id=\"".$Config['_ID']."\">";
+    echo "<div class=\"dbt-toolbar ".$Config['_toolBarClass']."\" id=\"".$Config['_ID']."\">\n";
         // Buttons
         if(!empty($Config['_addItem']) && !empty($Config['_addItemName'])){
 
@@ -20,10 +21,10 @@
                     echo "<div class=\"modal-body\">\n";
                     echo "<p>Loading...</p>\n";
                     echo "</div>\n";
-                    echo "<div class=\"modal-footer\">\n";
-                        echo "<a href=\"#\" class=\"btn\" data-dismiss=\"modal\">Close</a>\n";
-                        echo "<a href=\"#\" class=\"btn btn-primary\">Save changes</a>\n";
-                    echo "</div>\n";
+                    //echo "<div class=\"modal-footer\">\n";
+                    //echo "<a href=\"#\" class=\"btn\" data-dismiss=\"modal\">Close</a>\n";
+                    //echo "<a href=\"#\" class=\"btn btn-primary\">Save changes</a>\n";
+                    //echo "</div>\n";
                 echo "</div>\n";
                 $footerscripts .= "
                     jQuery('#md_".$Config['_ID']."').on('show', function () {
@@ -36,10 +37,10 @@
             echo dbt_toolbarButton($Config['_addItemName'], $addScript, 'icon-plus', 'a data-toggle="modal" ', $addLink, '_parent');
         }
         if(!empty($Config['_autoHideFilters'])){
-            echo dbt_toolbarButton('Filters', "alert('ping')", ' icon-filter');
+            echo dbt_toolbarButton('Filters', "alert('ping')", 'btn');
         }
         if(!empty($Config['_showReloader'])){
-            echo dbt_toolbarButton('Reload', "alert('ping')", ' icon-refresh');
+            echo dbt_toolbarButton('Reload', "alert('ping')", 'btn');
         }
         if(!empty($Config['_showImporter'])){
             echo dbt_toolbarButton('Import', "alert('Not implemented yet.')", 'icon-upload', 'a', false, '_parent');

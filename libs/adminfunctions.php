@@ -702,6 +702,10 @@ if(!empty($Config['_primaryField'])){
                 if(!empty($Config['_FieldTitle'][$Field])){
                     $FieldTitle = $Config['_FieldTitle'][$Field];
                 }
+                $FieldCaption = '';
+                if(!empty($Config['_FieldCaption'][$Field])){
+                    $FieldCaption = $Config['_FieldCaption'][$Field];
+                }
                 $ListWidth = '';
                 if(!empty($Config['_widthOverride'][$Field])){
                     $ListWidth = $Config['_widthOverride'][$Field];
@@ -717,15 +721,62 @@ if(!empty($Config['_primaryField'])){
 
             ?>
 
-            
+            <div class="configControlForm">
                 <div class="configControlLabel">
                     <label for="">Field Title</label>
                 </div>
                 <div class="configControlField">
-                    <input type="text" name="data[_FieldTitle][<?php echo $Field; ?>]" value="<?php echo $FieldTitle; ?>" style="width:208px;" onkeyup="jQuery('#<?php echo $Field; ?>_title').html(this.value);">
+                    <input type="text" name="data[_FieldTitle][<?php echo $Field; ?>]" value="<?php echo $FieldTitle; ?>" onkeyup="jQuery('#<?php echo $Field; ?>_title').html(this.value);">
                 </div>
-            
+            </div>
+            <div class="configControlForm">
+                <div class="configControlLabel">
+                    <label for="">Form Field Width</label>
+                </div>
+                <div class="configControlField">
+                    <?php
+
+                        $fieldWidth = '';
+                        if(!empty($Config['_FormFieldWidth'][$Field])){
+                            $fieldWidth = $Config['_FormFieldWidth'][$Field];
+                        }
+
+
+                    ?>
+                    <select name="data[_FormFieldWidth][<?php echo $Field; ?>]" style="width:49%;">
+                        <optgroup label="Preset Sizes">
+                            <option value="">Auto</option>
+                            <option value="input-mini" <?php if($fieldWidth == 'input-mini'){ echo 'selected="selected"';} ?>>Mini</option>
+                            <option value="input-small" <?php if($fieldWidth == 'input-small'){ echo 'selected="selected"';} ?>>Small</option>
+                            <option value="input-medium" <?php if($fieldWidth == 'input-medium'){ echo 'selected="selected"';} ?>>Medium</option>
+                            <option value="input-large" <?php if($fieldWidth == 'input-large'){ echo 'selected="selected"';} ?>>Large</option>
+                            <option value="input-xlarge" <?php if($fieldWidth == 'input-xlarge'){ echo 'selected="selected"';} ?>>XLarge</option>
+                            <option value="input-xxlarge" <?php if($fieldWidth == 'input-xxlarge'){ echo 'selected="selected"';} ?>>XXLarge</option>
+                        </optgroup><optgroup label="Incremental">
+                            <option value="span1" <?php if($fieldWidth == 'span1'){ echo 'selected="selected"';} ?>>Span 1</option>
+                            <option value="span2" <?php if($fieldWidth == 'span2'){ echo 'selected="selected"';} ?>>Span 2</option>
+                            <option value="span3" <?php if($fieldWidth == 'span3'){ echo 'selected="selected"';} ?>>Span 3</option>
+                            <option value="span4" <?php if($fieldWidth == 'span4'){ echo 'selected="selected"';} ?>>Span 4</option>
+                            <option value="span5" <?php if($fieldWidth == 'span5'){ echo 'selected="selected"';} ?>>Span 5</option>
+                            <option value="span6" <?php if($fieldWidth == 'span6'){ echo 'selected="selected"';} ?>>Span 6</option>
+                            <option value="span7" <?php if($fieldWidth == 'span7'){ echo 'selected="selected"';} ?>>Span 7</option>
+                            <option value="span8" <?php if($fieldWidth == 'span8'){ echo 'selected="selected"';} ?>>Span 8</option>
+                            <option value="span9" <?php if($fieldWidth == 'span9'){ echo 'selected="selected"';} ?>>Span 9</option>
+                            <option value="span10" <?php if($fieldWidth == 'span10'){ echo 'selected="selected"';} ?>>Span 10</option>
+                            <option value="span11" <?php if($fieldWidth == 'span11'){ echo 'selected="selected"';} ?>>Span 11</option>
+                            <option value="span12" <?php if($fieldWidth == 'span12'){ echo 'selected="selected"';} ?>>Span 12</option>
+                        </optgroup>
+                    </select>
+                </div>
+            </div>
             <div class="clear"></div>
+            
+                <div class="configControlLabel">
+                    <label for="">Caption</label>
+                </div>
+                <div class="configControlField">
+                    <input type="text" name="data[_FieldCaption][<?php echo $Field; ?>]" value="<?php echo $FieldCaption; ?>" style="width:208px;">
+                </div>
             
             <div class="configControlForm">
                 <div class="configControlLabel">
@@ -811,7 +862,7 @@ if(!empty($Config['_primaryField'])){
 
 $footerscripts .= "
     if(jQuery(\"#formField_".$Field."\").length == 0){
-        jQuery('#formFields').append('<div id=\"formField_".$Field."\" class=\"button formFieldElement\">\<i class=\"icon-remove formElementRemove\" style=\"cursor:pointer;\"></i> ".$FieldTitle."<input class=\"fieldLocationCapture\" type=\"hidden\" value=\"\" name=\"data[_fieldLayout][".$Field."]\" style=\"width:50px;\" /></div>');
+        jQuery('#formFields').append('<div id=\"formField_".$Field."\" class=\"button formFieldElement\"><i class=\"icon-remove formElementRemove\" style=\"cursor:pointer;\"></i> ".$FieldTitle."<input class=\"fieldLocationCapture\" type=\"hidden\" value=\"\" name=\"data[_fieldLayout][".$Field."]\" style=\"width:50px;\" /></div>');
     }
 ";
 

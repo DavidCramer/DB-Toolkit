@@ -1,14 +1,12 @@
 <?php
 
-global $footerscripts, $page, $post, $dbt_interface, $dbt_app;
-// Remove the autop as it destroys dbtoolkit layouts.
-remove_filter( 'the_content', 'wpautop' );
+global $footerscripts, $page, $post;
 
-    if(empty($dbt_interface)){
+    if(empty($_GET['interface'])){
         return;
     }
     if(empty($Config)){
-        $Config = $dbt_interface;
+        $Config = get_option($_GET['interface']);        
     }    
     $linkURL = get_permalink($Config['_basePost']);
     

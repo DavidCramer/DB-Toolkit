@@ -163,7 +163,6 @@ function dbt_start(){
     dbt_add_rewrite_rules($wp_rewrite);
 }
 function dbt_process(){
-    global $dbt_interface, $dbt_app;
     
     if(!empty($_POST['_createApp'])){
         if(!empty($_POST['_appTitle'])){
@@ -230,11 +229,11 @@ function dbt_process(){
     
     
     // Process entry deleting
-    if((!empty($_GET['_cb']) && !empty($_GET['delsel']) && !empty($dbt_interface)) || (!empty($_POST['_cb']) && !empty($_POST['delsel']))){
+    if((!empty($_GET['_cb']) && !empty($_GET['delsel']) && !empty($_GET['interface'])) || (!empty($_POST['_cb']) && !empty($_POST['delsel']))){
         if(is_admin()){
             if(wp_verify_nonce($_GET['delsel'],'dbt_nounce_delete')){
                 if(is_array($_GET['_cb'])){
-                    $Config = get_option($dbt_interface);
+                    $Config = get_option($_GET['interface']);
                     foreach($_GET['_cb'] as $entryID){
                         $result = dbt_deleteEntry($entryID, $Config);
                     }
@@ -407,31 +406,30 @@ function dbt_process(){
     }
 }
 function dbt_processFrontend(){
-    global $dbt_interface, $dbt_app;
     
-    if(!empty($dbt_interface) && !empty($_GET['delsel'])){        
-        if(wp_verify_nonce($_GET['delsel'],'dbt_nounce_delete')){
-            if(is_array($_GET['_cb'])){
-                $Config = get_option($dbt_interface);
-                foreach($_GET['_cb'] as $entryID){
-                    $result = dbt_deleteEntry($entryID, $Config);
-                }
-                wp_redirect(get_permalink($Config['_basePost']));
-                exit;
-            }
-        }
+    
+    if(empty($_POST['interface']) || empty($_GET['interface'])){
+        return;
     }
-    if(!empty($dbt_interface) && !empty($_POST['delsel'])){
-        
-        if(wp_verify_nonce($_POST['delsel'],'dbt_nounce_delete')){            
-            if(is_array($_POST['_cb'])){
-                $Config = get_option($dbt_interface);
-                foreach($_POST['_cb'] as $entryID){
-                    $result = dbt_deleteEntry($entryID, $Config);
-                }
-                wp_redirect(get_permalink($Config['_basePost']));
-                exit;
+    
+    if(wp_verify_nonce($_GET['delsel'],'dbt_nounce_delete')){
+        if(is_array($_GET['_cb'])){
+            $Config = get_option($_GET['interface']);
+            foreach($_GET['_cb'] as $entryID){
+                $result = dbt_deleteEntry($entryID, $Config);
             }
+            wp_redirect(get_permalink($Config['_basePost']));
+            exit;
+        }
+    }    
+    if(wp_verify_nonce($_POST['delsel'],'dbt_nounce_delete')){
+        if(is_array($_POST['_cb']) && isset($_POST['interface'])){
+            $Config = get_option($_POST['interface']);
+            foreach($_POST['_cb'] as $entryID){
+                $result = dbt_deleteEntry($entryID, $Config);
+            }
+            wp_redirect(get_permalink($Config['_basePost']));
+            exit;
         }
     }
 
@@ -591,8 +589,6 @@ function dbt_processInput($Data, $Config, $processType = false, $primary = false
     return $Return;
 }
 function dbt_menus(){
-    
-    
     add_menu_page("Application Builder", "DB-Toolkit", 'activate_plugins', "app_builder", "dbt_adminPage");
     $adminPage = add_submenu_page("app_builder", 'App Builder', 'App Builder', 'activate_plugins', "app_builder", 'dbt_adminPage');
 
@@ -644,7 +640,13 @@ function dbt_menus(){
 
 function dbt_header($template){
     if(!is_admin()){
-        global $wp_query, $wp_rewrite, $post, $pages, $page, $wp_scripts, $wp_styles, $wpdb, $dbt_app, $dbt_interface;
+        global $wp_query, $wp_rewrite, $post, $pages, $page, $wp_scripts, $wp_styles, $wpdb;
+
+            wp_enqueue_style('bootstrap-grid', DBT_URL . 'styles/grid.bootstrap.min.css');
+            wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/form.bootstrap.min.css');
+
+        //wp_enqueue_script('dbt-frontJS', 'http://scritps!', false, false, true);
+        //wp_enqueue_style('dbt-frontCSS', 'http://styles!');
 
             
         // DBT currently requires permalinks to be on.
@@ -666,25 +668,8 @@ function dbt_header($template){
             if(empty($app)){
                 return $template;
             }
-            // include Bootstrap Grid and Forms
-            // I want to make this optionsl and give the create an option to
-            // add thier own librarys fro grid and forms
-            // but for now its not anoption...yet.
-            //wp_enqueue_style('bootstrap-grid', DBT_URL . 'styles/grid.bootstrap.min.css');
-            //wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/form.bootstrap.min.css');
-            //wp_enqueue_style('dbt-modal', DBT_URL.'libs/modal/modal.css');
-            //wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/bootstrap.css');
-            //wp_enqueue_style('bootstrap-form', DBT_URL . 'styles/responsive.css');
-            
-            //get the current theme
-            // a little trick to try keep the styles after themes style
-            // doesnt always work as it relies on the theme designer to 
-            // use the theme name-style
-            
-            $dbt_interface = $Config;
-            $dbt_app = $Interface;
-            //$_GET['interface'] = $Config['_ID'];
-            //$_GET['app'] = $Interface;
+            $_GET['interface'] = $Config['_ID'];
+            $_GET['app'] = $Interface;
             
             include_once DBT_PATH . 'libs/utilities.php';
             include_once DBT_PATH . 'libs/renderfunctions.php';
@@ -730,7 +715,7 @@ function dbt_header($template){
             
             
             if(!empty($Config['_includeBootstrap'])){
-                //wp_enqueue_style('dbt-frontend', DBT_URL . 'styles/frontend.bootstrap.min.css');
+                wp_enqueue_style('dbt-frontend', DBT_URL . 'styles/frontend.bootstrap.min.css');
             }
             foreach($Config['_Field'] as $Field=>$FieldType){
                 $Config['_fieldType'][$Field] = explode('_', $FieldType);
@@ -748,7 +733,9 @@ function dbt_header($template){
             }
             if(!empty($Config['_modalForm'])){
                 wp_enqueue_script('dbt-modal', DBT_URL.'libs/modal/modal.js', array('jquery'));
+                wp_enqueue_style('dbt-modal', DBT_URL.'libs/modal/modal.css');
                 add_action('wp_footer', 'dbt_ajax_javascript');
+                
             }
             if(!empty($Config['_assetURL'])){
                 foreach($Config['_assetURL'] as $assetKey=>$assetURL){
@@ -785,9 +772,9 @@ function dbt_header($template){
             }
             ob_start();
             include DBT_PATH . 'render.php';
-            
+
             $content = ob_get_clean();
-            $newContent = $post->post_content.'<div class="dbt-interface">'.$content.'</div>';
+            $newContent = $post->post_content.$content;
             // set the queried object content to the interface
             $post->post_content = $newContent;
             $wp_query->posts[0]->post_content = $newContent;
@@ -804,23 +791,6 @@ function dbt_header($template){
             
     }
 }
-function dbt_frontend_scripts(){
-    global $dbt_interface;
-    wp_enqueue_script("jquery");
-    wp_enqueue_style('dbt-grid', DBT_URL . 'styles/dbt-grid.css');
-    wp_enqueue_style('dbt-form', DBT_URL . 'styles/dbt-forms.css');
-    wp_enqueue_style('dbt-table', DBT_URL . 'styles/dbt-tables.css');
-    wp_enqueue_style('dbt-panel', DBT_URL . 'styles/dbt-panels.css');
-    wp_enqueue_style('dbt-button', DBT_URL . 'styles/dbt-button.css');
-    if(!empty($dbt_interface['_modalForm'])){
-        wp_enqueue_style('dbt-modal', DBT_URL . 'styles/dbt-modal.css');
-    }
-    wp_enqueue_style('dbt-responsive', DBT_URL . 'styles/dbt-responsive.css');
-    
-    //wp_enqueue_style('dbt-frontend', DBT_URL . 'styles/dbt-frontend.css');
-}
-add_action('wp_enqueue_scripts', 'dbt_frontend_scripts', 1000);
-
 function dbt_styles(){
     if(is_admin()){
         if(!empty($_GET['post_type'])){
@@ -846,8 +816,8 @@ function dbt_scripts(){
     wp_enqueue_script("jquery-ui-tabs");
     if(is_admin()){
         if(!empty($_GET['action'])){
-            if($_GET['action'] == 'edit' && !empty($dbt_interface)){
-                $interface = get_option($dbt_interface);
+            if($_GET['action'] == 'edit' && !empty($_GET['interface'])){
+                $interface = get_option($_GET['interface']);
                 $includes = array();
                 if(!empty($interface['_Field'])){
                     foreach($interface['_Field'] as $Field){
