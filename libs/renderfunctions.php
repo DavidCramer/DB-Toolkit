@@ -106,7 +106,11 @@ function dbt_buildFormView($Config, $viewType, $entry=false){
                                 $FieldTypes[$type[1]]['display']['placeholder'] = true;
                             }
                             $formhtml .= "<div id=\"".$Field."_control\" class=\"control-group ".$isValid." ".$Span."\">\n";
-                                $formhtml .= dbt_makeFormField($Field, $FieldTypes[$type[1]]['display'], $Config['_FieldTitle'][$Field], $Config['_FieldCaption'][$Field], $Val, $viewType, false);
+                                $caption = '';
+                                if(!empty($Config['_FieldCaption'][$Field])){
+                                    $caption = $Config['_FieldCaption'][$Field];
+                                }
+                                $formhtml .= dbt_makeFormField($Field, $FieldTypes[$type[1]]['display'], $Config['_FieldTitle'][$Field], $caption, $Val, $viewType, false);
                             $formhtml .= "</div>\n";
                             
                             $layout->append($formhtml, $row, $column-1);

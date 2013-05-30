@@ -885,6 +885,7 @@ function dbt_doShortcode(){
 
 }
 function dbt_adminPage(){
+    global $dbt_interface;
     if (!empty($_GET['action'])) {
         switch ($_GET['action']) {
 
@@ -892,6 +893,8 @@ function dbt_adminPage(){
                 include DBT_PATH . 'edit.php';
                 break;
             case 'render':
+                $dbt_interface = get_option($_GET['interface']);
+                //, $dbt_app;
                 include_once DBT_PATH . 'libs/renderfunctions.php';
                 echo '<div class="wrap">';
                 include DBT_PATH . 'render.php';
