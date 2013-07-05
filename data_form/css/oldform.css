@@ -1,0 +1,147 @@
+/* @override http://localhost/wordpress/wp-content/plugins/db-toolkit/data_form/css/form.css */
+
+/* Basic stylings */
+.formular{
+	font-family:arial,helvetica,sans-serif;
+	font-size:1em;
+        padding-top: 10px;
+        color: #666;
+	/*background-color:#FFF;*/
+}
+.formular .form-gen-row{
+	padding:0 ;
+}
+.formular .form-gen-col{
+	margin:0px;
+}
+.form-gen-field-wrapper{
+	padding:0 5px;
+	margin:0;
+}
+.formular .form-gen-field-wrapper input[type=checkbox]{
+    margin-top: 17px;
+}
+.formular input, .formular select, .formular textarea{
+	font-size:12px;
+	font-family:arial,helvetica,sans-serif;
+}
+.formular legend{
+	font-size:1.3em;
+	padding:0 5px 0 0;
+	margin:0;
+}
+.formular label{
+	font-weight:bold;
+	display:block;
+	margin-bottom:2px;
+}
+.formular label.entrylabel{
+	font-weight:normal;	
+	padding: 2px;
+        margin: 0;
+}
+.formular label em{
+	color:#C00;
+	font-style:normal;
+	font-weight:normal;
+}
+.formular .caption{
+	clear:both;
+	padding-bottom:8px;
+	font-size:0.9em;
+}
+
+/* Section Breaks */
+.formular .sectionbreak{
+	padding:10px 3px 2px !important;
+
+}
+
+.formular .sectionbreak h2{
+	/*font-family:Georgia, "Times New Roman", Times, serif;*/
+	text-shadow:0 1px 0 #fff;
+	padding:0 0 1px 0 !important;
+	margin: 0 !important;
+	margin-top: 4px !important;
+	margin-bottom: 4px !important;
+	font-weight:normal;
+	font-size: 1.8em !important;
+        line-height: 10px;
+}
+.formular .sectionbreak .caption{
+	padding:0 0 0 2px;
+	margin: 0;
+	font-size:1em;
+}
+
+/* Form Elements */
+
+.formular input.text, .formular textarea.textbox, .formular textarea.textboxlarge, .formular input.date, .formular select, .formular textarea.textboxcode{
+	border:1px solid #DDDDDD;
+	padding:3px;
+        margin-top:2px;
+	float:left;
+}
+.formular select{
+	padding:1px;
+}
+.formular input.text, .formular textarea.textbox, .formular textarea.textboxlarge, .formular textarea.textboxcode{
+	width:97%;
+	width: -moz-available;
+}
+.formular textarea.textbox{
+	height:80px;
+}
+.formular textarea.textboxlarge{
+	height:130px;
+}
+.formular textarea.textboxcode{
+	height:230px;
+}
+.formular select {
+	width:100%;
+}
+.formular input:focus, .formular textarea:focus, .formular input:focus {
+	border:1px solid #999;
+}
+
+/* Form Buttons */
+.formular .buttonbar{
+	border-top:1px solid #DDDDDD;
+	color:#666666;
+	padding:6px 6px 0px;
+}
+.formular .formbutton{
+	font-family:Arial, Helvetica, sans-serif;
+	background-color:#FFF;
+	border:1px solid #DDDDDD;
+	color:#525252;
+	cursor:pointer;
+	font-size:12px;
+	font-weight:bold;
+	padding:2px 5px;
+}
+.formular .formbutton:hover{
+	background-color:#EFEFEF;
+}
+.formular .uploaderfy{
+	border:1px solid #DDDDDD;
+	padding:0;
+	margin:0;
+	height:18px;
+}
+.formular .view-gen-lable{
+    font-weight: bold;
+}
+.view-gen-field-data-wrapper{
+    font-size: 1.15em;
+    border-bottom:1px solid #efefef;
+    font-weight: normal;
+}
+
+.clusterRow{
+    padding: 3px;
+}
+.clusterItem{
+    padding: 3px;*/
+}

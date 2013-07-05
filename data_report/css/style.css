@@ -1,0 +1,195 @@
+/*
+    Document   : toolbar.css
+    Created on : Nov 24, 2011, 12:31:50 PM
+    Author     : David Cramer
+    Description:
+        toolbar styles for dbt canvas.
+*/
+
+.fbutton {
+    float: left;
+    padding: 3px 0;
+}
+.fbutton .button {
+    color: #6e6e6e;
+    font: bold 11px Helvetica, Arial, sans-serif;
+    text-decoration: none;
+    padding: 7px 12px 19px;
+    position: relative;
+    display: inline-block;
+    text-shadow: 0 1px 0 #fff;
+    -webkit-transition: border-color .218s;
+    -moz-transition: border .218s;
+    -o-transition: border-color .218s;
+    transition: border-color .218s;
+    background: -webkit-gradient(linear,0% 40%,0% 70%,from(#F5F5F5),to(#F1F1F1));
+    background: -moz-linear-gradient(linear,0% 40%,0% 70%,from(#F5F5F5),to(#F1F1F1));
+    border: solid 1px #dcdcdc;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    margin-right: 2px;
+    cursor: pointer;
+}
+.fbutton .button a{
+    color: #6e6e6e;
+    text-decoration: none;
+}
+.fbutton .button a:hover{
+    color: #333;
+    text-decoration: none;
+}
+.fbutton .button span{
+    padding: 2px 2px 2px 20px;
+}
+.fbutton .button:hover {
+    color: #333;
+    border-color: #999;
+    -moz-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2) -webkit-box-shadow:0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+.fbutton .button:active {
+    color: #000;
+    border-color: #444;
+}
+
+.button .export {
+    background: url(images/save.png) no-repeat;
+    padding-left: 30px;
+}
+.button .import {
+    background: url(images/database-import.png) no-repeat;
+    padding-left: 30px;
+}
+.button .add {
+    background: url(images/plus.png) no-repeat;
+    padding-left: 30px;
+}
+.button .delete {
+    background: url(images/minus.png) no-repeat;
+    padding-left: 30px;
+}
+.button .clearfilter {
+    background: url(images/minus.png) no-repeat;
+    padding-left: 30px;
+}
+.button .filterbutton {
+    background: url(images/funnel.png) no-repeat;
+    padding-left: 30px;
+}
+.button .reload {
+    background: url(images/reload.png) no-repeat;
+    padding-left: 30px;
+}
+.button .selectall {
+    background: url(images/select-all.png) no-repeat;
+    padding-left: 30px;
+}
+.button .unselectall {
+    background: url(images/table.png) no-repeat;
+    padding-left: 30px;
+}
+.button .applyfilter {
+    background: url(images/funnel-arrow.png) no-repeat;
+    padding-left: 30px;
+}
+.button .closefilter {
+    background: url(images/minus-button.png) no-repeat;
+    padding-left: 30px;
+}
+.button .lockfilterfilter {
+    background: url(images/lock.png) no-repeat;
+    padding-left: 30px;
+}
+.button .unlockfilterfilter {
+    background: url(images/lock-unlock.png) no-repeat;
+    padding-left: 30px;
+}
+.button .install {
+    background: url(images/upload-cloud.png) no-repeat;
+    padding-left: 30px;
+}
+
+
+/* Toolbar boxes */
+.report_tools{
+    background: none repeat scroll 0 0 #f9f9f9;
+    border-bottom: 1px solid #D2D2D2;
+    border-top: 1px solid #D2D2D2;
+    clear: both;
+    position: relative;
+    padding: 8px 4px 2px;
+    margin: 10px 0 0 0 !important;
+}
+.report_filters_panel .filterField{
+    float:left;
+    padding:2px;
+}
+.report_filters_panel{
+    background: none repeat scroll 0 0 #F1F1F1;
+    border-bottom: 1px solid #D2D2D2;
+    clear: both;
+    position: relative;
+    padding: 10px 10px 8px;
+}
+.filterpanels .list_row3{
+    background: none repeat scroll 0 0 #f9f9f9;
+    padding: 8px 4px 2px;
+    margin-bottom: 0 !important;
+    border-bottom: 1px solid #D2D2D2;
+}
+.filterSearch{
+    background: none repeat scroll 0 0 #FAFAFA;
+    border: 1px solid #D1D1D1;
+    color: #666666;
+    font-size: 13px;
+    line-height: 16px;
+    padding: 5px 7px;
+    width: 200px;
+}
+.report_filters_panel h2{
+    margin: 0 !important;
+}
+/* fix table margin on top */
+.data_report_Table_admin{
+    margin-top: 10px;
+}
+
+.report_notification{
+    display: block;
+    clear:both;
+    padding:8px;
+    margin: 2px;
+    border-radius:3px;
+}
+
+.report_notification.error{
+	background:#ffe0e0;
+	padding-left:20px;
+	margin:2px 0;
+	border:1px solid #ffc1c1;
+}
+.report_notification.notice{
+	background:#FFFFCC;
+	padding-left:20px;
+	margin:2px 0;
+	border:1px solid #FFCC66;
+}
+.report_notification.warning{
+	background:#ffe0e0 url('images/exclamation.png') 2px no-repeat;
+	padding-left:20px;
+	margin:2px 0;
+	border:1px solid #ffc1c1;
+}
+.report_notification.loading{
+	background:#efefef url('images/load.gif') 2px no-repeat;
+	padding-left:20px;
+	margin:2px 0;
+	border:1px solid #ccc;
+}
+.report_notification.success{
+	background: #d0e6c1 url('images/accept.png') 2px no-repeat;
+	padding-left:20px;
+	margin:2px 0;
+	border:1px solid #77b64e;
+}
