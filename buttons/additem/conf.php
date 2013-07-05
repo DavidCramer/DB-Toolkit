@@ -1,3 +1,0 @@
-<?php
-    $ButtonName = 'Add Item';
-?>
