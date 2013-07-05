@@ -1,152 +1,105 @@
 <?php
 /*
- * DB-Toolkit actions library
- * (C) 2012 - David Cramer
+ * Core Actions Library - DB Toolkit
+ * (C) David Cramer 2010 - 2011
+ *
  */
-add_action( 'init', 'dbt_psudoPostTypes' );
-add_action('wp_query', 'dbt_start');
-add_action('wp_loaded', 'dbt_process');
-add_action('admin_menu', 'dbt_menus');
-add_action('wp_footer', 'dbt_footer');
-add_action('admin_footer', 'dbt_footer');
 
-add_shortcode('interface', 'dbt_doShortcode');
+// admin menus ! :D
+add_action( 'admin_bar_menu', 'dt_adminMenus', 1000);
 
-add_filter('query_vars', 'dbt_query_vars');
+// Assign Actions
+add_action('init', 'dt_start');
+add_action('admin_init', 'dt_admin_init');
+add_action('admin_menu', 'dt_menus');
+add_action('wp_ajax_dt_ajaxCall', 'dt_ajaxCall');
+add_filter('the_content', 'dt_bindInterfaces');
 
-add_filter('single_template', 'dbt_header', 1000);
-add_filter('archive_template', 'dbt_header', 1000);
-add_action('get_header', 'dbt_header');
+function dt_bindInterfaces($content){
+    global $post;
+    if($isBound = get_option('_dbtbinding_'.$post->ID)){
+        return $content.dt_renderInterface($isBound);
+    }
+    return $content;
+}
 
-$ajaxAllowedFunctions['dbt_ajaxloadForm'] = true;
-add_action('wp_ajax_dbt_ajaxCall', 'dbt_ajaxCall');
-if(is_admin()){
 
-    $ajaxAllowedFunctions['dbt_deleteInterface'] = true;
-    $ajaxAllowedFunctions['dbt_deleteApp'] = true;
-    $ajaxAllowedFunctions['dbt_createApp'] = true;
-    $ajaxAllowedFunctions['dbt_setupTable'] = true;
-    $ajaxAllowedFunctions['dbt_loadFieldTypeConfig'] = true;
-    $ajaxAllowedFunctions['dbt_createNewTable'] = true;
-    $ajaxAllowedFunctions['dbt_addSortingField'] = true;
-    $ajaxAllowedFunctions['dbt_buildNewFieldSetup'] = true;
-    $ajaxAllowedFunctions['dbt_loadFormProcessor'] = true;
-    $ajaxAllowedFunctions['dbt_loadListProcessor'] = true;
-    $ajaxAllowedFunctions['dbt_addListRowTemplate'] = true;
-    $ajaxAllowedFunctions['dbt_setLanding'] = true;
-    $ajaxAllowedFunctions['dbt_setBasePage'] = true;
-    $ajaxAllowedFunctions['dbt_setBaseTemplate'] = true;
+// Hook into the page loading to get the scripts and
+// styles for the shortcodes used on a post or page.
+add_action('wp_head', 'shortcodesOnPost');
+function shortcodesOnPost(){
+    // get the post data
+    global $post;
+    // get the shortcode regex
+    $pattern = get_shortcode_regex();
+    // run regex on the content to find all the shortcodes being used
+    preg_match_all('/'.$pattern.'/s', $post->post_content, $matches);
+    // only if there are matches
+    if(!empty($matches)){
 
+        //loop through the results
+        //$matches[3] contains the atts
+        //$matches[2] contains the shortcode name
+        //$matches[5] contains the shortcode Data
+        foreach($matches[3] as $key=>$arg){
+
+            $shortcode = $matches[2][$key];
+            //check to see if the found code is mine :)
+            if($shortcode == 'myShortCode'){
+                // Parse the attributes to an array
+                $data = shortcode_parse_atts($arg);
+                // get the shortcode content
+                $content = $matches[5][$key];
+
+                // wp_enqueue_script
+                // wp_enqueue_style
+                // for the specific shortcodes used
+            }
+
+        }
+    }
+}
+
+
+
+
+// Add actions to front end
+if(basename($_SERVER['PHP_SELF']) == 'index.php'){
+    add_action('wp_head', 'dt_headers');
+    add_action('wp_print_styles', 'dt_styles');
+    add_action('wp_print_scripts', 'dt_scripts');
+    add_action('wp_footer', 'dt_footers');
+    add_action('wp_dashboard_setup', 'dt_dashboard_widgets' );
+    add_action('wp_dashboard_setup', 'dt_remove_dashboard_widgets' );
+}
+
+/*
+add_action('admin_init', 'dbt_stealthMode');
+function dbt_stealthMode(){
+    add_settings_field('dbt_stealth' , 'Enable DBT Stealth Mode' ,'dbtForm_Stealth' , 'general' , 'default');
+    register_setting('general','dbtStealth');
+}
+
+function dbtForm_Stealth(){
+
+    $Default = get_option('dbtStealth');
     
-    add_action('admin_head', 'dbt_ajax_javascript');
-
-    add_action('generate_rewrite_rules', 'dbt_add_rewrite_rules');
-
-
-
-    
-
-
-add_filter('wp_setup_nav_menu_item', 'test_menuthing');
-function test_menuthing($item){
-
-    if(!empty($item->post_type)){
-        if($item->post_type == 'page'){
-            if($isMeta = get_post_meta($item->ID, '_dbt_app_page', true)){
-                $item->title = $item->title.' (App Page)';
-            }
-        }
-        if($item->post_type == 'nav_menu_item'){
-            if($isMeta = get_post_meta($item->object_id, '_dbt_app_page', true)){
-                $item->title = str_replace(' (App Page)', '', $item->title);
-            }
-        }
+    $sel = '';
+    if(!empty($Default)){
+        $sel= 'checked="checked"';
     }
-    return $item;
-}
-
-add_action( 'pre_get_posts' ,'exclude_this_page' );
-function exclude_this_page( $query ) {
-	if(!is_admin()){
-            return $query;
-        }
-
-	global $pagenow;
-	if( 'edit.php' == $pagenow && ( get_query_var('post_type') && 'page' == get_query_var('post_type'))){
-            if(!empty($_GET['post_status'])){
-                if($_GET['post_status'] == 'dbt_app'){
-                    $query->set('meta_key', '_dbt_app_page');
-                }
-            }
-        }        
-        return $query;
+    echo '<input type="checkbox" value="1" id="dbtStealth" name="dbtStealth" '.$sel.'> Put DB-Toolkit into Stealth Mode. (Disabled the Builder and Editor. Docked apps still active.)';
 }
 
 
-    add_filter('views_edit-page', 'dbt_addviews');
-    function dbt_addviews($views){
-        global $wpdb;
-        $preViews = array();       
-        foreach($views as $key=>$view){
-            $preViews[$key] = $view;
-            if($key =='publish'){
 
-                $sql = "SELECT count(DISTINCT pm.post_id)
-                FROM $wpdb->postmeta pm
-                JOIN $wpdb->posts p ON (p.ID = pm.post_id)
-                WHERE pm.meta_key = '_dbt_app_page'
-                AND p.post_type = 'page'
-                ";
-                $count = $wpdb->get_var($sql);
-                $Class = '';
-                if(!empty($_GET['post_status'])){
-                    if($_GET['post_status'] == 'dbt_app'){
-                        $Class= 'class="current"';
-                    }
-                }
-                $preViews['DB-Toolkit'] = '<a '.$Class.' href="edit.php?post_status=dbt_app&post_type=page">DB-Toolkit <span class="count">('.$count.')</span></a>';
-            }
+add_filter('page_row_actions','filter_Enhance', 1, 2);
 
-        }
-        return $preViews;
-        
-        
-        return $views;
+    function filter_Enhance($actions, $post){
+
+        $newAction['enhance'] = '<a title="Edit this item" href="edit.php?post_type=page&page=dais&post='.$post->ID.'">Enhance</a>';
+        return array_slice($actions, 0, 2) + $newAction + array_slice($actions, 1);
+       
     }
-
-
-
-    // Add the posts and pages columns filter. They can both use the same function.
-    add_filter('manage_pages_columns', 'dbt_add_post_thumbnail_column', 5);
-
-    // Add the column
-    function dbt_add_post_thumbnail_column($cols){
-      $precols = array();
-      foreach($cols as $key=>$col){
-          $precols[$key] = $col;
-          if($key == 'comments'){
-            $precols['dbt_app_page'] = 'DB-Toolkit';
-          }
-
-      }
-      return $precols;
-    }
-
-    // Hook into the posts an pages column managing. Sharing function callback again.
-    add_action('manage_pages_custom_column', 'dbt_display_dbt_page', 5, 2);
-
-    // Grab featured-thumbnail size post thumbnail and display it.
-    function dbt_display_dbt_page($col, $id){
-      if($col == 'dbt_app_page'){
-        if(get_post_meta($id, '_dbt_app_page', true)){
-            echo '<span class="icon-cog"></span>';
-        }
-      }
-    }
-
-
-
-
-}
-
+    */
 ?>

@@ -1,0 +1,26 @@
+<?php
+if(!empty($_SESSION['DocumentLoaded'])){
+	declare_ajax_functions('df_tableReportSetup',
+						   'df_imageSetup',
+						   'dr_loadPageElements',
+						   'df_textFieldSetup', 
+						   'df_dateFieldSetup', 
+						   'df_ubgroupChange', 
+						   'df_vlauedFilterSetup', 
+						   'dr_loadvaluefilteredfields',
+						   'dr_addTotalsField',
+						   'df_alignmentSetup',
+						   'df_searchReferenceForm',
+						   'dr_loadPassbackFields'
+						   );
+}
+	declare_ajax_functions('df_buildDataSheet',
+						   'dr_BuildUpDateForm',
+						   'dr_setItemPageCount',
+						   'dr_db2csv',
+						   'df_buildQuickCaptureForm',
+						   'df_deleteEntries',
+						   'df_anewFunctionToBe',
+						   'dr_BuildReportGrid',
+						   'df_inlineedit');
+?>
