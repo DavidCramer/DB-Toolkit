@@ -1,0 +1,153 @@
+#wphead{
+    display: none;
+}
+
+/*body.admin-bar #appTitle{
+    padding-top: 28px;
+}*/
+
+#appTitle {
+    border-bottom: 1px solid #E7E7E7;
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    padding: 1px 15px 0 0;
+    color: #464646;
+    line-height: 29px;
+    font-family: "HelveticaNeue-Light","Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: normal;
+    margin: 0;
+    text-shadow: 0 1px 0 #FFFFFF;
+    display: block;    
+}
+
+
+
+
+
+
+
+
+
+.appnav_toolbar{
+      border-bottom: 1px solid #DFDFDF;
+}
+/* Navigations */
+.tools_widgets {
+	list-style:none;
+	margin:0;
+	padding: 0;
+	position:relative;
+}
+.tools_widgets .root_item{
+	display:inline;
+	float: left;
+        margin-bottom: 0;
+}
+.tools_widgets li {
+	margins:0;
+	padding:0;
+	position:relative
+}
+.tools_widget ul{
+	margin:0;
+	padding:0;
+}
+.tools_widgets li a.parent {
+	color: #;
+	line-height:24px;
+	text-shadow:0 1px 0 #FFF;
+        padding:0 10px 0 10px;
+        font-weight: bold;
+}
+.tools_widgets li a.hasSubs {
+    padding:0 20px 0 10px;
+}
+
+.tools_widgets li a.parent.hasSubs{
+        background: url(images/downarrow.png) center right no-repeat;
+}
+.tools_widgets li a.child.hasSubs{
+        background: #999999 !important;
+}
+
+.tools_widgets .tabBox{
+    border: 1px solid #ccc;
+    border-bottom: 0;
+}
+.tools_widgets a {
+	display:block;
+	margin:0;
+	padding:6px 18px 6px 10px;
+	color:#333;	
+	text-decoration:none;
+	cursor: pointer;
+}
+.tools_widgets a:hover {	
+	background:#E7E7E7
+}
+.tools_widgets ul {
+	list-style:none;
+	position:absolute;
+	display:none;
+	top:24px;
+	margin:0;
+	padding:0;
+	background:#fff;
+	width:200px;
+	z-index:60;
+	box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.3);
+
+    border-color: -moz-use-text-color #DFDFDF #DFDFDF;
+    border-right: 1px solid #DFDFDF;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.tools_widgets ul li {
+	margin: 0;
+}
+.tools_widgets li:hover > a {
+}
+.tools_widgets li:hover > a.parent {
+	text-shadow:0 1px 0 #CCC;        
+}
+.tools_widgets li:hover > a.parent.hasSubs {
+       background:#E7E7E7 url(images/downarrowwhite.png) center right no-repeat;
+}
+.tools_widgets li:hover > a.child.hasSubs {
+       background:#E7E7E7 url(images/downarrowwhite.png) center right no-repeat;
+}
+.tools_widgets li:hover > a.child {	
+	text-shadow:0 1px 0 #333333;
+}
+.tools_widgets ul ul {
+	left:100%;
+	top:0px;
+}
+.tools_widgets ul li:hover > a {
+	color: #fff;
+        background-color: #808080;
+        text-shadow:0 1px 0 #333;
+}
+.tools_widgets li:hover ul ul, .tools_widgets li:hover ul ul ul, .tools_widgets li:hover ul ul ul ul {
+	display:none
+}
+.tools_widgets li:hover ul, .tools_widgets li li:hover ul, .tools_widgets li li li:hover ul, .tools_widgets li li li li:hover ul {
+	display:block
+}
+
+
+
+
+.tools_widgets .title h2{
+	font-size:12px !important;
+        font-weight: bold;
+        font-family: Arial,Helvetica,sans-serif;
+        font-style: normal;
+	background-color:#ef4036;
+	color:#fff;
+	padding:0px 5px 0px 28px !important;
+	margin:0 !important;
+	text-shadow:0 1px 0 #333333;
+        line-height: 32px;
+}
