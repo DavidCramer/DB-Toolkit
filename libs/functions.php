@@ -919,19 +919,17 @@ function dt_adminMenus() {
 
 
 
-    $interfaces = $wpdb->get_results("SELECT option_name FROM $wpdb->options WHERE `option_name` LIKE 'dt_intfc%' ", ARRAY_A);
-
     $Apps = get_option('dt_int_Apps');
     if(is_array($Apps)){
         foreach($Apps as $App=>$dta){
 
             $AppData = get_option('_'.$App.'_app');
-
             //if(!empty($AppData['docked'])){
 
                 // add to menu list
                 if(is_array($AppData['interfaces'])){
                     foreach($AppData['interfaces'] as $interface=>$access){
+                        $cfg = get_option($interface);
                         if(!empty($cfg)){
                             if($cfg['_menuAccess'] == 'null'){
                                $cfg['_menuAccess'] = 'read';
@@ -944,7 +942,6 @@ function dt_adminMenus() {
                                 if(!empty($cfg['_ItemGroup']) && !empty($cfg['_SetAdminMenu'])) {
                                     $Groups[$cfg['_ItemGroup']][] = $cfg;
                                 }
-
                             }
                         }
                     }
@@ -989,6 +986,8 @@ function dt_adminMenus() {
                     }
                 }
             }
+        }else{
+
         }
 
 }
