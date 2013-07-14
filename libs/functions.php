@@ -646,8 +646,8 @@ function dt_menus() {
         //$menu['30.99'] = array( '', 'read', 'separator-dbtoolkit1', '', 'wp-menu-separator' );
 
         // Create the new top-level Menu
-        //$market = add_menu_page ('Application Marketplace', 'App Market', 'manage_options','appmarket', 'dt_appMarket', WP_PLUGIN_URL.'/db-toolkit/images/cart.png', '2.1');
-        //$appMarket = add_submenu_page("appmarket", 'App Market', 'Browse Market', 'read', "appmarket");
+        $market = add_menu_page ('Application Marketplace', 'App Market', 'manage_options','appmarket', 'dt_appMarket', WP_PLUGIN_URL.'/db-toolkit/images/cart.png', '2.1');
+        $appMarket = add_submenu_page("appmarket", 'App Market', 'Browse Market', 'read', "appmarket");
         //$launcher = add_submenu_page("appmarket", 'Applications', 'Applications', 'read', "app_launcher", 'app_launcher');
         //add_menu_page($page_title, $menu_title, $capability, $menu_slug, $function);
         //add_submenu_page($parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
