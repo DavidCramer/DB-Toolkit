@@ -4,7 +4,7 @@ Plugin Name: DB-Toolkit V1
 Plugin URI: http://dbtoolkit.co.za
 Description: WARNING: This is a development version. Do not use it for anything other than testing.
 Author: David Cramer
-Version: 1.0.0.000 Alpha
+Version: 1.0 alpha 1
 Author URI: http://dbtoolkit.co.za
 */
 
