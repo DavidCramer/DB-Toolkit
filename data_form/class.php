@@ -95,7 +95,7 @@ if(is_admin()) {
 
         if(empty($Value))
             $Value = '';
-        $Return .= 'Select Table: <select name="Data[Content]['.$TableReference.']" id="'.$TableReference.'" onchange="'.$JFunc.'(\''.$TableReference.'\');">';
+        $Return = 'Select Table: <select name="Data[Content]['.$TableReference.']" id="'.$TableReference.'" onchange="'.$JFunc.'(\''.$TableReference.'\');">';
         $Return .= '<option value="">'.$Value.'</option>';
 
         //$databases = $wpdb->get_results("show databases", ARRAY_N);

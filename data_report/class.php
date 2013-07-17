@@ -2113,7 +2113,11 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
                 if ($Type[1] === 1)
                     break;
 
-                $Data = $row[$Field];
+                if(isset($row[$Field])){
+                    $Data = $row[$Field];
+                }else{
+                    $Data = '';
+                }
 
                 if (!empty($Config['_IndexType'][$Field][1])) {
                     if ($Config['_IndexType'][$Field][1] == 'show') {
