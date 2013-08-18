@@ -617,7 +617,7 @@ function dt_scripts($preIs = false) {
 
 //Menus
 
-function add_admin_menu_separator($position) {
+function dbt_add_admin_menu_separator($position) {
   global $menu;
   $index = 0;
   foreach($menu as $offset => $section) {
@@ -881,7 +881,7 @@ function dt_menus() {
             $pageName = $Interfaces[0]['ID'];
 
 
-            add_admin_menu_separator('25.'.$base++);
+            dbt_add_admin_menu_separator('25.'.$base++);
 
             $groupPage = add_menu_page($Group, $Group, $Interfaces[0]['_menuAccess'], $pageName, "dbtoolkit_viewinterface", WP_PLUGIN_URL.'/db-toolkit/data_report/table.png', '25.'.$base++);
             add_submenu_page($pageName, $Interfaces[0]['_interfaceName'], $Interfaces[0]['_interfaceName'], $Interfaces[0]['_menuAccess'], $pageName, 'dbtoolkit_viewinterface');//admin.php?page=Database_Toolkit&renderinterface='.$interface['option_name']);
