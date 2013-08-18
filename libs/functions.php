@@ -1960,7 +1960,7 @@ function dt_renderInterface($interface){
         }
     }
 
-    $Return = do_shortcode(do_shortcode(do_shortcode($Return)));
+    //$Return = do_shortcode(do_shortcode(do_shortcode($Return)));
 
     $order   = array("\r\n", "\n", "\r", "\n\n", "\r\r", "  ");
     $replace = "";
