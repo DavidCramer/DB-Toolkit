@@ -2,7 +2,7 @@
 //Filters query variables for the field type
 if(!empty($_SESSION['reportFilters'][$EID][$Field])) {
 
-if($Type[1] == 'integer'){
+if(($Type[1] == 'integer') || ($Type[1] == 'float')){
         if($_SESSION['reportFilters'][$EID][$Field][0] != '' && $_SESSION['reportFilters'][$EID][$Field][0] != ''){
             if($WhereTag == '') {
                 $WhereTag = " WHERE ";

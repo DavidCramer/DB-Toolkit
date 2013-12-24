@@ -17,6 +17,7 @@ $FieldTypes['wysiwyg'] 		= array('name' => 'Wysiwyg Editor'	, 'func' => 'text_wy
 $FieldTypes['url'] 		= array('name' => 'URL'			, 'func' => 'null'		, 'visible' => true, 'baseType'  => 'TEXT');
 $FieldTypes['colourpicker'] 	= array('name' => 'Colour Picker'	, 'func' => 'null'		, 'visible' => true, 'baseType'  => 'VARCHAR(7)');
 $FieldTypes['integer']              = array('name' => 'Number/Integer'	, 'func' => 'null'		, 'visible' => true, 'baseType'  => 'INT(11)');
+$FieldTypes['float']              = array('name' => 'Floating Point'	, 'func' => 'null'		, 'visible' => true, 'baseType'  => 'FLOAT');
 
 
 ?>

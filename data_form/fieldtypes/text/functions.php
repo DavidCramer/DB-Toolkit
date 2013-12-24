@@ -322,7 +322,7 @@ function text_showFilter($Field, $Type, $Default, $Config, $EID) {
 
     $Return = '';
     $Return .= '<div class="filterField '.$Class.'"><h2>'.$FieldTitle.'</h2>';
-if($Type == 'integer'){
+if(($Type == 'integer') || ($Type == 'float')){
     $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.'][]" class="filterSearch" id="filter_'.$EID.'_'.$UID.'from" value="'.$text[0].'"  size="12" style="width: 100px;" /> to ';
     $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.'][]" class="filterSearch" id="filter_'.$EID.'_'.$UID.'to" value="'.$text[1].'"  size="12" style="width: 100px;" />';
 }else{
