@@ -194,7 +194,7 @@ return $Return;
 }
 
 function text_emailSetup($Field, $Table, $Config = false){
-
+    $Return = '';
 
         $sel = '';
 	if(!empty($Config['Content']['_forwardResult'][$Field])){
@@ -313,13 +313,14 @@ function text_showFilter($Field, $Type, $Default, $Config, $EID) {
         $FieldTitle = df_parseCamelCase($Config['_FieldTitle'][$Field]);
     }
     $Class = '';
-    $text = '';
+    $text = array ("", "");
     if(!empty($Default[$Field])) {
         $Class = 'class="highlight"';
         $text = $Default[$Field];
     }
     $UID = uniqid(rand(1,999));
 
+    $Return = '';
     $Return .= '<div class="filterField '.$Class.'"><h2>'.$FieldTitle.'</h2>';
 if($Type == 'integer'){
     $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.'][]" class="filterSearch" id="filter_'.$EID.'_'.$UID.'from" value="'.$text[0].'"  size="12" style="width: 100px;" /> to ';

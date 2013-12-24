@@ -981,7 +981,7 @@ function dt_adminMenus() {
                         }
 
                         if(current_user_can($Interfaces[$i]['_menuAccess']) && !empty($Interfaces[0]['_SetAdminMenu'])){
-                            $wp_admin_bar->add_menu( array( 'parent' => $Interfaces[0]['ID'], 'title' => $Interfaces[$i]['_interfaceName'], 'href' => get_admin_url().$pageLink.$Interfaces[$i]['ID'] ) );
+                            $wp_admin_bar->add_menu( array( 'id' => $Interfaces[0]['ID'], 'parent' => $Interfaces[0]['ID'], 'title' => $Interfaces[$i]['_interfaceName'], 'href' => get_admin_url().$pageLink.$Interfaces[$i]['ID'] ) );
                         }
                     }
                 }

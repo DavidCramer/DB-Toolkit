@@ -133,8 +133,10 @@
 
     <input type="checkbox" name="Data[Content][_disableLayoutEngineview]" id="disableLayoutEngineview" <?php if(!empty($Element['Content']['_disableLayoutEngineview'])){ echo 'checked="checked"';} ?>/>
     <label for="disableLayoutEngineview"> Disable Layout Engine</label>
-	<input name="Data[Content][_gridViewLayout]" type="hidden" id="gridLayoutBoxView" value="<?php echo $cfg['_gridViewLayoutView']; ?>" size="100" <?php if(!empty($element['content']['_disablelayoutengineview'])){ echo 'disabled="disabled"';} ?>="<?php if(!empty($Element['Content']['_disableLayoutEngineview'])){ echo 'disabled="disabled"';} ?>" />
-	
+<?php
+//disable undefined _gridViewLayoutView code
+//	<input name="Data[Content][_gridViewLayout]" type="hidden" id="gridLayoutBoxView" value="<?php echo $cfg['_gridViewLayoutView']; ?>" size="100" <?php if(!empty($element['content']['_disablelayoutengineview'])){ echo 'disabled="disabled"';} ?>="<?php if(!empty($Element['Content']['_disableLayoutEngineview'])){ echo 'disabled="disabled"';} ?>" />
+?>
         </div>
         <div id="templateview" class="setupTab">
 

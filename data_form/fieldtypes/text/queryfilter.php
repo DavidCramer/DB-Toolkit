@@ -18,20 +18,24 @@ if($Type[1] == 'integer'){
         $filterParts = explode(';', $_SESSION['reportFilters'][$EID][$Field]);
         if(is_array($filterParts)){
             foreach($filterParts as $querySearch){
-                switch ($Config['_filterMode'][$Field]){
-                    case 'mid':
-                        $qline = "%".$querySearch."%";
-                        break;
-                    case 'before':
-                        $qline = "%".$querySearch;
-                        break;
-                    case 'after':
-                        $qline = $querySearch."%";
-                        break;
-                    default:
-                        $qline = "%".$querySearch."%";
-                        break;
-                }
+			    if (array_key_exists('_filterMode',$Config)) {
+                    switch ($Config['_filterMode'][$Field]){
+                        case 'mid':
+                            $qline = "%".$querySearch."%";
+                            break;
+                        case 'before':
+                            $qline = "%".$querySearch;
+                            break;
+                        case 'after':
+                            $qline = $querySearch."%";
+                            break;
+                        default:
+                            $qline = "%".$querySearch."%";
+                            break;
+                    }
+				} else {
+                    $qline = "%".$querySearch."%";
+				}
                 $queryWhere[] = "( prim.".$Field." LIKE '".$qline."' )";
             }
         }

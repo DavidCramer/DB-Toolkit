@@ -73,6 +73,7 @@ function printr($a) {
 }
 
 function df_cleanArray($Array) {
+    $Clean = array();
     foreach ($Array as $Key => $Value) {
         if (is_array($Value)) {
             $temp = df_cleanArray($Value);

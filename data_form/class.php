@@ -10,6 +10,7 @@ foreach($FieldTypeFunctions[0] as $Type) {
 
 
 if(is_admin()) {
+    $Return = '';
     // edit mode check
     function df_controlFunc($Field, $Table, $Func) {
         if(function_exists($Func)) {
@@ -23,6 +24,7 @@ if(is_admin()) {
         return 'No Config Options Available';
     }
     function df_listTables($TableReference, $JFunc = 'alert', $Default = false, $Req = false) {
+    $Return = '';
     /*
     global $wpdb;
 
