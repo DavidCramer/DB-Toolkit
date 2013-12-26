@@ -23,6 +23,24 @@ if(!empty($Element['Content']['_APIAuthentication'])) {
 echo dais_customfield('radio', 'Sharedsecret', '_APIAuthentication', '_APIAuthentication', 'list_row2' , 'ss', $Sel, 'Interface accessed with a shared secret.');
 
 echo dais_customfield('text', 'Sharedsecret Seed', '_APISeed', '_APISeed', 'list_row1' , $Element['Content']['_APISeed'], '', 'Seed with random characters to change sharedsecret.');
+
+$Sel = '';
+if(!empty($Element['Content']['_APIAuthentication'])) {
+    if($Element['Content']['_APIAuthentication'] == 'open') {
+        $Sel = 'checked="checked"';
+    }
+}
+echo dais_customfield('radio', 'Open', '_APIAuthentication', '_APIAuthentication', 'list_row2' , 'open', $Sel, 'Public access Interface.');
+
+$Sel = '';
+if(!empty($Element['Content']['_APIAuthentication'])) {
+    if($Element['Content']['_APIAuthentication'] == 'disable') {
+        $Sel = 'checked="checked"';
+    }
+} else if(empty($Element['Content']['_APIAuthentication'])) {
+    $Sel = 'checked="checked"';
+}
+echo dais_customfield('radio', 'Disabled', '_APIAuthentication', '_APIAuthentication', 'list_row2' , 'disable', $Sel, 'Disable API Interface Access.');
 ?>
 <h2>Methods</h2>
 <?php
