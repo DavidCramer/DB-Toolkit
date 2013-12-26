@@ -1,7 +1,17 @@
-<?php echo get_bloginfo('url').'/ <em><strong>CallName</strong></em> / <em><strong>Key/Token</strong></em> / <em><strong>Method</strong></em> / <em><strong>Format</strong></em> / <em><strong>? GET Variables</strong></em> '; ?>
+<?php 
+if ($Config['_APIAuthentication'] != 'open') {
+    echo get_bloginfo('url').'/ <em><strong>CallName</strong></em> / <em><strong>Key/Token</strong></em> / <em><strong>Method</strong></em> / <em><strong>Format</strong></em> / <em><strong>? GET Variables</strong></em> '; 
+} else {
+    echo get_bloginfo('url').'/ <em><strong>CallName</strong></em> / <em><strong>Method</strong></em> / <em><strong>Format</strong></em> / <em><strong>? GET Variables</strong></em> '; 
+}
+?>
 <h2>API Access Details</h2>
 <?php
-$APIKey = md5($Media['ID']. $Config['_APISeed']);
+if ($Config['_APISeed'] != '') {
+   $APIKey = md5($Media['ID']. $Config['_APISeed']);
+} else {
+   $APIKey = 'Warning: insecure shared secret';
+}
 ?>
 
 <table class="form-table">
@@ -23,19 +33,23 @@ $APIKey = md5($Media['ID']. $Config['_APISeed']);
             </td>
         </tr>
         
+        <?php if ($Config['_APIAuthentication'] != 'open') { ?>
         <tr>
             <th scope="row" span="2">Key</th>
             <td>
                 <?php
                 if($Config['_APIAuthentication'] == 'key'){
                     echo '<div>Your token: '.API_getCurrentUsersKey().'</div>';
-                    echo '<span class="description">This is the token for you. You\'ll need to call the Auth Method as indicated below to retireve the other tokens.</span>';
+                    echo '<span class="description">This is the token for you. You\'ll need to call the Auth Method as indicated below to retrieve the other tokens.</span>';
                 }else{
                     echo $APIKey;
                 }
                 ?>
             </td>
         </tr>
+        <?php } ?>
+
+
         <?php
         if($Config['_APIAuthentication'] == 'key'){
         ?>
