@@ -39,8 +39,10 @@
     
     
 
-    if(!empty($_SESSION['reportFilters'][$Media['ID']])){
+    if(isset($gotTo) && !empty($_SESSION['reportFilters'][$Media['ID']])) {
         echo dr_BuildReportGrid($Media['ID'], $gotTo, $_SESSION['report_'.$Media['ID']]['SortField'], $_SESSION['report_'.$Media['ID']]['SortDir']);
+    } else if (!empty($_SESSION['reportFilters'][$Media['ID']])) {
+        echo dr_BuildReportGrid($Media['ID'], false, false, false);
     }
 
 

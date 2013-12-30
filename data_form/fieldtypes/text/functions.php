@@ -194,6 +194,7 @@ return $Return;
 }
 
 function text_emailSetup($Field, $Table, $Config = false){
+    $Return = '';
 
 
         $sel = '';

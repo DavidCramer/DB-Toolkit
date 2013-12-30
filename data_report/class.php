@@ -73,6 +73,7 @@ function printr($a) {
 }
 
 function df_cleanArray($Array) {
+    $Clean = array();
     foreach ($Array as $Key => $Value) {
         if (is_array($Value)) {
             $temp = df_cleanArray($Value);
@@ -1538,13 +1539,17 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
         if ($Config['_IndexType'][$Field][1] == 'show' && ($Location == 'inline' || $Location == 'headerinline' || $Location == 'footerinline') && empty($wherePush)) {
             //Set Widths
             $Direction = 'ASC';
-            if ($_SESSION['report_' . $EID]['SortDir'] == 'ASC') {
-                $Direction = 'DESC';
-            }
+			if (key_exists('SortDir', $_SESSION['report_' . $EID])) {
+                if ($_SESSION['report_' . $EID]['SortDir'] == 'ASC') {
+                    $Direction = 'DESC';
+                }
+			}
             $sortClass = 'report_header';
-            if ($_SESSION['report_' . $EID]['SortField'] == $Field) {
-                $sortClass = 'sorting_' . $_SESSION['report_' . $EID]['SortDir'];
-            }
+			if (key_exists('SortFIeld', $_SESSION['report_' . $EID])) {
+                if ($_SESSION['report_' . $EID]['SortField'] == $Field) {
+                    $sortClass = 'sorting_' . $_SESSION['report_' . $EID]['SortDir'];
+                }
+			}
             // set the column Title
             $fieldTitle = $Field;
             if (!empty($Config['_TotalsFields'][$Field]['Title'])) {
@@ -1690,7 +1695,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
     $queryWhere = implode(' AND ', $queryWhere);
     // create sort fields
     if (!empty($Config['_SortField'])) {
-        if (!empty($querySelects[$_SESSION['report_' . $EID]['SortField']])) {
+        if ((key_exists('SortFields', $_SESSION['report_' . $EID]) && !empty($querySelects[$_SESSION['report_' . $EID]['SortField']]))) {
             $orderStr = 'ORDER BY `' . $_SESSION['report_' . $EID]['SortField'] . '` ' . $_SESSION['report_' . $EID]['SortDir'];
         } else {
             $orderStr = 'ORDER BY prim.`' . $Config['_SortField'] . '` ' . $Config['_SortDirection'] . '';
@@ -2166,7 +2171,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
                         if ($Location == 'inline' || $Location == 'headerinline' || $Location == 'footerinline') {
                             // selection highlighting (experimental)
                             $sortClass = '';
-                            if ($_SESSION['report_' . $EID]['SortField'] == $Field) {
+                            if ((key_exists('SortField', $_SESSION['report_' . $EID]) && $_SESSION['report_' . $EID]['SortField'] == $Field)) {
                                 $sortClass = 'column_sorting_' . $_SESSION['report_' . $EID]['SortDir'];
                             }
                             $itemID = uniqid('');
@@ -2846,9 +2851,11 @@ function df_processupdate($Data, $EID) {
         $typeSet = explode('_', $Type);
         if (!empty($typeSet[1])) {
             if (function_exists($typeSet[0] . '_postProcess')) {
+                if (key_exists($Field, $Data[$EID])) {
                 $Func = $typeSet[0] . '_postProcess';
                 $Element['_ActiveProcess'] = 'update';
                 $Func($Field, $Data[$EID][$Field], $typeSet[1], $Element, $Data[$EID], $Data[$Config['_ReturnFields'][0]]);
+                }
             }
         }
     }
