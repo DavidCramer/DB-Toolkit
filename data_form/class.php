@@ -585,7 +585,7 @@ function df_reloadFormField($EID, $Field, $Default = false){
         }else{
             include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/input.php');
         }
-        $Pre .= ob_get_clean();
+        $Pre = ob_get_clean();
 
 
 
