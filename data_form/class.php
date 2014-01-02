@@ -225,13 +225,15 @@ if(is_admin()) {
     function df_fieldTypes($Field, $Table, $c, $Defaults) {
         // $c = data types.
 
+        if (!key_exists($Field, $Defaults))
+            $Defaults[$Field] = '';
         $Return = '';
         $Type = explode('_', $Defaults[$Field]);
         //$Return = $Type[0];
         global $wpdb;
-        $exisitngFields = $wpdb->get_results("SHOW FIELDS FROM `".$Table."`", ARRAY_A);
+        $existingFields = $wpdb->get_results("SHOW FIELDS FROM `".$Table."`", ARRAY_A);
 
-        foreach($exisitngFields as $curField){
+        foreach($existingFields as $curField){
             if($curField['Field'] == $Field){
                 $FieldType = $curField['Type'];
             }
@@ -288,9 +290,9 @@ if(is_admin()) {
     function df_buildFieldTypesMenu($Field, $Table){
 
         global $wpdb;
-        $exisitngFields = $wpdb->get_results("SHOW FIELDS FROM `".$Table."`", ARRAY_A);
+        $existingFields = $wpdb->get_results("SHOW FIELDS FROM `".$Table."`", ARRAY_A);
         $fields = array();
-        foreach($exisitngFields as $curField){
+        foreach($existingFields as $curField){
             $fields[$curField['Field']] = $curField['Type'];
         }
 

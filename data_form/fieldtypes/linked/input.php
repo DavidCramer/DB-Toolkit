@@ -159,7 +159,7 @@ if($FieldSet[1] == 'linked'){
 			if(empty($Defaults[$Field])){
 				$Return .= '<option value=""></option>';
 			}
-			while($lrow = mysql_fetch_assoc($Res)){
+			while(($Res) && ($lrow = mysql_fetch_assoc($Res))){
 				$Sel = '';
 				if(!empty($Defaults[$Field])){
 					if($Defaults[$Field] == $lrow[$Config['_Linkedfields'][$Field]['ID']]){

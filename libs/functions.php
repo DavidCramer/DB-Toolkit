@@ -1628,7 +1628,7 @@ function dt_process() {
                                 }
 
                                 ob_start();
-                                fputcsv($CSVout, $FieldHeaders, ';')."\r\n";
+                                fputcsv($CSVout, $FieldHeaders, ',')."\r\n";
                                 $out .= ob_get_clean();
 
                                 while($exportData = mysql_fetch_assoc($result)){
@@ -1664,7 +1664,7 @@ function dt_process() {
 
                                     //combine row
                                     ob_start();
-                                    fputcsv($CSVout, $Row, ';')."\r\n";
+                                    fputcsv($CSVout, $Row, ',')."\r\n";
                                     $out .= ob_get_clean();
 
                                 }

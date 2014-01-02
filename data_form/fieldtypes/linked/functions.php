@@ -417,6 +417,10 @@ function linked_loadAdditionalValue($Table, $Field, $Default = false, $filtered 
 	return $Val;
 }
 function linked_loadfilterfields($Table, $Field, $MainTable, $Defaults = false){
+	$Ref = '';
+	$Val = '';
+	$ID = '';
+	$LURL = '';
 	$result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
 	//$Return = '<input type="hidden" name="Data[Content]['.$Field.']" value="'.$Table.'" id="linkedTableRef_'.LinkedField.'" />';
 	if (mysql_num_rows($result) > 0) {
