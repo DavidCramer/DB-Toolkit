@@ -164,12 +164,15 @@ if(!empty($_FILES['itfInstaller']['size'])){
                 // Upload Logo
 
                 $newFileName = uniqid('dbtlgo').'.png';
-                $logoFile = wp_upload_bits($newFileName, null, base64_decode($data['Logo']));
-                if(!empty($logoFile)){
-                    $data['AppSettings']['imageURL'] = $logoFile['url'];
-                    $data['AppSettings']['imageFile'] = $logoFile['file'];
-                }
+
+                if (isset($data['Logo'])) {
+                    $logoFile = wp_upload_bits($newFileName, null, base64_decode($data['Logo']));
+                    if(!empty($logoFile)){
+                        $data['AppSettings']['imageURL'] = $logoFile['url'];
+                        $data['AppSettings']['imageFile'] = $logoFile['file'];
+                    }
                 unset($data['Logo']);
+                }
 
                 // Create Tables
                 global $wpdb;

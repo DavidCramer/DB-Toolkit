@@ -2495,6 +2495,10 @@ function exportApp($app, $publish=false){
 
         // Export Table Structures and Data
         if(!empty($tables)){
+            $quote_show_create = $wpdb->get_row("SHOW VARIABLES LIKE 'sql_quote_show_create';");
+            if ($quote_show_create->Value === "ON")
+               $wpdb->query("SET sql_quote_show_create=OFF;");
+
             $output['Data'] = array();
             foreach($tables as $tableKey=>$table){
                 $tableCreates = $wpdb->get_row("SHOW CREATE TABLE ".$table, ARRAY_N);
@@ -2511,6 +2515,8 @@ function exportApp($app, $publish=false){
                     $output['Data'][] = base64_encode("INSERT INTO `".$tableKey."` (".implode(',', $Fields).") VALUES (".implode(',', $Values).");");
                 }
             }
+            if ($quote_show_create->Value === "ON")
+               $wpdb->query("SET sql_quote_show_create=ON;");
         }
 
 
