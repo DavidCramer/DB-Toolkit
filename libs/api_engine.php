@@ -19,9 +19,17 @@
     // validate API Key
     $Intrface = get_option($interfaceID);
     $Media = $Intrface;
-    $APIkey = $vars[0];
-    $Method = $vars[1];
-    $Format = $vars[2];
+
+    if (isset($vars[2])) {
+    // secure access interface uses format CallName / Key/Token / Method / Format / ? GET Variables
+        $APIkey = $vars[0];
+        $Method = $vars[1];
+        $Format = $vars[2];
+    } else {
+    // open access interface uses format CallName / Method / Format / ? GET Variables
+        $Method = $vars[0];
+        $Format = $vars[1];
+    }
 
     $Page = 0;
     if(!empty($_GET['offset'])){
@@ -99,7 +107,10 @@
         }
     }
 
-    if($Config['_APIAuthentication'] == 'key'){
+    if (!key_exists('_APIAuthentication', $Config) || $Config['_APIAuthentication'] == 'disable') {
+            api_Deny();
+            exit;
+    } else if($Config['_APIAuthentication'] == 'key'){
         //echo API_getCurrentUsersKey();
         if($userData = API_decodeUsersAPIKey($APIkey)){            
             if($user = get_user_by('id', $userData['id'])){
@@ -117,8 +128,7 @@
             api_Deny();
             exit;
         }
-
-    }else{
+    } else if($Config['_APIAuthentication'] == 'ss'){
         $VerifyKey = md5($interfaceID.$Config['_APISeed']);
         if ($VerifyKey !== $APIkey) {
             api_Deny();
