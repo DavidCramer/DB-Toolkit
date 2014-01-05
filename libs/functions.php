@@ -229,18 +229,20 @@ function dt_styles($preIs = false) {
         }
 
         if (in_array('interface', $matches[2])) {
-            foreach($matches[3] as $preInterface){
-                $args = shortcode_parse_atts($preInterface);
-                $op = get_option($args['id']);
-                if(!empty($op)){
-                    $preIs[] = $args['id'];
+            $i = 0;
+            foreach($matches[2] as $candidate) {
+                if ($candidate === 'interface') {
+                    $args = shortcode_parse_atts($matches[3][$i]);
+                    $op = get_option($args['id']);
+
+                    if(!empty($op)) {
+                        $preIs[] = $args['id'];
+                    }
                 }
+                $i++;
             }
         }
         }
-
-
-
     }
 
     if(!empty($preIs) || is_admin()){
@@ -467,14 +469,17 @@ function dt_scripts($preIs = false) {
             }
         }
         if (in_array('interface', $matches[2])) {
-            foreach($matches[3] as $preInterface){
-                $args = shortcode_parse_atts($preInterface);
-                $op = get_option($args['id']);
+            $i = 0;
+            foreach($matches[2] as $candidate) {
+                if ($candidate === 'interface') {
+                    $args = shortcode_parse_atts($matches[3][$i]);
+                    $op = get_option($args['id']);
 
-                if(!empty($op)){
-                    $preIs[] = $args['id'];
+                    if(!empty($op)){
+                        $preIs[] = $args['id'];
+                    }
                 }
-                //vardump($_SERVER);
+                $i++;
             }
         }
     }
