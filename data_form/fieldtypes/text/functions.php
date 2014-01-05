@@ -321,15 +321,17 @@ function text_showFilter($Field, $Type, $Default, $Config, $EID) {
     }
     $UID = uniqid(rand(1,999));
 
-    $Return .= '<div class="filterField '.$Class.'"><h2>'.$FieldTitle.'</h2>';
+    if (!isset($text)) {
+        $Return .= '<div class="filterField '.$Class.'"><h2>'.$FieldTitle.'</h2>';
 if($Type == 'integer'){
-    $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.'][]" class="filterSearch" id="filter_'.$EID.'_'.$UID.'from" value="'.$text[0].'"  size="12" style="width: 100px;" /> to ';
-    $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.'][]" class="filterSearch" id="filter_'.$EID.'_'.$UID.'to" value="'.$text[1].'"  size="12" style="width: 100px;" />';
+        $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.'][]" class="filterSearch" id="filter_'.$EID.'_'.$UID.'from" value="'.$text[0].'"  size="12" style="width: 100px;" /> to ';
+        $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.'][]" class="filterSearch" id="filter_'.$EID.'_'.$UID.'to" value="'.$text[1].'"  size="12" style="width: 100px;" />';
+        $Return .= '</div>';
 }else{
 
-    $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.']" class="filterSearch" id="filter_'.$EID.'_'.$UID.'" value="'.$text.'" />';
+        $Return .= '<input type="text" name="reportFilter['.$EID.']['.$Field.']" class="filterSearch" id="filter_'.$EID.'_'.$UID.'" value="'.$text.'" />';
 }
-    $Return .= '</div>';
+	}
 
 
 
