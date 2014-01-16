@@ -82,6 +82,7 @@
                         if(empty($PrimInterfaces['Plugin']))
                             $PrimInterfaces['Plugin'] = '';
 
+
                         if(is_array($PrimInterfaces['Plugin'])){
                             foreach($PrimInterfaces['Plugin'] as $PrimInterface) {
                                 if(empty($PrimInterface['_ItemGroup'])){

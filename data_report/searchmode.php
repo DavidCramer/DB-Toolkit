@@ -10,7 +10,9 @@
                 }
             }
             
-            echo dr_BuildReportFilters($Config, $Media['ID'], $Filters);
+            if (!isset($Filters))
+			    $Filters = '';
+                echo dr_BuildReportFilters($Config, $Media['ID'], $Filters);
             ?>
         <div style="clear:both;"></div>
             <?php

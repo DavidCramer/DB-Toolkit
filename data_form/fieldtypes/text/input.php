@@ -1,7 +1,7 @@
 <?php
 /// This creates the actual input fields for capturing. this will handle the occurance of the setting
 
-if($FieldSet[1] == 'integer'){
+if(($FieldSet[1] == 'integer') || ($FieldSet[1] == 'float')){
 	$WidthOverride = '';
         if(!empty($Req)){
             $Req = 'validate[required,custom[onlyNumber]]';
