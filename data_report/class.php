@@ -328,7 +328,8 @@ if (is_admin ()) {
         if (empty($row))
             $row = false;
 
-        $PreReturn[$Field] .= '</div><div class="admin_config_toolbar"> <div style="float:left; width:180px;">' . df_fieldTypes($Field, $Table, $row, $Defaults['_Field']) . '</div>' . dr_reportListTypes($Field, $Defaults['_IndexType'][$Field]);
+		if (key_exists($Field, $Defaults['_IndexType']))
+           $PreReturn[$Field] .= '</div><div class="admin_config_toolbar"> <div style="float:left; width:180px;">' . df_fieldTypes($Field, $Table, $row, $Defaults['_Field']) . '</div>' . dr_reportListTypes($Field, $Defaults['_IndexType'][$Field]);
         // inline settings
         //class="button-primary"
         $PreReturn[$Field] .= ' &nbsp;<span class="' . $UClass . '" id="unique_' . $Field . '" onclick="df_setToggle(\'unique_' . $Field . '\');" title="Unique"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/unique.png) left center no-repeat; padding:5px 8px;"></span></span>';
@@ -345,17 +346,19 @@ if (is_admin ()) {
 
         $PreReturn[$Field] .= '</div><div class="admin_config_panel" style="text-align:right;" id="ExtraSetting_' . $Field . '">';
         unset($Types);
-        $Types = explode('_', $Defaults['_Field'][$Field]);
-        if (file_exists(WP_PLUGIN_DIR . '/db-toolkit/data_form/fieldtypes/' . $Types[0] . '/conf.php')) {
-            include(WP_PLUGIN_DIR . '/db-toolkit/data_form/fieldtypes/' . $Types[0] . '/conf.php');
-            $func = $FieldTypes[$Types[1]]['func'];
-            if ($func != 'null') {
-                if ($func != '') {
-                    $PreReturn[$Field] .= '<div class="widefat" id="' . $Field . '_configPanel" style="display:none; text-align:left;">';
-                    $PreReturn[$Field] .= '<h3>' . $Field . ' Config</h3><div class="admin_config_panel">';
-                    $PreReturn[$Field] .= $func($Field, $Table, $Config);
-                    $PreReturn[$Field] .= '</div></div>';
-                    $PreReturn[$Field] .= '<input type="button" class="button" style="margin-top:5px;" value="Setup" onclick="toggle(\'' . $Field . '_configPanel\');" />';
+        if (key_exists($Field, $Defaults['_Field'])) {
+            $Types = explode('_', $Defaults['_Field'][$Field]);
+            if (file_exists(WP_PLUGIN_DIR . '/db-toolkit/data_form/fieldtypes/' . $Types[0] . '/conf.php')) {
+                include(WP_PLUGIN_DIR . '/db-toolkit/data_form/fieldtypes/' . $Types[0] . '/conf.php');
+                $func = $FieldTypes[$Types[1]]['func'];
+                if ($func != 'null') {
+                    if ($func != '') {
+                        $PreReturn[$Field] .= '<div class="widefat" id="' . $Field . '_configPanel" style="display:none; text-align:left;">';
+                        $PreReturn[$Field] .= '<h3>' . $Field . ' Config</h3><div class="admin_config_panel">';
+                        $PreReturn[$Field] .= $func($Field, $Table, $Config);
+                        $PreReturn[$Field] .= '</div></div>';
+                        $PreReturn[$Field] .= '<input type="button" class="button" style="margin-top:5px;" value="Setup" onclick="toggle(\'' . $Field . '_configPanel\');" />';
+                    }
                 }
             }
         }
@@ -366,6 +369,7 @@ if (is_admin ()) {
 
     function df_tableReportSetup($Table, $EID, $Config = false, $Column = 'M') {
 
+        $PreReturn = array();
         if (empty($Table)) {
             return;
         }
@@ -1539,13 +1543,17 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
         if ($Config['_IndexType'][$Field][1] == 'show' && ($Location == 'inline' || $Location == 'headerinline' || $Location == 'footerinline') && empty($wherePush)) {
             //Set Widths
             $Direction = 'ASC';
-            if ($_SESSION['report_' . $EID]['SortDir'] == 'ASC') {
-                $Direction = 'DESC';
-            }
+			if (key_exists('SortDir', $_SESSION['report_' . $EID])) {
+                if ($_SESSION['report_' . $EID]['SortDir'] == 'ASC') {
+                    $Direction = 'DESC';
+                }
+			}
             $sortClass = 'report_header';
-            if ($_SESSION['report_' . $EID]['SortField'] == $Field) {
-                $sortClass = 'sorting_' . $_SESSION['report_' . $EID]['SortDir'];
-            }
+			if (key_exists('SortFIeld', $_SESSION['report_' . $EID])) {
+                if ($_SESSION['report_' . $EID]['SortField'] == $Field) {
+                    $sortClass = 'sorting_' . $_SESSION['report_' . $EID]['SortDir'];
+                }
+			}
             // set the column Title
             $fieldTitle = $Field;
             if (!empty($Config['_TotalsFields'][$Field]['Title'])) {
@@ -1691,7 +1699,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
     $queryWhere = implode(' AND ', $queryWhere);
     // create sort fields
     if (!empty($Config['_SortField'])) {
-        if (!empty($querySelects[$_SESSION['report_' . $EID]['SortField']])) {
+        if ((key_exists('SortFields', $_SESSION['report_' . $EID]) && !empty($querySelects[$_SESSION['report_' . $EID]['SortField']]))) {
             $orderStr = 'ORDER BY `' . $_SESSION['report_' . $EID]['SortField'] . '` ' . $_SESSION['report_' . $EID]['SortDir'];
         } else {
             $orderStr = 'ORDER BY prim.`' . $Config['_SortField'] . '` ' . $Config['_SortDirection'] . '';
@@ -2167,7 +2175,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
                         if ($Location == 'inline' || $Location == 'headerinline' || $Location == 'footerinline') {
                             // selection highlighting (experimental)
                             $sortClass = '';
-                            if ($_SESSION['report_' . $EID]['SortField'] == $Field) {
+                            if ((key_exists('SortField', $_SESSION['report_' . $EID]) && $_SESSION['report_' . $EID]['SortField'] == $Field)) {
                                 $sortClass = 'column_sorting_' . $_SESSION['report_' . $EID]['SortDir'];
                             }
                             $itemID = uniqid('');
@@ -2847,9 +2855,11 @@ function df_processupdate($Data, $EID) {
         $typeSet = explode('_', $Type);
         if (!empty($typeSet[1])) {
             if (function_exists($typeSet[0] . '_postProcess')) {
+                if (key_exists($Field, $Data[$EID])) {
                 $Func = $typeSet[0] . '_postProcess';
                 $Element['_ActiveProcess'] = 'update';
                 $Func($Field, $Data[$EID][$Field], $typeSet[1], $Element, $Data[$EID], $Data[$Config['_ReturnFields'][0]]);
+                }
             }
         }
     }

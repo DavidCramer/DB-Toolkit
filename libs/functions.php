@@ -229,18 +229,20 @@ function dt_styles($preIs = false) {
         }
 
         if (in_array('interface', $matches[2])) {
-            foreach($matches[3] as $preInterface){
-                $args = shortcode_parse_atts($preInterface);
-                $op = get_option($args['id']);
-                if(!empty($op)){
-                    $preIs[] = $args['id'];
+            $i = 0;
+            foreach($matches[2] as $candidate) {
+                if ($candidate === 'interface') {
+                    $args = shortcode_parse_atts($matches[3][$i]);
+                    $op = get_option($args['id']);
+
+                    if(!empty($op)) {
+                        $preIs[] = $args['id'];
+                    }
                 }
+                $i++;
             }
         }
         }
-
-
-
     }
 
     if(!empty($preIs) || is_admin()){
@@ -467,14 +469,17 @@ function dt_scripts($preIs = false) {
             }
         }
         if (in_array('interface', $matches[2])) {
-            foreach($matches[3] as $preInterface){
-                $args = shortcode_parse_atts($preInterface);
-                $op = get_option($args['id']);
+            $i = 0;
+            foreach($matches[2] as $candidate) {
+                if ($candidate === 'interface') {
+                    $args = shortcode_parse_atts($matches[3][$i]);
+                    $op = get_option($args['id']);
 
-                if(!empty($op)){
-                    $preIs[] = $args['id'];
+                    if(!empty($op)){
+                        $preIs[] = $args['id'];
+                    }
                 }
-                //vardump($_SERVER);
+                $i++;
             }
         }
     }
@@ -1623,7 +1628,7 @@ function dt_process() {
                                 }
 
                                 ob_start();
-                                fputcsv($CSVout, $FieldHeaders, ';')."\r\n";
+                                fputcsv($CSVout, $FieldHeaders, ',')."\r\n";
                                 $out .= ob_get_clean();
 
                                 while($exportData = mysql_fetch_assoc($result)){
@@ -1659,7 +1664,7 @@ function dt_process() {
 
                                     //combine row
                                     ob_start();
-                                    fputcsv($CSVout, $Row, ';')."\r\n";
+                                    fputcsv($CSVout, $Row, ',')."\r\n";
                                     $out .= ob_get_clean();
 
                                 }
@@ -2495,6 +2500,10 @@ function exportApp($app, $publish=false){
 
         // Export Table Structures and Data
         if(!empty($tables)){
+            $quote_show_create = $wpdb->get_row("SHOW VARIABLES LIKE 'sql_quote_show_create';");
+            if ($quote_show_create->Value === "ON")
+               $wpdb->query("SET sql_quote_show_create=OFF;");
+
             $output['Data'] = array();
             foreach($tables as $tableKey=>$table){
                 $tableCreates = $wpdb->get_row("SHOW CREATE TABLE ".$table, ARRAY_N);
@@ -2511,6 +2520,8 @@ function exportApp($app, $publish=false){
                     $output['Data'][] = base64_encode("INSERT INTO `".$tableKey."` (".implode(',', $Fields).") VALUES (".implode(',', $Values).");");
                 }
             }
+            if ($quote_show_create->Value === "ON")
+               $wpdb->query("SET sql_quote_show_create=ON;");
         }
 
 

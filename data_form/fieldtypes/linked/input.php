@@ -151,11 +151,15 @@ if($FieldSet[1] == 'linked'){
 			$QuerySQL = "SELECT ".$Config['_Linkedfields'][$Field]['ID'].", ".$outString." FROM `".$Config['_Linkedfields'][$Field]['Table']."` ".$Where." ".$Ordering.";";
 			$Res = mysql_query($QuerySQL);
 			//cho $QuerySQL;
-			$Return = '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" ref="'.$row['_return_'.$Config['_ReturnFields'][0]].'" class="'.$Req.' '.$Config['_FormFieldWidth'][$Field].'">';
+            if (isset($row)) {
+				$Return = '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" ref="'.$row['_return_'.$Config['_ReturnFields'][0]].'" class="'.$Req.' '.$Config['_FormFieldWidth'][$Field].'">';
+            } else {
+				$Return = '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field. '" class="'.$Req.' '.$Config['_FormFieldWidth'][$Field].'">';
+            }
 			if(empty($Defaults[$Field])){
 				$Return .= '<option value=""></option>';
 			}
-			while($lrow = mysql_fetch_assoc($Res)){
+			while(($Res) && ($lrow = mysql_fetch_assoc($Res))){
 				$Sel = '';
 				if(!empty($Defaults[$Field])){
 					if($Defaults[$Field] == $lrow[$Config['_Linkedfields'][$Field]['ID']]){

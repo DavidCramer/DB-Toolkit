@@ -1,6 +1,8 @@
 <?php
 /// This creates the actual input fields for capturing. this will handle the occurance of the setting
 //<input name="dataForm['.$Element['ID'].']['.$Field.']" type="'.$Type.'" id="entry_'.$Element['ID'].'_'.$Field.'" value="'.$Val.'" class="textfield '.$Req.'" />';
+$Date = '';
+$Return = '';
 if($FieldSet[1] == 'date'){
 			if(!empty($Element['Content']['_TodayDefault'][$Field])){
 				$Date = date('Y-m-d');					

@@ -96,7 +96,7 @@
                                 }
                             }
                         }
-                        if(is_array($PrimInterfaces['Cluster'])){
+                        if(key_exists('Cluster', $PrimInterfaces) && is_array($PrimInterfaces['Cluster'])){
                             foreach($PrimInterfaces['Cluster'] as $PrimInterface) {
                                 if(empty($PrimInterface['_ItemGroup'])){
                                     $PrimInterface['_ItemGroup'] = '__Ungrouped';
