@@ -36,6 +36,14 @@
             echo dais_customfield('text', 'Wrapper Element', '_TemplateWrapper', '_TemplateWrapper', 'list_row1', $wapperEl, '', 'Element tag that wrappes the interface.');
             echo dais_customfield('text', 'Wrapper Classes', '_TemplateClass', '_TemplateClass', 'list_row1', $wapperClass, '', 'Additional classes to add to the interface wrapper.');
 
+            echo "Field Keys:<p>";
+            if(!empty($Element['Content']['_FieldTitle'])){
+                foreach($Element['Content']['_FieldTitle'] as $FieldKey=>$Val) {
+                    echo $Val.' = {{'.$FieldKey.'}}<br />';
+                }
+            }
+            echo '<br /><br />';
+
             $HeaderTemplate = '';
             if (!empty($Element['Content']['_layoutTemplate']['_Header'])) {
                 $HeaderTemplate = $Element['Content']['_layoutTemplate']['_Header'];
