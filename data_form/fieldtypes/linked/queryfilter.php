@@ -202,7 +202,14 @@
                 @session_start();
 		// Setup Where Clause in Query
                 //clear out empty arrays
-                for($o=0; $o<= count($_SESSION['reportFilters'][$EID][$Field])-1; $o++){
+
+                if ((array_key_exists('reportFilters', $_SESSION)) && (array_key_exists($EID, $_SESSION['reportFilters']))) {
+                
+                $fieldcount = 0;
+                if (array_key_exists($Field, $_SESSION['reportFilters'][$EID]))
+                    $fieldcount = count($_SESSION['reportFilters'][$EID][$Field])-1;
+
+                for($o=0; $o<= $fieldcount; $o++){
                     if(empty($_SESSION['reportFilters'][$EID][$Field][$o])){
                         unset($_SESSION['reportFilters'][$EID][$Field][$o]);
                     }
@@ -245,9 +252,9 @@
                                 //echo $_SESSION['reportFilters'][$EID][$Field];
                                 $queryWhere[] = $outString." LIKE '%".$_SESSION['reportFilters'][$EID][$Field]."%' ";
                             }
-			}
-		}
+			     }
+		    }
 		// apply Where Filter
 
-
+		}
 ?>
