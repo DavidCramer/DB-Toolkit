@@ -164,6 +164,11 @@
                         $Sel = 'checked="checked"';
                     }
                     echo dais_customfield('checkbox', 'Show Footer Bar', '_Show_Footer', '_Show_Footer', 'list_row1' , 1, $Sel, 'Render the footer which holds the page and items count.');
+                    $Sel = '';
+                    if(!empty($Element['Content']['_Feature_Selectable_Rows'])) {
+                        $Sel = 'checked="checked"';
+                    }
+                    echo dais_customfield('checkbox', 'Disable Selectable Rows', '_Feature_Selectable_Rows', '_Feature_Selectable_Rows', 'list_row1' , 1, $Sel, 'Disable individual selection of rows.');
                     
                     echo '<h2>Style Classes</h2>';
                     echo dais_customfield('text', 'Submit Button Class', '_SubmitButtonClass', '_SubmitButtonClass', 'list_row1' , $Element['Content']['_SubmitButtonClass'], '', 'Set the insert entry button style class.');

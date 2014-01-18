@@ -1597,7 +1597,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
         }
     }
     if (empty($Config['_Show_popup'])) {
-        if (!empty($Config['_Show_Edit']) && empty($Config['_ItemViewPage']) || !empty($Config['_Show_View']) || !empty($Config['_Show_Edit'])) {
+        if (!empty($Config['_Show_Edit']) && empty($Config['_ItemViewPage']) || !empty($Config['_Show_Delete']) || !empty($Config['_Show_View']) || !empty($Config['_Show_Edit'])) {
             $ShowActionPanel = true;
         }
 
@@ -2449,7 +2449,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
 
 
 // Make Scripts for deleting and select
-    if (!empty($Config['_Show_Edit'])) {
+    if (empty($Config['_Feature_Selectable_Rows'])) {
         $_SESSION['dataform']['OutScripts'] .= "
 		jQuery('#data_report_" . $EID . " .report_entry').bind('click', function(){
 			jQuery(this).toggleClass(\"highlight\");
