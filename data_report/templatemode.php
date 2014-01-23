@@ -39,6 +39,7 @@ echo $Config['_layoutTemplate']['_Header'];
 //vardump($Config['_layoutTemplate']['_Content']);
 $Row = 'odd';
 
+$rowIndex = 1;
 $First = 1;
 $Prev = $Page - 1;
 $Next = $Page + 1;
@@ -71,6 +72,10 @@ if ($Count['Total'] == 0) {
 }
 
 //$prevbutton = '<div class="fbutton" onclick="dr_goToPage(\'' . $Media['ID'] . '\', ' . $Prev . ');"><div><img src="' . WP_PLUGIN_URL . '/db-toolkit/data_report/prev.gif" width="27" height="17" alt="Previous" align="absmiddle" /></div></div>';
+
+if (!isset($pageLink))
+   $pageLink = '';
+
 $firstpagebutton = '<a href="?'.$pageLink.'npage=1" title="Go to the first page" class="first-page" onclick="dr_goToPage(\'' . $EID . '\', 1); return false;">&laquo;</a>';
 $prevbutton = '<a href="?'.$pageLink.'npage='.$Prev.'" title="Go to the previous page" class="prev-page" onclick="dr_goToPage(\'' . $EID . '\', ' . $Prev . '); return false;">&lsaquo;</a>';
 $pagejump = '<div class="fpanel">Page <input type="text" name="pageJump" id="pageJump_' . $Media['ID'] . '" style="width:30px; font-size:11px;" value="' . $Page . '" onkeypress="dr_pageInput(\'' . $Media['ID'] . '\', this.value);" /> of ' . $TotalPages . '</div>';
@@ -277,12 +282,12 @@ foreach($Config['_layoutTemplate']['_Content']['_name'] as $key=>$rowTemplate){
                         $sendString = htmlspecialchars_decode(http_build_query($ReportVars));
 
                         $viewTarget = "dr_pushResult('".$Config['_ItemViewInterface']."', '".$sendString."');";
+                        $PreReturn = str_replace('{{_ViewTarget}}', $viewTarget, $PreReturn); //'Edit | View';
                     }
 
 
                 $PreReturn = str_replace('{{_ViewEdit}}', $ViewLink, $PreReturn); //'Edit | View';
                 $PreReturn = str_replace('{{_ViewLink}}', $ViewOnly, $PreReturn); //'Edit | View';
-                $PreReturn = str_replace('{{_ViewTarget}}', $viewTarget, $PreReturn); //'Edit | View';
             }
 
 
@@ -391,12 +396,12 @@ foreach($Config['_layoutTemplate']['_Content']['_name'] as $key=>$rowTemplate){
                         $sendString = htmlspecialchars_decode(http_build_query($ReportVars));
 
                         $viewTarget = "dr_pushResult('".$Config['_ItemViewInterface']."', '".$sendString."');";
+                        $PreReturn = str_replace('{{_ViewTarget}}', $viewTarget, $PreReturn); //'Edit | View';
                     }
 
 
                 $PreReturn = str_replace('{{_ViewEdit}}', $ViewLink, $PreReturn); //'Edit | View';
                 $PreReturn = str_replace('{{_ViewLink}}', $ViewOnly, $PreReturn); //'Edit | View';
-                $PreReturn = str_replace('{{_ViewTarget}}', $viewTarget, $PreReturn); //'Edit | View';
             }
 
 
@@ -408,6 +413,7 @@ foreach($Config['_layoutTemplate']['_Content']['_name'] as $key=>$rowTemplate){
             $outContent = $PreReturn;
 
     }
+    $rowIndex++;
 
     echo $outContent;
     }

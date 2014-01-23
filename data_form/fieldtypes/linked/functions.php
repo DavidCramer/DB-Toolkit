@@ -249,8 +249,11 @@ return $Return;
 
 function linked_loadfields($Table, $Field, $MainTable, $Defaults = false){
         global $wpdb;
-        $WhereField .= '<option value=""></option>';
-        $SortField .= '<option value=""></option>';
+    $WhereField = '<option value=""></option>';
+    $SortField = '<option value=""></option>';
+    $IDReturn = '';
+    $ValueReturn = '';
+
 	$result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
 	if (mysql_num_rows($result) > 0) {
 		while ($row = mysql_fetch_assoc($result)){
@@ -294,7 +297,7 @@ function linked_loadfields($Table, $Field, $MainTable, $Defaults = false){
 	$IReturn = '<div class="list_row1" style="padding:3px;">Reference Field: <select name="Data[Content][_Linkedfields]['.$Field.'][ID]" id="Ref_'.$Table.'">';
 		$IReturn .= $IDReturn;
 	$IReturn .= '</select></div>';
-	$VReturn .= '<div class="list_row1" style="padding:3px;">Value Field:<select name="Data[Content][_Linkedfields]['.$Field.'][Value][]" id="Ref_'.$Table.'">';
+        $VReturn = '<div class="list_row1" style="padding:3px;">Value Field:<select name="Data[Content][_Linkedfields]['.$Field.'][Value][]" id="Ref_'.$Table.'">';
 		$VReturn .= $ValueReturn;
 	$VReturn .= '</select> <img src="'.WP_PLUGIN_URL.'/db-toolkit/images/nadd.png" width="16" width="16" id="addbtn_'.$Field.'" onclick="linked_addReturn(\''.$Table.'\', \''.$Field.'\', 0);" /></div>';
 	$VReturn .= '<div id="'.$Field.'_additionalValues">';
@@ -388,7 +391,8 @@ function linked_loadfields($Table, $Field, $MainTable, $Defaults = false){
 
 	
 
-return $IReturn.$VReturn.$URLField.$Types.$LocalURLField;
+//return $IReturn.$VReturn.$URLField.$Types.$LocalURLField;
+return $IReturn.$VReturn.$Types;
 }
 function linked_loadAdditionalValue($Table, $Field, $Default = false, $filtered = false){
 	$ElID = rand(1, 999999);
@@ -570,6 +574,7 @@ return $Return;
 
 function linked_showFilter($Field, $Type, $Default, $Config, $EID){	
 	$FieldTitle = '';
+	$Return = '';
         
 	if(!empty($Config['_FieldTitle'][$Field])){
 		$FieldTitle = $Config['_FieldTitle'][$Field];	

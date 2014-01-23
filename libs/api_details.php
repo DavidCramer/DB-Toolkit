@@ -1,5 +1,10 @@
 <?php 
-if ($Config['_APIAuthentication'] != 'open') {
+$apiAuth = '';
+if (key_exists('_APIAuthentication', $Config)) {
+    $apiAuth .= $Config['_APIAuthentication'];
+}
+
+if ($apiAuth != 'open') {
     echo get_bloginfo('url').'/ <em><strong>CallName</strong></em> / <em><strong>Key/Token</strong></em> / <em><strong>Method</strong></em> / <em><strong>Format</strong></em> / <em><strong>? GET Variables</strong></em> '; 
 } else {
     echo get_bloginfo('url').'/ <em><strong>CallName</strong></em> / <em><strong>Method</strong></em> / <em><strong>Format</strong></em> / <em><strong>? GET Variables</strong></em> '; 
@@ -33,12 +38,12 @@ if ($Config['_APISeed'] != '') {
             </td>
         </tr>
         
-        <?php if ($Config['_APIAuthentication'] != 'open') { ?>
+        <?php if ($apiAuth != 'open') { ?>
         <tr>
             <th scope="row" span="2">Key</th>
             <td>
                 <?php
-                if($Config['_APIAuthentication'] == 'key'){
+                if($apiAuth == 'key'){
                     echo '<div>Your token: '.API_getCurrentUsersKey().'</div>';
                     echo '<span class="description">This is the token for you. You\'ll need to call the Auth Method as indicated below to retrieve the other tokens.</span>';
                 }else{
@@ -51,7 +56,7 @@ if ($Config['_APISeed'] != '') {
 
 
         <?php
-        if($Config['_APIAuthentication'] == 'key'){
+        if($apiAuth == 'key'){
         ?>
 
         <tr>
