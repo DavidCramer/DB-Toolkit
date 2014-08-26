@@ -1,0 +1,18 @@
+<div class="dbtoolkit-field-group dbtoolkit-field-group-full">
+	<button class="button block-button add-toggle-option" type="button">Add Option</button>
+</div>
+<div class="dbtoolkit-field-group dbtoolkit-field-group-full toggle-options">
+	{{#each option}}
+	<div class="toggle_option_row">
+		<i class="dashicons dashicons-sort" style="padding: 4px 9px;"></i>
+		{{#if default}}
+			<input type="checkbox" class="toggle_set_default field-config" name="variables[{{../../id}}][option][{{@key}}][default]" value="1" checked="checked">
+		{{else}}			
+			<input type="checkbox" class="toggle_set_default field-config" name="variables[{{../../id}}][option][{{@key}}][default]" value="1">
+		{{/if}}
+		<input type="text" class="toggle_value_field field-config" name="variables[{{../id}}][option][{{@key}}][value]" value="{{value}}" placeholder="value">
+		<input type="text" class="toggle_label_field field-config" name="variables[{{../id}}][option][{{@key}}][label]" value="{{label}}" placeholder="label">
+		<button class="button toggle-remove-option" type="button"><i class="dashicons dashicons-no" style="padding: 3px 0px;"></i></button>		
+	</div>
+	{{/each}}
+</div>

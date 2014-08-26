@@ -1,7 +1,0 @@
-/* debug styles*/
-.show-grid{margin-top: 10px;margin-bottom: 20px;}
-.show-grid [class*="span"]{background-color: #eee;min-height: 30px;line-height: 30px;}
-.show-grid:hover [class*="span"]{background: #ddd;}
-.show-grid .show-grid{margin-top: 0;margin-bottom: 0;}
-.show-grid .show-grid [class*="span"], .show-grid .show-grid .show-grid .show-grid [class*="span"]{background-color: #ccc;}
-.show-grid .show-grid .show-grid [class*="span"]{background-color: #eee;}

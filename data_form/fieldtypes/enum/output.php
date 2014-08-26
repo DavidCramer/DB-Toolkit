@@ -1,3 +1,0 @@
-<?php
-	$Out .= $Data[$Field];
-?>

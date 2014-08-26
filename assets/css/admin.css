@@ -1,0 +1,164 @@
+/*wp4 styles*/
+.wp-filter {
+  background: none repeat scroll 0 0 #fff;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+  color: #555;
+  display: inline-block;
+  font-size: 13px;
+  margin: 12px 0 25px;
+  padding: 0 20px;
+  position: relative;
+  width: 100%;
+}
+.wp-filter-links, .wp-filter-links li {
+  display: inline-block;
+  margin: 0;
+}
+.wp-filter-link {
+  border-bottom: 4px solid #fff;
+  color: #666;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 10px;
+  padding: 15px 0;
+}
+.wp-filter a {
+  text-decoration: none;
+}
+.wp-filter-links .current {
+  border-bottom: 4px solid #666;
+  color: #222;
+}
+
+
+/* library admin view classes */
+h2.dbtoolkit-h2 {
+  background: url("icon.png") no-repeat scroll 0 13px rgba(0, 0, 0, 0);
+  font-weight: 200;
+  padding-left: 30px;
+}
+#loading-indicator.loading > .spinner {
+  display: inline-block;
+  float: none;
+}
+.dbtoolkit-element-tool-error {
+  border-left: 4px solid #cf2020;
+}
+.dbtoolkit-element-tool-separator {
+  border-right: 1px solid #efefef;
+}
+.dbtoolkit-element-tool-separator .wp-filter-link {
+  margin-left: 0;
+  margin-right: 0;
+}
+.dbtoolkit-field-group{
+  margin-bottom: 8px;
+}
+.dbtoolkit-field-group > label {
+  display: inline-block;
+  margin: 0;
+  vertical-align: top;
+  width: 180px;
+}
+.dbtoolkit-field-group .dbtoolkit-config-field,
+.dbtoolkit-field-group > input,
+.dbtoolkit-field-group > select {
+  width: 320px;
+  display: inline-block;
+}
+.dbtoolkit-field-group .dbtoolkit-config-field > label{
+  display: block;
+}
+.dbtoolkit-panel-footer {
+  background: none repeat scroll 0 0 #f8f8f8;
+  border-top: 1px solid #efefef;
+  margin: 12px -6px -6px;
+  padding: 6px;
+}
+
+.wp-filter.wp-filter-small {
+  margin-top: -6px;
+}
+.wp-filter.wp-filter-small.wp-filter-projects {
+  display: inline;
+  float: left;
+  margin-right: 13px;
+  margin-top: 0;
+  width: 220px;
+  padding: 10px 10px 10px 20px;
+}
+.wp-filter.wp-filter-small .wp-filter-link{
+	padding: 5px 0 2px;
+	height: 20px;
+}
+.wp-filter-small.wp-filter-projects .wp-filter-links,
+.wp-filter-small.wp-filter-projects .wp-filter-links > li,
+.wp-filter-small.wp-filter-projects .wp-filter-links > li > a{
+  display: block;
+  border-bottom: 1px solid transparent;
+}
+.wp-filter-small.wp-filter-projects .wp-filter-links .current {
+  border-bottom: 1px solid #959595;
+}
+.wp-filter-link .count {
+  background: none repeat scroll 0 0 #777;
+  border-radius: 50%;
+  color: #fff;
+  display: inline-block;
+  font-size: 8px;
+  height: 12px;
+  line-height: 13px;
+  padding: 2px;
+  text-align: center;
+  width: 12px;
+}
+.wp-filter.wp-filter-small.wp-filter-projects .count {
+  float: right;
+}
+.db-toolkit-list-projects {
+  margin-left: 246px;
+}
+.dbtoolkit-project-line {
+  clear: left;
+  margin-left: 315px;
+}
+
+
+/* admin dropdown */
+.dbtoolkit-new > ul {
+  background: none repeat scroll 0 0 #fff;
+  position: absolute;
+  z-index: 999;
+  border: 1px solid #e5e5e5;
+  border-top: 0;
+  box-shadow: 0 12px 12px rgba(0, 0, 0, 0.2);
+  padding: 0 4px;
+  margin-left: -4px;
+  display: none;
+  width: 280px;
+}
+.dbtoolkit-new > ul > li {
+  display: block;
+  float: left;
+  width: 140px;
+}
+.dbtoolkit-new > ul .wp-filter-link {
+	padding: 6px 0;
+}
+.dbtoolkit-new:hover > ul {
+	display: block;
+}
+
+
+
+/* Experimental 
+.db-toolkit-list-elements small,
+.db-toolkit-list-projects small {
+  font-size: 65px;
+  left: -8px;
+  opacity: 0.1;
+  position: absolute;
+  top: -8px;
+}*/

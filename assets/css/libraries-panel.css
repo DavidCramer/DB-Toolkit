@@ -1,0 +1,33 @@
+/* libraries panel styles */
+
+.dbtoolkit-library-items-wrapper{
+  margin-left: 12px;
+  padding: 3px;
+  width: 300px;
+  float: left;
+}
+
+
+.dbtoolkit-library-item{
+  background: none repeat scroll 0 0 #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e5e5e5;
+  margin-bottom: 12px;
+  padding: 6px;
+}
+.dbtoolkit-library-item > h3 {
+  color: #535353;
+  font-size: 1em;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+}
+.dbtoolkit-library-config {
+  color: #888;
+  cursor: pointer;
+  float: right;
+}
+.dbtoolkit-library-handle {
+  cursor: move;
+  color: #8f8f8f;
+}

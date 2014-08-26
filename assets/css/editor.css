@@ -1,0 +1,38 @@
+/* editor view classes */
+
+.dbtoolkit-editor-panel {
+	padding-left: 32px;
+}
+
+h2.dbtoolkit-panel-title {
+	color: #404040;
+	font-size: 1.2em;
+	font-weight: 400;
+	margin: -12px 0 8px;
+	padding: 0;
+}
+
+.dbtoolkit-page-caption,
+.dbtoolkit-panel-caption{
+	color: rgb(159, 159, 159);
+	font-size: 11px;
+	line-height: 10px;
+	opacity: 1;
+}
+.dbtoolkit-panel-controls{
+	float: left;
+	width: 20px;
+	margin-top: 2px;
+}
+.dbtoolkit-panel-control-icon{
+	display: inline-block;
+	color: #888;
+	margin: 4px 0px;
+	cursor: pointer;
+}
+.dbtoolkit-panel-control-icon:hover{
+	color: #666
+}
+.dbtoolkit-help-block.description {
+  margin: -4px 0 10px 155px;
+}
