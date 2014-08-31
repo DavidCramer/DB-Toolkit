@@ -1,6 +1,7 @@
 <div class="dbtoolkit-field-group">
 	<label>Type</label>
-	<select name="fields[{{Field}}][Handler]" class="{{Field}} dbtoolkit-trigger" data-event="change" data-field="{{Field}}" data-request="dbt_setup_field_handler" data-callback="dbt_init_fieldhandler_switch" data-target="#{{Field}}_field_config">
+	<select name="fields[{{Field}}][Handler]" class="{{Field}} dbtoolkit-trigger" data-event="change" data-field="{{Field}}" data-request="dbt_setup_field_handler" data-before="dbt_init_field_handler_switch" data-target="#{{Field}}_field_config">
+		<option></option>
 		<?php
 		$field_types = apply_filters("dbtoolkit_local_table_field_types", array() );
 

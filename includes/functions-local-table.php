@@ -40,6 +40,7 @@ function dbtoolkit_load_local_table(){
 		
 	$struct = array();
 	foreach ($fields as $field_index => $field) {
+		$field['new_item'] = true; // SET TO INDICATE NEWLY LOADED
 		$struct[] = $field;
 	}
 
@@ -52,6 +53,16 @@ function dbtoolkit_render_local_table_templates(){
 	echo "<script type=\"text/html\" id=\"dbtoolkit-panel-local-field-item-tmpl\">\r\n";
 		include DBTOOLKIT_PATH . "ui/templates/dataset/dataset-item-template.php";
 	echo "</script>\r\n";
+	echo "<script type=\"text/html\" id=\"dbtoolkit-panel-local-field-config-tmpl\">\r\n";
+		include DBTOOLKIT_PATH . "ui/templates/dataset/dataset-item-config-template.php";
+	echo "</script>\r\n";
+	$field_types = apply_filters("dbtoolkit_local_table_field_types", array() );
+
+	foreach($field_types as $field_slug=>$field_config){
+		echo "<script type=\"text/html\" id=\"dbtoolkit-handler-template-".$field_slug."-tmpl\">\r\n";
+			include $field_config['template'];
+		echo "</script>\r\n";
+	}
 	
 }
 

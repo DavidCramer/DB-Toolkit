@@ -2774,14 +2774,11 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
   });
   Handlebars.registerHelper('include', function(template){
 
-    var include = '';
-    if(field_type_templates[template]){
-      include = field_type_templates[template](this);
-    }else{
-      include = field_type_templates._no_config_(this);
-    }
-    console.log(this);
+    var include = jQuery('#dbtoolkit-handler-template-' + template + '-tmpl').html();
     
+    if(!include){
+      return 'NOPE';
+    }
     return new Handlebars.SafeString( include );
 
   });

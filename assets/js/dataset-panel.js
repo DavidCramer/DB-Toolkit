@@ -1,26 +1,5 @@
 /* Variables panel js */
-
-// create a new group object
-function dbt_add_dataset_group(obj){
-
-	var group_count 	= obj.target.children().length + 1,
-		group_id		= dbt_generate_id(),
-		dataset_count	= jQuery('.dbtoolkit-dataset-item').length + 1,
-		new_item		= dbt_add_dataset_item(obj),
-		group = [
-		{
-			id			: group_id,
-			label		: 'Group '+ ( group_count ),
-			slug		: 'group_'+ ( group_count )			
-		}
-	];
-	if(dataset_count<=1){
-		group[0].datasets = new_item.datasets;
-		group[0].datasets[0].group = group_id;
-	}	
-
-	return { dataset_groups : group };
-}
+var field_handler_templates = {}
 
 // create a new item object
 function dbt_add_dataset_item(obj){
@@ -44,23 +23,33 @@ function dbt_add_dataset_config(obj){
 
 	var group_count 	= obj.target.children().length,
 		dataset_count	= jQuery('.dbtoolkit-dataset-item').length,
-		group = [
-		{
-			datasets	: [
+		dataset = {
+			fields	: [
 				{	
-					id		: obj.trigger.data('id'),
-					label	: 'Variable '+ ( dataset_count ),
-					slug	: 'dataset_'+ ( dataset_count ),
+					Field	: obj.trigger.data('field'),
+					Type	: obj.trigger.data('fieldtype'),
 				}
 			]
-		}
-	];
+		};
 
-	return { dataset_groups : group };
+	return dataset;
 }
 
 function dbt_trigger_new_config(obj){
 	obj.params.trigger.parent().find('.dbtoolkit-group-config').trigger('click');
+}
+
+function dbt_init_field_handler_switch(el){
+	var trigger = jQuery(el),
+		template = '#dbtoolkit-handler-template-' + trigger.val() + '-tmpl';
+
+	trigger.data('template', template);
+	console.log(template);
+	return true;
+}
+
+function dbt_setup_field_handler(obj){
+	return {};
 }
 
 function dbt_delete_dataset_field(obj){

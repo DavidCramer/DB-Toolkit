@@ -125,6 +125,3 @@ if(is_admin()){
 	}
 
 }
-
-// Load DBT Form Processor for CF
-include_once DBTOOLKIT_PATH . 'cf_processor/cf_processor.php';
