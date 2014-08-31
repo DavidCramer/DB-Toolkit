@@ -90,25 +90,19 @@ function dbtoolkit_load_projects(){
 	wp_send_json( $out );
 }
 
+add_action( "wp_ajax_element_delete", "dbtoolkit_delete_element" );
+function dbtoolkit_delete_element(){
 
-function dbtoolkit_get_legacy_type($type){
-	
-	$elements_types = apply_filters( "dbtoolkit_get_element_types", array() );
-
-	if(!isset($elements_types[$type])){
-		// find legacy
-		foreach($elements_types as $type_slug=>$element_type){
-			if(isset($element_type['legacy'])){
-				if($element_type['legacy'] == $type){
-					return $type_slug;
-				}
-			}
-		}
-
+	$elements = get_option( 'DBT_ELEMENTS' );
+	if(isset($elements[$_POST['element']])){
+		unset($elements[$_POST['element']]);
+		delete_option( $elements[$_POST['element']] );
 	}
-	if(!isset($elements_types[$type])){
-		return false;
-	}
+
+
+	update_option( 'DBT_ELEMENTS', $elements );
+
+	exit;
 }
 
 // create new element

@@ -121,14 +121,9 @@ function dbt_toggle_group_config(obj){
 // setup sortables
 function dbt_reset_dataset_sortables(el){
 
-	jQuery( ".dbtoolkit-dataset-wrapper" ).not('.ui-sortable').sortable({
-		items					:	".dbtoolkit-dataset-group",
-		handle					:	".dbtoolkit-group-handle",
-		forcePlaceholderSize	:	true,
-		placeholder				:	"dbtoolkit-dataset-group-helper",
-	});
 
-	jQuery( ".dbtoolkit-dataset-holder" ).not('.ui-sortable').sortable({
+
+	jQuery( ".dbtoolkit-dataset-group" ).not('.ui-sortable').sortable({
 		connectWith				: ".dbtoolkit-dataset-holder",
 		items					:	".dbtoolkit-dataset-item",
 		handle					:	"h4",
@@ -138,10 +133,10 @@ function dbt_reset_dataset_sortables(el){
 			dbt_check_holder_count(this);
 		},
 		update					:	function(){
-			dbt_check_holder_count(this);
+			//dbt_check_holder_count(this);
 			// update field config groups
-			var panel 	= jQuery(this);
-			panel.find('.dataset-group-id').val(panel.data('group'));
+			//var panel 	= jQuery(this);
+			//panel.find('.dataset-group-id').val(panel.data('group'));
 		
 		}
 	});

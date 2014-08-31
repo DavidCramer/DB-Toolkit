@@ -1,5 +1,12 @@
 var current_screen_object = {page : "admin", state : ""}, dbt_animation_speed = 100;
 
+function dbt_confirm_delete(){
+	return confirm('Are you sure you want to remove this item?');
+}
+function dbt_reload_elements(){
+	jQuery('#dbtoolkit-canvas .wp-filter-link.dbtoolkit-trigger.current').trigger('click');
+}
+
 function dbt_create_new_element(){
 	return '{"type" : true}';
 }

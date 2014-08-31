@@ -42,7 +42,13 @@
 				data-callback="dbt_reveal_tools"
 			>Edit</a>
 			<a class="button button-small" href="{{footer/link}}" target="_blank">Clone</a>
-			<a class="button button-small right" href="{{footer/link}}" target="_blank">Delete</a>
+			<a class="button button-small dbtoolkit-trigger right"
+				href="#delete-{{id}}"
+				data-action="element_delete"
+				data-element="{{id}}"
+				data-before="dbt_confirm_delete"
+				data-callback="dbt_reload_elements"
+			>Delete</a>
 		</div>
 	</div>
 	{{/each}}

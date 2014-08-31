@@ -1,16 +1,17 @@
-<ul class="dbtoolkit-panel-controls">
-	<li style="margin-bottom:0;"><span 
-	class="dbtoolkit-panel-control-icon dbtoolkit-trigger dashicons dashicons-admin-page"
-	data-request="dbt_add_dataset_group"
-	data-target="#ce-datasets-wrap"
-	data-target-insert="append"
-	data-template="#dbtoolkit-panel-dataset-group-tmpl"
-	data-callback="dbt_reset_dataset_sortables"
-	></span></li>	
-</ul>
 <div class="dbtoolkit-dataset-wrapper" id="ce-datasets-wrap">
-<?php include DBTOOLKIT_PATH . "ui/templates/dataset/dataset-group-template.php"; ?>
+	<div class="dbtoolkit-trigger" id="ce-data-wrap" data-table="{{table}}" data-action="dbt_load_local_tables" data-target="#ce-data-wrap" data-event="none" data-autoload="true">
+	</div>	
+<hr>
+<div class="dbtoolkit-dataset-group" id="ce-data-source">
+<?php include DBTOOLKIT_PATH . "ui/templates/dataset/dataset-item-template.php"; ?>
+</div>
 </div>
 <div class="dbtoolkit-dataset-items-config-wrapper" id="ce-datasets-items-config-wrap">
 <?php include DBTOOLKIT_PATH . "ui/templates/dataset/dataset-item-config-template.php"; ?>
 </div>
+
+
+
+
+
+

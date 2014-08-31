@@ -20,7 +20,7 @@ function dbtoolkit_load_element_types(){
 				)
 			),
 		),
-		'cf_form_data'	=>	array(
+		/*'cf_form_data'	=>	array(
 			'name'			=>	"Caldera Form Data",
 			'type'			=>	'data',
 			'processor'		=>	'dbtoolkit_cf_form_get_entries',
@@ -28,6 +28,20 @@ function dbtoolkit_load_element_types(){
 			'panels'		=>	array(
 				'cf_form_data'
 			)
+		),
+		'data_grid'	=>	array(
+			'name'			=>	"Data Grid",
+			'type'			=>	'display',
+			'renderer'		=> 	'render_cf_data_grid',
+			'panels'		=>	array(
+				'cf_data_grid'
+			),
+			'scripts'	=> array(
+				DBTOOLKIT_URL . 'assets/js/jquery.bootgrid.min.js'
+			),
+			'styles'	=> array(
+				DBTOOLKIT_URL . 'assets/css/jquery.bootgrid.css'
+			),
 		),
 		'query_template'	=>	array(
 			'name'			=>	"Template",
@@ -47,9 +61,9 @@ function dbtoolkit_load_element_types(){
 					'type'		=>	'javascript'
 				)
 			),
-		),
-		'dataset'			=>	array(
-			'name'			=>	"Dataset",
+		),*/
+		'db_table'			=>	array(
+			'name'			=>	"Local Table",
 			'type'			=>	'data',
 			'processor'		=>	'dbtoolkit_rundata_set',
 			'structure'		=>	'dbtoolkit_dataset_struct',

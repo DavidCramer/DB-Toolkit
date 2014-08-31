@@ -1,35 +1,17 @@
 <div class="dbtoolkit-field-group">
-	<label>Label</label>
-	<input name="datasets[{{id}}][label]" class="{{id}}" data-sync="label_{{id}}" type="text" value="{{label}}">
-</div>
-
-<div class="dbtoolkit-field-group">
-	<label>Slug</label>
-	<input name="datasets[{{id}}][slug]" class="{{id}} dbtoolkit-field-slug" data-format="slug" data-sync="slug_{{id}}" type="text" value="{{slug}}">
-</div>
-
-<div class="dbtoolkit-field-group">
-	<label>Description</label>
-	<input name="datasets[{{id}}][description]" class="{{id}}" type="text" value="{{description}}">
-</div>
-
-<div class="dbtoolkit-field-group">
 	<label>Type</label>
-	<select name="datasets[{{id}}][type]" class="{{id}} dbtoolkit-trigger" data-event="change" data-field="{{id}}" data-request="dbt_setup_fieldtype" data-callback="dbt_init_fieldtype_switch" data-target="#{{id}}_field_config">
+	<select name="fields[{{Field}}][Handler]" class="{{Field}} dbtoolkit-trigger" data-event="change" data-field="{{Field}}" data-request="dbt_setup_field_handler" data-callback="dbt_init_fieldhandler_switch" data-target="#{{Field}}_field_config">
 		<?php
-		global $field_types;
+		$field_types = apply_filters("dbtoolkit_local_table_field_types", array() );
+
 		foreach($field_types as $field_slug=>$field_config){
-			echo "<option value=\"" . $field_slug ."\" {{#is type value=\"" . $field_slug . "\"}}selected=\"selected\"{{/is}}>" . $field_config['field'] . "</option>\r\n";
+			echo "<option value=\"" . $field_slug ."\" {{#is Handler value=\"" . $field_slug . "\"}}selected=\"selected\"{{/is}}>" . $field_config['label'] . "</option>\r\n";
 		}
 		?>
 	</select>
 	
 </div>
 
-<div id="{{id}}_field_config">
-{{include type}}
-</div>
-
-<div class="dbtoolkit-panel-footer">
-	<button class="button dbtoolkit-trigger" data-id="{{id}}" data-request="dbt_delete_dataset_field" type="button">Delete Variable</button>
+<div id="{{Field}}_field_config">
+{{include Handler}}
 </div>
