@@ -14,5 +14,18 @@
 </div>
 
 <div id="{{Field}}_field_config">
-{{include Handler}}
+<?php
+	$field_types = apply_filters("dbtoolkit_local_table_field_types", array() );
+
+	foreach($field_types as $field_slug=>$field_config){
+		if(isset($field_config['template']) && file_exists($field_config['template'])){
+			echo "{{#is Handler value=\"".$field_slug."\"}}\r\n";
+			include $field_config['template'];
+			echo "\r\n{{/is}}\r\n";
+		}
+	}
+
+	//{{include Handler}}
+?>
+
 </div>

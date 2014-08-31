@@ -2773,12 +2773,19 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
     }
   });
   Handlebars.registerHelper('include', function(template){
-
-    var include = jQuery('#dbtoolkit-handler-template-' + template + '-tmpl').html();
+    
+    var include = jQuery('#dbtoolkit-handler-template-' + template + '-tmpl').html(),
+        comp;
     
     if(!include){
       return '';
     }
-    return new Handlebars.SafeString( include );
+    
+    comp = Handlebars.compile(include);
 
+    return new Handlebars.SafeString( comp(this) );
+
+  });
+  Handlebars.registerHelper('console', function(options){
+    console.log(options);
   });

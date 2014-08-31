@@ -66,7 +66,8 @@ if(is_admin()){
 	// add active shortcode templates
 	add_action( 'init', 'dbtoolkit_define_template_shortcodes' );
 	function dbtoolkit_define_template_shortcodes(){
-		$elements = dbtoolkit_get_active_elements(array('query_template', 'data_grid'));
+		$elements = dbtoolkit_get_active_elements(array('query_template', 'db_table'));
+		dump($elements);
 		foreach($elements as $element){
 			add_shortcode( $element['slug'], 'dbtoolkit_render_shortcode' );
 		}	
@@ -75,7 +76,7 @@ if(is_admin()){
 	function dbtoolkit_render_shortcode($args, $content, $code){
 		global $passback_args, $wp_query, $post;
 
-		$elements = dbtoolkit_get_active_elements( array('query_template', 'data_grid') );
+		$elements = dbtoolkit_get_active_elements( array('query_template', 'db_table') );
 		
 		foreach($elements as $element){
 			if($element['slug'] === $code){

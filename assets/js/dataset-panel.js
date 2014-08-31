@@ -112,9 +112,7 @@ function dbt_toggle_group_config(obj){
 
 // setup sortables
 function dbt_reset_dataset_sortables(el){
-
-
-
+	
 	jQuery( ".dbtoolkit-dataset-group" ).not('.ui-sortable').sortable({
 		connectWith				: ".dbtoolkit-dataset-holder",
 		items					:	".dbtoolkit-dataset-item",
@@ -146,7 +144,10 @@ function dbt_check_holder_count(el){
 	}
 }
 
-
+function dbt_clear_configs(){
+	jQuery('#ce-datasets-items-config-wrap').empty();
+	return true;
+}
 
 
 
