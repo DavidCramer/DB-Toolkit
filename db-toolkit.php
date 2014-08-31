@@ -66,7 +66,7 @@ if(is_admin()){
 	// add active shortcode templates
 	add_action( 'init', 'dbtoolkit_define_template_shortcodes' );
 	function dbtoolkit_define_template_shortcodes(){
-		$elements = dbtoolkit_get_active_elements('query_template');
+		$elements = dbtoolkit_get_active_elements(array('query_template', 'data_grid'));
 		foreach($elements as $element){
 			add_shortcode( $element['slug'], 'dbtoolkit_render_shortcode' );
 		}	
@@ -75,8 +75,8 @@ if(is_admin()){
 	function dbtoolkit_render_shortcode($args, $content, $code){
 		global $passback_args, $wp_query, $post;
 
-		$elements = dbtoolkit_get_active_elements('query_template');
-
+		$elements = dbtoolkit_get_active_elements( array('query_template', 'data_grid') );
+		
 		foreach($elements as $element){
 			if($element['slug'] === $code){
 				$config = $element;
@@ -89,26 +89,37 @@ if(is_admin()){
 
 		$passback_args = array_merge( (array) $passback_args, (array) $args);
 
+		$element_types = apply_filters( 'dbtoolkit_get_element_types', array() );
+		if(empty($element_types[$config['type']])){
+			return;
+		}
+		if(!empty($element_types[$config['type']]['renderer'])){
+			add_action( 'dbtoolkit_render_element-'.$config['type'], $element_types[$config['type']]['renderer'], 10, 2);
+			ob_start();
+			do_action( 'dbtoolkit_render_element-'.$config['type'], $config, $passback_args);
+			$html = do_shortcode( ob_get_clean() );
+		}else{
 
-		$engine = new Handlebars;
-		$data_source = get_option( $config['data_source'] );
+			$engine = new Handlebars;
+			$data_source = get_option( $config['data_source'] );
 
-		$data = apply_filters( "dbtoolkit_element_process-" . $data_source['type'], array(), $data_source );
-		$data['wp_query'] = $wp_query;
-		$data['post'] = $post;
-		
-		$template = dbtoolkit_do_magic_tags( $config['code']['html'] );
+			$data = apply_filters( "dbtoolkit_element_process-" . $data_source['type'], array(), $data_source );
+			$data['wp_query'] = $wp_query;
+			$data['post'] = $post;
+			
+			$template = dbtoolkit_do_magic_tags( $config['code']['html'] );
 
-		$sdata = array(
-			'name' => 'DAVID',
-			'entries' => array(
-				'book',
-				'car'
-			)			
-		);
-		$html = do_shortcode( $engine->render( $template, $data ) );
-		if(!empty($config['code']['script'])){
-			$html .= "<script type=\"text/javascript\">\r\n" . dbtoolkit_do_magic_tags( $config['code']['script'] ) . "\r\n</script>";
+			$sdata = array(
+				'name' => 'DAVID',
+				'entries' => array(
+					'book',
+					'car'
+				)			
+			);
+			$html = do_shortcode( $engine->render( $template, $data ) );
+			if(!empty($config['code']['script'])){
+				$html .= "<script type=\"text/javascript\">\r\n" . dbtoolkit_do_magic_tags( $config['code']['script'] ) . "\r\n</script>";
+			}
 		}
 		return $html;
 	}

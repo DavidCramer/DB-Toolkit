@@ -158,14 +158,14 @@ function dbtoolkit_build_admin_page(){
 
 // helper function to get active elements of a specific type
 function dbtoolkit_get_active_elements($type = null){
-
+	
 	$elements = get_option( 'DBT_ELEMENTS' );
 	$returns = array();
 	foreach($elements as $element_id=>$element_def){
 
 		if( !empty($element_def['state']) ){
 			if(!empty($type)){
-				if($element_def['type'] !== $type){
+				if( !in_array( $element_def['type'], (array) $type) ){
 					continue;
 				}
 			}
@@ -177,9 +177,43 @@ function dbtoolkit_get_active_elements($type = null){
 }
 
 
+if(!is_admin()){
+	add_action('wp', 'dbtoolkit_detect_active_shortcodes');
+	function dbtoolkit_detect_active_shortcodes(){
+		global $post;
+		if(empty($post)){
+			return;
+		}
 
+		$elements = dbtoolkit_get_active_elements(array('query_template', 'data_grid'));
+		if(empty($elements)){
+			return;
+		}
+		$types = apply_filters( 'dbtoolkit_get_element_types', array() );
+		foreach($elements as $element){
+			// set scripts
+			if( !empty($types[$element['type']]['scripts'])){
+				foreach($types[$element['type']]['scripts'] as $script){
+					if( false !== strpos($script, '/')){
+						// url						
+						wp_enqueue_script( 'dbtoolkit-script-'. $element['type'] . sanitize_key( basename( $script ) )				, $script, array('jquery')					, DBTOOLKIT_VER );
+					}else{
+						// slug
+						wp_enqueue_script( $script );
+					}
+				}
+			}
+			// set styles
+			if( !empty($types[$element['type']]['styles'])){
+				foreach($types[$element['type']]['styles'] as $style){
+					wp_enqueue_style( 'dbtoolkit-style-'. $element['type'] . sanitize_key( basename( $style ) ) .'-styles'				, $style		, array()							, DBTOOLKIT_VER );
+				}
+			}
 
+		}	
 
+	}
+}
 
 
 

@@ -29,6 +29,20 @@ function dbtoolkit_load_element_types(){
 				'cf_form_data'
 			)
 		),
+		'data_grid'	=>	array(
+			'name'			=>	"Data Grid",
+			'type'			=>	'display',
+			'renderer'		=> 	'render_cf_data_grid',
+			'panels'		=>	array(
+				'cf_data_grid'
+			),
+			'scripts'	=> array(
+				DBTOOLKIT_URL . 'assets/js/jquery.bootgrid.min.js'
+			),
+			'styles'	=> array(
+				DBTOOLKIT_URL . 'assets/css/jquery.bootgrid.css'
+			),
+		),
 		'query_template'	=>	array(
 			'name'			=>	"Template",
 			'type'			=>	'display',

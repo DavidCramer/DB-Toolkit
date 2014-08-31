@@ -56,6 +56,22 @@ function dbtoolkit_load_element_panels($panels){
 			'functions'	=>	DBTOOLKIT_PATH . 'includes/functions-cf-connect.php',
 			'template'	=>	DBTOOLKIT_PATH . 'ui/templates/caldera_forms/cf-connect-template.php',
 		),
+		'cf_data_grid' =>	array(
+			'label'		=>	'Form',
+			'title'		=>	'Caldera Form Fields',
+			'caption'	=>	'set field visibility, sorting and order',
+			'functions'	=>	DBTOOLKIT_PATH . 'includes/functions-cf-connect.php',
+			'template'	=>	DBTOOLKIT_PATH . 'ui/templates/caldera_forms/datagrid-template.php',
+			'callback'	=>	'dbt_reset_datagrid_sortables',
+			'styles'	=>	array(
+				DBTOOLKIT_URL . 'assets/css/datagrid-panel.css'
+			),
+			'scripts'	=>	array(
+				DBTOOLKIT_URL . 'assets/js/datagrid-panel.js',
+				'jquery-ui-core',
+				'jquery-ui-sortable'
+			)
+		),
 
 	);
 
