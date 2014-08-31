@@ -2777,7 +2777,7 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
     var include = jQuery('#dbtoolkit-handler-template-' + template + '-tmpl').html();
     
     if(!include){
-      return 'NOPE';
+      return '';
     }
     return new Handlebars.SafeString( include );
 

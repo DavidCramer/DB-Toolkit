@@ -1,1 +1,1 @@
-WOOTER
+<input type="text" name="fields[{{Field}}][Table]" value="{{Table}}">

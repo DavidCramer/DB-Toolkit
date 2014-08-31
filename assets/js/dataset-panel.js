@@ -43,13 +43,16 @@ function dbt_init_field_handler_switch(el){
 	var trigger = jQuery(el),
 		template = '#dbtoolkit-handler-template-' + trigger.val() + '-tmpl';
 
+	if(trigger.val() === ''){
+		jQuery(trigger.data('target')).empty();
+		return false;
+	}
 	trigger.data('template', template);
-	console.log(template);
 	return true;
 }
 
 function dbt_setup_field_handler(obj){
-	return {};
+	return { Field: obj.trigger.data('field') };
 }
 
 function dbt_delete_dataset_field(obj){
