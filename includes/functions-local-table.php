@@ -98,6 +98,14 @@ function dbtoolkit_render_local_table_templates(){
 	
 }
 
+function dbtoolkit_get_local_structure($structure, $config){
+	
+	foreach($config['fields'] as $field){
+		$structure[$field['slug']] = $field['slug'];
+	}
+
+	return $structure;
+}
 function dbtoolkit_build_local_joins($query, $field, $config){
 	global $wpdb;
 
@@ -182,6 +190,7 @@ function dbtoolkit_get_field_type_handlers($types){
 function dbtoolkit_build_local_query($data, $config){
 
 	global $wpdb;
+	
 
 	$handlers = apply_filters('dbtoolkit_local_table_field_types', array());
 	if(empty($config['fields'])){
@@ -222,7 +231,7 @@ function dbtoolkit_build_local_query($data, $config){
 		if($field['Key'] == 'PRI'){
 			$primary = 'SELECT COUNT(`'.$config['table'].'`.`'.$field_id.'`) AS `total`';
 		}
-	}
+	}	
 	if(empty($primary)){
 		// no primary just pick one for now
 		// TODO: make it list the keys and then choose.
@@ -232,6 +241,13 @@ function dbtoolkit_build_local_query($data, $config){
 
 	// build filters
 	// TODO
+	if(!empty($config['filter'])){
+		foreach($config['filter'] as $filter_key=>$filter_value){
+			if(isset($config['fields'][$filter_key])){
+				$query['where'][] = $wpdb->prepare('`'.$config['table'].'`.`'.$filter_key.'` = %s', $filter_value);
+			}
+		}
+	}	
 	// build pagination
 	// TODO
 	// build query
@@ -284,13 +300,10 @@ function dbtoolkit_build_local_query($data, $config){
 
 	$data['total']		=	$wpdb->get_var($query_count);
 	$data['pages']		=	ceil( $data['total'] / $data['per_page'] );
-	$data['entries']	=	$wpdb->get_results($query_full, ARRAY_A);
+	$data['entry']		=	$wpdb->get_results($query_full, ARRAY_A);
 
-	dump($data);
-	//$raw_results = 
-	dump($query_full,0);
-	dump($query_count);
-	die;
+	return $data;
+	
 }
 
 

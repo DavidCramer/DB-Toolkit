@@ -41,7 +41,7 @@
 				data-before="dbt_clear_canvas"
 				data-callback="dbt_reveal_tools"
 			>Edit</a>
-			<a class="button button-small" href="{{footer/link}}" target="_blank">Clone</a>
+			<?php /*<a class="button button-small" href="{{footer/link}}" target="_blank">Clone</a>*/ ?>
 			<a class="button button-small dbtoolkit-trigger right"
 				href="#delete-{{id}}"
 				data-action="element_delete"

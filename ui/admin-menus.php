@@ -29,5 +29,6 @@ $dbt_elements_types = apply_filters( "dbtoolkit_get_element_types", array() );
 </ul>
 </li>
 <li class="dbtoolkit-element-tool dbtoolkit-element-tool-separator"><a class="wp-filter-link">&nbsp;</a></li>
-<li class="dbtoolkit-element-tool dbtoolkit-elements" style="opacity:0;margin-left: -10px;"><a class="wp-filter-link dbtoolkit-trigger" href="#elements" data-action="dbt_load_projects" data-active-class="current" data-group="filter-nav" data-template="#elements-list-tmpl" data-target="#dbtoolkit-canvas">Import</a> </li>
-<li class="dbtoolkit-element-tool dbtoolkit-elements" style="opacity:0;margin-left: -10px;"><a class="wp-filter-link dbtoolkit-trigger" href="#elements" data-action="dbt_load_projects" data-active-class="current" data-group="filter-nav" data-template="#elements-list-tmpl" data-target="#dbtoolkit-canvas">Export</a> </li>
+<?php /*<li class="dbtoolkit-element-tool dbtoolkit-elements" style="opacity:0;margin-left: -10px;"><a class="wp-filter-link dbtoolkit-trigger" href="#elements" data-action="dbt_load_projects" data-active-class="current" data-group="filter-nav" data-template="#elements-list-tmpl" data-target="#dbtoolkit-canvas">Import</a> </li>
+<li class="dbtoolkit-element-tool dbtoolkit-elements" style="opacity:0;margin-left: -10px;"><a class="wp-filter-link dbtoolkit-trigger" href="#elements" data-action="dbt_load_projects" data-active-class="current" data-group="filter-nav" data-template="#elements-list-tmpl" data-target="#dbtoolkit-canvas">Export</a> </li>*/
+?>

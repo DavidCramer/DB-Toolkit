@@ -48,7 +48,7 @@ function dbtoolkit_init_plugin(){
 	foreach($elements as $element_type=>$element){
 		// processor
 		if(!empty($element['processor'])){
-			add_filter('dbtoolkit_element_process-' . $element_type, $element['processor'], 1, 2);
+			add_filter('dbtoolkit_get_data_from-' . $element_type, $element['processor'], 1, 2);
 		}
 	}
 
@@ -67,10 +67,10 @@ if(is_admin()){
 	add_action( 'init', 'dbtoolkit_define_template_shortcodes' );
 	function dbtoolkit_define_template_shortcodes(){
 		$element_types = apply_filters( 'dbtoolkit_get_element_types', array() );
-		$elements = dbtoolkit_get_active_elements(array('query_template', 'db_table'));		
+		$elements = dbtoolkit_get_active_elements();
 		foreach($elements as $element){
-			if(isset( $element_types[$element['type']]['processor'] )){
-				add_filter( 'dbtoolkit_get_data_from-'.$element['type'], $element_types[$element['type']]['processor'], 1, 2);
+			if($element_types[$element['type']]['type'] !== 'display'){
+				continue;
 			}
 			add_shortcode( $element['slug'], 'dbtoolkit_render_shortcode' );
 		}	
@@ -79,9 +79,19 @@ if(is_admin()){
 	function dbtoolkit_render_shortcode($args, $content, $code){
 		global $passback_args, $wp_query, $post;		
 
-		$elements = dbtoolkit_get_active_elements( array('query_template', 'db_table') );
+		$elements = dbtoolkit_get_active_elements();
+
+		// verify an element
+		$element_types = apply_filters( 'dbtoolkit_get_element_types', array() );
+		//if(empty($element_types[$config['type']])){
+			//return;
+		//}
 		
 		foreach($elements as $element){
+			if($element_types[$element['type']]['type'] !== 'display'){
+				continue;
+			}
+
 			if($element['slug'] === $code){
 				$config = $element;
 				break;
@@ -91,22 +101,21 @@ if(is_admin()){
 		if(empty($config)){
 			return;
 		}
-		// verify an element
-		$element_types = apply_filters( 'dbtoolkit_get_element_types', array() );
-		if(empty($element_types[$config['type']])){
-			return;
-		}
+
 		// create passback stuff
 		$config = array_merge( (array) $config, (array) $args);
-		
+
 		// create initial data object
 		$data = array(
 			'total'		=>	0,
 			'pages'		=>	1,
 			'offset'	=>	1,
 			'per_page'	=>	5,
-			'entries'	=>	array()
+			'entry'		=>	array(),
+			'wp_query'	=>	$wp_query,
+			'post'		=>	$post,
 		);
+
 		// do pagination calculations
 		if( !empty($_GET['pg']) ){
 			$prepage = abs( (int) $_GET['pg'] );
@@ -116,10 +125,16 @@ if(is_admin()){
 		}
 
 		// get data
-		$data = apply_filters( 'dbtoolkit_get_data_from-'.$config['type'], $data, $config);
-
-
+		if(!empty($config['data_source'])){
+			$data_source = get_option( $config['data_source'] );
+			if(!empty($args)){
+				$data_source['filter'] = (array) $args;
+			}
+			$data = apply_filters( 'dbtoolkit_get_data_from-'.$data_source['type'], $data, $data_source);
+		}
+		
 		if(!empty($element_types[$config['type']]['renderer'])){
+
 			add_action( 'dbtoolkit_render_element-'.$config['type'], $element_types[$config['type']]['renderer'], 10, 2);
 			ob_start();
 			do_action( 'dbtoolkit_render_element-'.$config['type'], $data, $config);
@@ -128,22 +143,10 @@ if(is_admin()){
 		}else{
 
 			$engine = new Handlebars;
-			$data_source = get_option( $config['data_source'] );
 
-			$data = apply_filters( "dbtoolkit_element_process-" . $data_source['type'], array(), $data_source );
-			$data['wp_query'] = $wp_query;
-			$data['post'] = $post;
-			
 			$template = dbtoolkit_do_magic_tags( $config['code']['html'] );
-
-			$sdata = array(
-				'name' => 'DAVID',
-				'entries' => array(
-					'book',
-					'car'
-				)			
-			);
 			$html = do_shortcode( $engine->render( $template, $data ) );
+
 			if(!empty($config['code']['script'])){
 				$html .= "<script type=\"text/javascript\">\r\n" . dbtoolkit_do_magic_tags( $config['code']['script'] ) . "\r\n</script>";
 			}
