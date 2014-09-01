@@ -24,6 +24,12 @@ function dbtoolkit_load_element_panels($panels){
 				'jquery-ui-core',
 				'jquery-ui-sortable'
 			)
+		),
+		'dataset_filters'	=>	array(
+			'label'		=>	'Filters',
+			'title'		=>	'Dataset Filters',
+			'caption'	=>	'setup dataset filtering rules',
+			'template'	=>	DBTOOLKIT_PATH . 'ui/templates/dataset/dataset-filters-template.php',
 		)
 	);
 

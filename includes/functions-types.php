@@ -23,10 +23,11 @@ function dbtoolkit_load_element_types(){
 		'db_table'			=>	array(
 			'name'			=>	"Local Table",
 			'type'			=>	'data',
-			'processor'		=>	'dbtoolkit_rundata_set',
+			'processor'		=>	'dbtoolkit_build_local_query',
 			'structure'		=>	'dbtoolkit_dataset_struct',
 			'panels'		=>	array(
-				'dataset_builder'
+				'dataset_builder',
+				'dataset_filters'
 			)
 		)
 

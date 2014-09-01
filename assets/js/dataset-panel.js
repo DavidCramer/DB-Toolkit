@@ -1,5 +1,5 @@
 /* Variables panel js */
-var field_handler_templates = {}
+var table_field_object = {}
 
 // create a new item object
 function dbt_add_dataset_item(obj){
@@ -35,10 +35,42 @@ function dbt_add_dataset_config(obj){
 	return dataset;
 }
 
+function dbt_dataset_currenct_object(obj){
+	current_loaded_object = obj.rawData;
+}
+
 function dbt_trigger_new_config(obj){
 	obj.params.trigger.parent().find('.dbtoolkit-group-config').trigger('click');
 }
+function dbt_update_table_field_selection(obj){
 
+	var fields = jQuery(obj.params.trigger.data('selector'));
+
+	fields.each(function(k,f){
+		
+		var field = jQuery(f);
+		field.empty();
+		
+		if(field.is('select')){
+			field.append('<option></option>');
+			for( var i = 0; i < obj.data.length; i++ ){
+				field.append('<option value="'+obj.data[i]+'">'+obj.data[i]+'</option>');
+			}
+			if(field.data('default')){
+				field.val(field.data('default'));
+			}
+		}else{
+			for( var i = 0; i < obj.data.length; i++ ){
+				field.append('<label style="display: block; width: 250px;"><input type="checkbox" value="'+obj.data[i]+'"> '+obj.data[i]+'</label>');
+			}
+		}
+	});
+
+	/*parent.find('select[data-default]').each(function(k,v){
+		var item = jQuery(v);
+		item.val(item.data('default'));
+	});*/
+}
 function dbt_init_field_handler_switch(el){
 	var trigger = jQuery(el),
 		template = '#dbtoolkit-handler-template-' + trigger.val() + '-tmpl';
@@ -52,7 +84,17 @@ function dbt_init_field_handler_switch(el){
 }
 
 function dbt_setup_field_handler(obj){
-	return { Field: obj.trigger.data('field') };
+	var tmpl_block	= jQuery('#dbtoolkit-handler-template-' + obj.trigger.val() + '-tmpl').html(),
+		template;
+
+	if(tmpl_block){
+		tmpl_block = "{{#each fields}}{{#is Field value=\""+obj.trigger.data('field')+"\"}}" + tmpl_block + "{{/is}}{{/each}}";
+		template = Handlebars.compile(tmpl_block);
+	}else{
+		return '';
+	}
+
+	return template(current_loaded_object);
 }
 
 function dbt_delete_dataset_field(obj){

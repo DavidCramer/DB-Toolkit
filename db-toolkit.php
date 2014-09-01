@@ -66,15 +66,18 @@ if(is_admin()){
 	// add active shortcode templates
 	add_action( 'init', 'dbtoolkit_define_template_shortcodes' );
 	function dbtoolkit_define_template_shortcodes(){
-		$elements = dbtoolkit_get_active_elements(array('query_template', 'db_table'));
-		dump($elements);
+		$element_types = apply_filters( 'dbtoolkit_get_element_types', array() );
+		$elements = dbtoolkit_get_active_elements(array('query_template', 'db_table'));		
 		foreach($elements as $element){
+			if(isset( $element_types[$element['type']]['processor'] )){
+				add_filter( 'dbtoolkit_get_data_from-'.$element['type'], $element_types[$element['type']]['processor'], 1, 2);
+			}
 			add_shortcode( $element['slug'], 'dbtoolkit_render_shortcode' );
 		}	
 	}
 
 	function dbtoolkit_render_shortcode($args, $content, $code){
-		global $passback_args, $wp_query, $post;
+		global $passback_args, $wp_query, $post;		
 
 		$elements = dbtoolkit_get_active_elements( array('query_template', 'db_table') );
 		
@@ -84,21 +87,44 @@ if(is_admin()){
 				break;
 			}
 		}
+		// verify a config
 		if(empty($config)){
 			return;
 		}
-
-		$passback_args = array_merge( (array) $passback_args, (array) $args);
-
+		// verify an element
 		$element_types = apply_filters( 'dbtoolkit_get_element_types', array() );
 		if(empty($element_types[$config['type']])){
 			return;
 		}
+		// create passback stuff
+		$config = array_merge( (array) $config, (array) $args);
+		
+		// create initial data object
+		$data = array(
+			'total'		=>	0,
+			'pages'		=>	1,
+			'offset'	=>	1,
+			'per_page'	=>	5,
+			'entries'	=>	array()
+		);
+		// do pagination calculations
+		if( !empty($_GET['pg']) ){
+			$prepage = abs( (int) $_GET['pg'] );
+			if($prepage > 1){
+				$data['offset'] = $prepage;
+			}
+		}
+
+		// get data
+		$data = apply_filters( 'dbtoolkit_get_data_from-'.$config['type'], $data, $config);
+
+
 		if(!empty($element_types[$config['type']]['renderer'])){
 			add_action( 'dbtoolkit_render_element-'.$config['type'], $element_types[$config['type']]['renderer'], 10, 2);
 			ob_start();
-			do_action( 'dbtoolkit_render_element-'.$config['type'], $config, $passback_args);
+			do_action( 'dbtoolkit_render_element-'.$config['type'], $data, $config);
 			$html = do_shortcode( ob_get_clean() );
+			
 		}else{
 
 			$engine = new Handlebars;

@@ -1,5 +1,6 @@
 var current_screen_editors = false,
-	field_type_templates = {};
+	field_type_templates = {},
+	current_loaded_object = {};
 
 function dbt_reveal_tools(obj){
 	
@@ -13,7 +14,7 @@ function dbt_reveal_tools(obj){
 	});
 	
 	if(obj){
-
+		current_loaded_object = obj.rawData;
 		if(!obj.rawData.confirm){
 			obj.state = current_screen_object.state;
 			current_screen_object = obj;
