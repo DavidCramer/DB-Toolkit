@@ -12,6 +12,9 @@
   position: relative;
   width: 100%;
 }
+.wp-filter-links{
+  width: 100%;
+}
 .wp-filter-links, .wp-filter-links li {
   display: inline-block;
   margin: 0;

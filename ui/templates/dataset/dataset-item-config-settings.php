@@ -1,11 +1,11 @@
 <div class="dbtoolkit-field-group">
 	<label>Slug</label>
-	<input type="text" name="fields[{{Field}}][slug]" value="{{#if slug}}{{slug}}{{else}}{{Field}}{{/if}}" data-format="slug">
+	<input id="field-slug-{{Field}}" type="text" name="fields[{{Field}}][slug]" value="{{#if slug}}{{slug}}{{else}}{{Field}}{{/if}}" data-format="slug" data-sync="label_{{Field}}">
 </div>
 <div class="dbtoolkit-field-group">
-	<label>Type</label>
+	<label>Handler</label>
 	<select name="fields[{{Field}}][Handler]" class="{{Field}} dbtoolkit-trigger" data-event="change" data-field="{{Field}}" data-request="dbt_setup_field_handler" data-target="#{{Field}}_field_config_settings_panel">
-		<option></option>
+		<option value="">None</option>
 		<?php
 		$field_types = apply_filters("dbtoolkit_local_table_field_types", array() );
 

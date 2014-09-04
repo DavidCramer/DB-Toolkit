@@ -36,9 +36,10 @@ $tables = dbtoolkit_get_table_list();
 		<option value="LIKE%%" {{#is join_condition value="LIKE%%"}}selected="selected"{{/is}}>LIKE %%</option>
 	</select>
 	<select id="onfield-{{Field}}" style="width: 111px;" name="fields[{{Field}}][join_on_field]" {{#if join_on_field}}data-default="{{join_on_field}}"{{/if}}>
-		<optgroup label="Field">
+		<option></option>
+		<optgroup label="Field">		
 		{{#each ../../fields}}
-		<option value="{{Field}}">{{Field}}</option>
+		<option value="{{Field}}" class="label_{{Field}}" data-bound="{{Field}}">{{#if slug}}{{slug}}{{else}}{{Field}}{{/if}}</option>
 		{{/each}}
 		</optgroup>
 		<optgroup label="Custom">

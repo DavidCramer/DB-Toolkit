@@ -1,6 +1,15 @@
 /* Variables panel js */
 var table_field_object = {}
 
+function dbt_reset_dataset_order(){
+	var clones = jQuery('.dbtoolkit-is-clone');
+
+	clones.each(function(k,v){
+		var clone 	= jQuery(v),
+			master	= jQuery(clone.data('master'));
+		clone.appendTo(master);
+	});
+}
 // create a new item object
 function dbt_add_dataset_item(obj){
 	
@@ -34,7 +43,42 @@ function dbt_add_dataset_config(obj){
 
 	return dataset;
 }
+function dbt_psudo_this(obj){
+	//console.log(obj.trigger.data('field'));
+	var field_name = obj.trigger.data('id') + '_' + ( obj.target.find('.dbtoolkit-dataset-item').length + 1 ),
+		new_clone = {
+			Field: field_name,
+			Type: "psudo",
+			Key: "",
+			Clone: obj.trigger.data('id'),
+			new_item: true
+		},
+		new_object = {
+			fields: [new_clone]
+		};
 
+	current_loaded_object.fields[field_name] = new_clone;
+	return new_object;
+}
+function dbt_kill_psudo(el){
+	var clicked  = jQuery(el),
+		wrap 	 = jQuery('#field-line-'+clicked.data('id')),
+		children = wrap.find('.dbtoolkit-dataset-item');
+
+	if(confirm('Are you sure?')){
+		children.each(function(k,f){
+			var field = jQuery(f).data('id');
+			jQuery('#field-config-'+field).remove();
+			jQuery('[data-bound="'+field+'"]').remove();
+			delete current_loaded_object.fields[field];
+		});
+		wrap.slideUp(dbt_animation_speed, function(){
+			jQuery(this).remove();
+		});
+	}
+
+	return false;
+}
 function dbt_dataset_currenct_object(obj){
 	current_loaded_object = obj.rawData;
 }
@@ -93,7 +137,9 @@ function dbt_setup_field_handler(obj){
 	}else{
 		return '';
 	}
-
+	for( var field in current_loaded_object.fields){
+		current_loaded_object.fields[field].slug = jQuery('#field-slug-'+field).val();
+	}
 	return template(current_loaded_object);
 }
 
@@ -139,10 +185,10 @@ function dbt_show_dataset_config_panel(el){
 
 	if(jQuery('.dbtoolkit-dataset-config-group:visible').length){
 		jQuery('.dbtoolkit-dataset-config-group:visible').fadeOut(dbt_animation_speed, function(){
-			jQuery('#' + clicked.data('id')).fadeIn(dbt_animation_speed);
+			jQuery('#field-config-' + clicked.data('id')).fadeIn(dbt_animation_speed);
 		});
 	}else{
-		jQuery('#' + clicked.data('id')).fadeIn(dbt_animation_speed);
+		jQuery('#field-config-' + clicked.data('id')).fadeIn(dbt_animation_speed);
 	}
 	clicked.parent().addClass('highlight');
 	return false;

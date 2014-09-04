@@ -153,6 +153,7 @@ function dbt_toggle_editor_tab(obj, e){
 	}
 	return panel;
 }
+
 function dbt_switch_editor_tab(obj){
 
 	jQuery('.dbtoolkit-element-tool .wp-filter-link').removeClass('current');
@@ -229,6 +230,21 @@ jQuery(function($){
 		field_type_templates[type] = Handlebars.compile(html);
 
 	}
+
+	// toggle buttons
+	$(document).on('click', '.dbtoolkit-panel-toggle-buttons button', function(e){
+		e.preventDefault();
+		var clicked = $(this),
+			parent 	= clicked.parent(),
+			wrap 	= parent.parent();
+
+		parent.children().removeClass('active');
+		clicked.addClass('active');
+
+		wrap.find('.dbtoolkit-panel').hide();
+		$('#'+clicked.data('panel')).show();
+
+	});
 
 });
 

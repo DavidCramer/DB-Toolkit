@@ -64,8 +64,20 @@ function dbt_build_new_element(el){
 jQuery(function($){
 	var baldrickPending = [];
 	// bind slugs
-	$(document).on('keyup change', '[data-format="slug"]', function(){		
+	$(document).on('keyup change', '[data-format="slug"]', function(){
+		var slugs 		= $('input[data-format="slug"]').not(this),
+			has_error 	= false;
 		this.value = this.value.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+		for(var i = 0; i < slugs.length; i++){
+			if( slugs[i].value === this.value ){				
+				has_error = true;
+			}
+		}
+		if(has_error || !this.value.length){
+			$(this).addClass('has-error');
+		}else{
+			$(this).removeClass('has-error');
+		}
 	});
 	
 	// bind label update

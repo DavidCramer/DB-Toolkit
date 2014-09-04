@@ -1,5 +1,10 @@
 /* datasets panel styles */
 
+input.has-error {
+  border-color: #ff0000 !important;
+  box-shadow: 0 0 2px rgba(255, 0, 0, 0.8) !important;
+}
+
 /* experimental datasets */
 .dbtoolkit-dataset-wrapper,
 .dbtoolkit-dataset-items-config-wrapper{
@@ -95,7 +100,7 @@
   font-weight: 400;
   margin: 0 20px 0 0;
   padding: 0;
-  cursor: move;
+
 }
 
 

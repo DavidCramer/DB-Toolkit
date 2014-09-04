@@ -15,14 +15,14 @@ function dbtoolkit_load_element_panels($panels){
 			'caption'	=>	'builds a complex dataset',
 			'functions'	=>	DBTOOLKIT_PATH . 'includes/functions-local-table.php',
 			'template'	=>	DBTOOLKIT_PATH . 'ui/templates/dataset/dataset-template.php',
-			'callback'	=>	'dbt_reset_dataset_sortables',
+			'callback'	=>	'dbt_reset_dataset_order',
 			'styles'	=>	array(
 				DBTOOLKIT_URL . 'assets/css/dataset-panel.css'
 			),
 			'scripts'	=>	array(
 				DBTOOLKIT_URL . 'assets/js/dataset-panel.js',
-				'jquery-ui-core',
-				'jquery-ui-sortable'
+				//'jquery-ui-core',
+				//'jquery-ui-sortable'
 			)
 		),
 		'dataset_filters'	=>	array(

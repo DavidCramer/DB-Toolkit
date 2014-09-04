@@ -9,7 +9,7 @@ function dbtoolkit_load_local_tables(){
 		//$autoload = ' data-autoload="true"';
 	}
 
-	echo '<select style="width:210px;" name="table" class="dbtoolkit-trigger"'.$autoload.' data-event="change" data-before="dbt_clear_configs" data-action="dbt_load_local_table" data-template="#dbtoolkit-panel-local-field-item-tmpl" data-target="#ce-data-source" data-callback="dbt_dataset_currenct_object">';
+	echo '<select style="width:100%;" name="table" class="dbtoolkit-trigger"'.$autoload.' data-event="change" data-before="dbt_clear_configs" data-action="dbt_load_local_table" data-template="#dbtoolkit-panel-local-field-item-tmpl" data-target="#ce-data-source" data-callback="dbt_dataset_currenct_object">';
 	echo '<option></option>';
 
 	$tables = dbtoolkit_get_table_list();
@@ -22,7 +22,7 @@ function dbtoolkit_load_local_tables(){
 	}
 	echo '</select>';
 
-	echo '<button class="button right">Add Field</button>';
+	//echo '<button class="button right">Add Field</button>';
 
 	exit;
 
@@ -110,55 +110,89 @@ function dbtoolkit_build_local_joins($query, $field, $config){
 	global $wpdb;
 
 	$join = array();
-	
-	$join[] = strtoupper($field['join_type']);
-	$join[] = '`'.$field['join_table'].'` ON';
-	$join[] = '(';
-	//$join[] = '`'.$field['join_table'].'`.`'.$field['join_field'].'`';
-	$join[] = '`'.$config['table'].'`.`'.$field['Field'].'` '.$field['join_condition'].' `'.$field['join_table'].'`.`'.$field['join_field'].'`';
-	if(!empty($field['join_where'])){
-		$join[] = 'AND';
-		$join[] = '`'.$field['join_table'].'`.`'.$field['join_where'].'`';
-		if($field['join_on_field'] == 'NULL'){
-			switch($field['join_condition']){
-				default:
-				case '=':
-					$join[] = 'IS NULL';
+	// build a joinkey with join fields
+    $join_key = md5($field['join_type'].$field['join_table'].$field['join_field'].$field['join_where'].$field['join_condition'].$field['join_on_field'].$field['join_value'].$field['join_order_by']);	
+    if(isset($query['join'][$join_key])){
+    	$keys = array_keys($query['join']);
+    	$alias_key = array_search($join_key, $keys);
+    	$alias = 't'.$alias_key;
+    }else{
+		$alias = 't'.count($query['join']);
+
+		$join[] = strtoupper($field['join_type']);
+		$join[] = '`'.$field['join_table'].'` AS `'.$alias.'` ON';
+		$join[] = '(';
+		//$join[] = '`'.$field['join_table'].'`.`'.$field['join_field'].'`';
+
+		// check if join field is a clone
+		if(!empty($field['Clone'])){
+			//$field['join_field']
+			$master_id = $field['Clone'];
+			$master = $config['fields'][$master_id]['slug'];
+			$loopback = 0;
+			while(!isset($query['select'][$master])){
+				$master_id = $config['fields'][$master]['Clone'];
+				$master = $config['fields'][$master_id]['slug'];
+				if($loopback >= count($query['select'])){
+					// not going to find it.
+					$master = null;
 					break;
-				case '!=':
-					$join[] = 'IS NOT NULL';
-					break;
+				}
 			}
-		}elseif($field['join_on_field'] == '__custom_value__'){
-			switch($field['join_condition']){
-				default:
-					if(is_numeric($field['join_value'])){
-						$join[] = $wpdb->prepare( $field['join_condition']." %d", $field['join_value'] );
-					}else{
-						$join[] = $wpdb->prepare( $field['join_condition']." %s", $field['join_value'] );
-					}
-					break;
-				case 'LIKE%%':
-					$join[] = $wpdb->prepare( $field['join_condition']." %%%s%", $field['join_value'] );
-					break;
+			
+			$join_field = $query['select'][$master];
+			if(empty($join_field)){
+				dump($query['select']);
 			}
 		}else{
-			switch($field['join_condition']){
-				default:
-					$join[] = $field['join_condition'].' `'.$config['table'].'`.`'.$field['join_on_field'].'`';
-					break;
-				case 'LIKE%%':
-					$join[] = 'LIKE `'.$config['table'].'`.`'.$field['join_on_field'].'`';
-					break;
+			$join_field = $config['table'].'`.`'.$field['Field'];
+		}
+
+		$join[] = '`'.$join_field.'` '.$field['join_condition'].' `'.$alias.'`.`'.$field['join_field'].'`';
+		if(!empty($field['join_where'])){
+			$join[] = 'AND';
+			$join[] = '`'.$alias.'`.`'.$field['join_where'].'`';
+			if($field['join_on_field'] == 'NULL'){
+				switch($field['join_condition']){
+					default:
+					case '=':
+						$join[] = 'IS NULL';
+						break;
+					case '!=':
+						$join[] = 'IS NOT NULL';
+						break;
+				}
+			}elseif($field['join_on_field'] == '__custom_value__'){
+				switch($field['join_condition']){
+					default:
+						if(is_numeric($field['join_value'])){
+							$join[] = $wpdb->prepare( $field['join_condition']." %d", $field['join_value'] );
+						}else{
+							$join[] = $wpdb->prepare( $field['join_condition']." %s", $field['join_value'] );
+						}
+						break;
+					case 'LIKE%%':
+						$join[] = $wpdb->prepare( $field['join_condition']." %%%s%", $field['join_value'] );
+						break;
+				}
+			}else{
+				switch($field['join_condition']){
+					default:
+						$join[] = $field['join_condition'].' `'.$config['table'].'`.`'.$field['join_on_field'].'`';
+						break;
+					case 'LIKE%%':
+						$join[] = 'LIKE `'.$config['table'].'`.`'.$field['join_on_field'].'`';
+						break;
+				}
 			}
 		}
+		$join[] = ')';
+		// build join
+		$join_line = implode(' ', $join);
+		$query['join'][$join_key] = $join_line;
 	}
-	$join[] = ')';
-	// build join
-	$join_line = implode(' ', $join);
-	$query['select']['_'.$field['slug']] = $config['table'].'`.`'.$field['slug'];
-	$query['select'][$field['slug']] = $field['join_table'].'`.`'.$field['join_select'];
-	$query['join'][] = $join_line;
+	//$query['select']['_'.$field['slug']] = $config['table'].'`.`'.$field['slug'];
+	$query['select'][$field['slug']] = $alias.'`.`'.$field['join_select'];
 
 	return $query;
 }
@@ -166,26 +200,22 @@ function dbtoolkit_build_local_joins($query, $field, $config){
 add_filter("dbtoolkit_local_table_field_types", "dbtoolkit_get_field_type_handlers");
 function dbtoolkit_get_field_type_handlers($types){
 	$type = array(
-		'text'	=>	array(
-			'label'		=>	'Text'
-		),
-		'primary'	=>	array(
-			'label'		=>	'Primary',
-			'template'	=>	DBTOOLKIT_PATH . "ui/templates/dataset/types/type-primary-template.php",
-		),
 		'relation'	=>	array(
 			'label'		=>	'Relation',
-			'template'	=>	DBTOOLKIT_PATH . "ui/templates/dataset/types/type-relation-template.php",
-			'processor' =>	'dbtoolkit_build_local_joins'
+			'template'	=>	DBTOOLKIT_PATH . "ui/templates/dataset/handlers/handler-relation-template.php",
+			'query' 	=>	'dbtoolkit_build_local_joins'
 		),
-		'wpuserid'	=>	array(
-			'label'		=>	'WordPress User ID',
-			'template'	=>	DBTOOLKIT_PATH . "ui/templates/dataset/types/type-wpuserid-template.php"
+		'email'			=>	array(
+			'label'		=>	'email',
+			'format'	=>	'dbtoolkit_format_email'
 		)
 	);
 	return array_merge($types, $type);
 }
 
+function dbtoolkit_format_email($value, $field, $config){
+	return '<a href="mailto:'.$value.'">'.$value.'</a>';
+}
 
 function dbtoolkit_build_local_query($data, $config){
 
@@ -214,24 +244,57 @@ function dbtoolkit_build_local_query($data, $config){
 	}else{
 		// else use all fields
 		foreach($config['fields'] as $field_id=>$field){
-			$query['select'][$field_id] = $field['slug'];
+			$query['select'][$field['slug']] = $field_id;
+		}
+	}
+
+	// init handler filters
+	foreach($handlers as $handler_id=>$handler){
+		// format handler
+		if(isset($handler['format'])){
+			add_filter('dbtoolkit_local_table_format-'.$handler_id, $handler['format'], 1, 3);
+		}
+		// query handler
+		if(isset($handler['query'])){
+			add_filter('dbtoolkit_local_table_query-'.$handler_id, $handler['query'], 1, 3);
 		}
 	}
 
 	foreach($config['fields'] as $field_id=>$field){
+		//filter query
+		$query = apply_filters('dbtoolkit_local_table_query-'.$field['Handler'], $query, $field, $config);
 		
-		if(isset($handlers[$field['Handler']]['processor'])){
-			// setup handler
-			add_filter('dbtoolkit_local_table_handle-'.$field['Handler'], $handlers[$field['Handler']]['processor'], 1, 3);
-			// init handler
-			$query = apply_filters('dbtoolkit_local_table_handle-'.$field['Handler'], $query, $field, $config);
-			$groupby[] = $field_id;
+		// set field select
+		if( false === strpos( $query['select'][$field['slug']], '.' )){
+			// track down clones
+			if(!empty($field['Clone'])){
+				$master_id = $field['Clone'];
+				$master = $config['fields'][$master_id]['slug'];
+				$loopback = 0;
+				while(!isset($query['select'][$master])){
+					$master_id = $config['fields'][$master]['Clone'];
+					$master = $config['fields'][$master_id]['slug'];
+					if($loopback >= count($query['select'])){
+						// not going to find it.
+						$master = null;
+						break;
+					}
+				}
+				$query['select'][$field['slug']] = $query['select'][$master];
+			}else{
+				// reference root table
+				$query['select'][$field['slug']] = $config['table'].'`.`'.$query['select'][$field['slug']];
+			}
 		}
-
+		
+		// set primary field
 		if($field['Key'] == 'PRI'){
 			$primary = 'SELECT COUNT(`'.$config['table'].'`.`'.$field_id.'`) AS `total`';
 		}
+
 	}	
+
+
 	if(empty($primary)){
 		// no primary just pick one for now
 		// TODO: make it list the keys and then choose.
@@ -239,6 +302,7 @@ function dbtoolkit_build_local_query($data, $config){
 		$primary = 'SELECT COUNT(`'.$config['table'].'`.`'.$field_keys[0].'`) AS `total`';
 	}
 
+	
 	// build filters
 	// TODO
 	if(!empty($config['filter'])){
@@ -252,21 +316,17 @@ function dbtoolkit_build_local_query($data, $config){
 	// TODO
 	// build query
 	$query_build = array();
-	foreach($query as $q_key=>$q_part){
+	foreach($query as $q_key=>&$q_part){
 		$query_build_line = null;
 		if(!empty($q_part)){
 			if($q_key == 'select'){
 				$select = array();
-				foreach($q_part as $as => $field){
-					if($as != $field && !is_numeric($as)){
-						$select[] = '`'.trim($field,'`').'` AS `'.$as.'`';
-					}else{
-						$select[] = '`'.$config['table'].'`.`'.trim($field,'`').'` AS `'.$field.'`';
-					}
+				foreach($q_part as $as => &$field){
+					$select[] = '`'.$field.'` AS `'.$as.'`';
 				}
-				$query_build_line = strtoupper($q_key) . ' ' . implode( ', ', (array) $select );
+				$query_build_line = strtoupper($q_key) . "\r\n\t" . implode( ",\r\n\t", (array) $select );
 			}elseif($q_key == 'join'){
-				$query_build_line = implode( ' ', (array) $q_part );
+				$query_build_line = implode( "\r\n", (array) $q_part );
 			}else{
 				$query_build_line = strtoupper($q_key) . ' ' . implode( ' ', (array) $q_part );
 			}
@@ -282,26 +342,40 @@ function dbtoolkit_build_local_query($data, $config){
 	$query_build['select'] = $primary;
 	if(!empty($groupby)){
 		//setup grouping counter for relations
+		
 		foreach($groupby as &$field){
+
 			if(isset($query['select'][$field])){
-				$field = '`'.trim($query['select'][$field], '`').'`';
-			}else{
-				$field = '`'.$field.'`';
+				$field = $query['select'][$field];
 			}
 		}
+		//dump($groupby);
+		//$query_build['group'] = 'GROUP BY '. implode(', ', $groupby);
 
-		$query_build['group'] = 'GROUP BY '. implode(' ', $groupby);
-
-		$query_count = "SELECT COUNT(`a`.`total`) as `total` FROM ( ".implode("\r\n", $query_build)." ) as `a` ";
+		$query_count = implode("\r\n", $query_build);
 	}else{
 		// straight count
 		$query_count = implode("\r\n", $query_build);
 	}
 
+	//dump($query_full);
+
 	$data['total']		=	$wpdb->get_var($query_count);
 	$data['pages']		=	ceil( $data['total'] / $data['per_page'] );
 	$data['entry']		=	$wpdb->get_results($query_full, ARRAY_A);
+	if(!empty($data['entry'])){
+		// apply formatting
+		foreach($data['entry'] as $entry_slug=>&$entry){
 
+			foreach($config['fields'] as $field_id=>$field){
+				if( has_filter( 'dbtoolkit_local_table_format-'.$field['Handler'] ) ){
+					$entry[$field['slug']] = apply_filters('dbtoolkit_local_table_format-'.$field['Handler'], $entry[$field['slug']], $field, $config);
+				}
+			}
+			
+		}
+	}
+	
 	return $data;
 	
 }
