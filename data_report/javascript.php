@@ -1,4 +1,4 @@
-//<script>
+<?php header("Content-Type: application/javascript"); ?>//<script>
 
     function dr_exportReport(url, eid, isGlobal){
 
