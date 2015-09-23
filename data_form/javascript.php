@@ -1,6 +1,8 @@
 <?php
 define('DBT_URL', '../wp-content/plugins/db-toolkit');
 
+header("Content-Type: application/javascript");
+
 function fieldtypes_script_loadFolderContents($Folder){
     $Index = 0;
     $List = array();
