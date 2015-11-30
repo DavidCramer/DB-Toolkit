@@ -688,7 +688,8 @@ function linked_autocomplete($eid, $Field, $query){
 
 	$Element = getelement($eid);
 	$Config = $Element['Content'];	
-	$Setup = $Config[$Table];
+	// David Holloway - do not understand this line $Setup = $Config[$Table];
+	// $Setup = $Config[$Table];
 	$Table = $Config['_Linkedfields'][$Field]['Table'];
 	$ID = $Config['_Linkedfields'][$Field]['ID'];
 	$Wheres = '';

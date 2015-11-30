@@ -174,7 +174,7 @@ if($FieldSet[1] == 'linked'){
 
                         // get the linked interfaces add entry button title
                         if(!empty($Config['_Linkedfields'][$Field]['_addInterface'])){
-                        $linkInterface = getelement($Config['_Linkedfields'][$Field]['_addInterface']);                        
+                        $linkInterface = getelement($Config['_Linkedfields'][$Field]['_addInterface']);
                             $Return .= ' <button class="btn" onclick="df_buildQuickCaptureForm(\''.$Config['_Linkedfields'][$Field]['_addInterface'].'\', true, \''.$Element['ID'].'|'.$Field.'\', linked_reloadField);return false;">'.$linkInterface['Content']['_New_Item_Title'].'</button>';
                         }
                         $_SESSION['dataform']['OutScripts'] .="
@@ -215,8 +215,6 @@ if($FieldSet[1] == 'linked'){
 				//$Return .= ob_get_clean();
 				$VisDef = $OutString;
 			}
-			//$FieldID = uniqid('check_'.$Field);
-			//$Return .= '<input type="text" id="autocomplete_'.$FieldID.'" class="textfield" value="'.$Det[$IDField].' ['.$Det[$ValueField].']" /><input type="hidden" name="dataForm['.$ElementID.']['.$Field.']" id="autocomplete_'.$FieldID.'_value" value="'.$Det[$IDField].'" class="'.$Req.'" />';
 			$Return .= '<input type="text" id="entry_'.$Element['ID'].'_'.$Field.'_view" class="'.$Req.' '.$Config['_FormFieldWidth'][$Field].'" value="'.$VisDef.'" autocomplete="off" /><input type="hidden" name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" value="'.$Det[$Config['_Linkedfields'][$Field]['ID']].'" />';
 
 
@@ -241,6 +239,20 @@ if($FieldSet[1] == 'linked'){
                                         jQuery( this ).removeClass( \"ui-corner-top\" ).addClass( \"ui-corner-all\" );
                                 }
                         });
+
+                        // enable autocomplete
+                        jQuery('#entry_".$Element['ID']."_".$Field."_view').each( function(index, element) {
+							$(element).attr('autocomplete', 'on');
+                        });
+
+                        ";
+
+                        // get the linked interfaces add entry button title
+                        if(!empty($Config['_Linkedfields'][$Field]['_addInterface'])){
+                        $linkInterface = getelement($Config['_Linkedfields'][$Field]['_addInterface']);                        
+                            $Return .= ' <button class="btn" onclick="df_buildQuickCaptureForm(\''.$Config['_Linkedfields'][$Field]['_addInterface'].'\', true, \''.$Element['ID'].'|'.$Field.'\', linked_reloadField);return false;">'.$linkInterface['Content']['_New_Item_Title'].'</button>';
+                        }
+                        $_SESSION['dataform']['OutScripts'] .="
                         ";
 
                         /*

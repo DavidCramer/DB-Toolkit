@@ -505,6 +505,7 @@ function dt_scripts($preIs = false) {
         wp_enqueue_script("jquery-ui-sortable");
         wp_enqueue_script("jquery-ui-tabs");
         wp_enqueue_script('jquery-multiselect');
+        wp_enqueue_script('jquery-ui-autocomplete');
         wp_enqueue_script('data_report');
         wp_enqueue_script('data_form');
         wp_enqueue_script('jquery-validate');
