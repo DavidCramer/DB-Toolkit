@@ -1,6 +1,8 @@
 <?php
-require_once('../../../../wp-admin/admin.php');
-define('DBT_URL', plugin_dir_url(__FILE__));
+//require_once('../../../../wp-admin/admin.php');
+if( !defined( 'DBT_URL' ) ){
+    define('DBT_URL', dirname( dirname( __FILE__ ) ) );
+}
 //define('DBT_URL', dirname(dirname(__FILE__)));
 
 function fieldtypes_script_loadFolderContents($Folder){
@@ -102,13 +104,7 @@ if (file_exists('fieldtypes')) {
             }
         });
 
-	return;
-
-	var Dialog = new Boxy('<div>'+message+'</div>', {title: 'Notice', modal: true, unloadOnHide: true});
-	return false;
-
-
-
+	   return;
     }
 
 
@@ -121,7 +117,6 @@ if (file_exists('fieldtypes')) {
 
 	jQuery('body').append('<div id="ui-jsDialog-'+eid+'" title="Loading"><p><img src="<?php echo DBT_URL; ?>/images/indicator.gif" width="16" height="16" alt="loading" align="absmiddle" /> Loading Form</p></div>');
 	jQuery("#ui-jsDialog-"+eid+"").dialog({
-            position: 'center',
             autoResize: true,
             modal: true,
             buttons: {
@@ -193,7 +188,6 @@ if (file_exists('fieldtypes')) {
 	}
 	jQuery('#report_tools_'+eid).append('<div id="ui-jsDialog-'+eid+'" title="Loading"><p><img src="<?php echo DBT_URL; ?>/images/indicator.gif" width="16" height="16" alt="loading" align="absmiddle" /> Loading Form</p></div>');
 	jQuery("#ui-jsDialog-"+eid+"").dialog({
-            position: 'center',
             autoResize: true,
             modal: true,
             buttons: {
@@ -236,7 +230,6 @@ if (file_exists('fieldtypes')) {
 	}
 	jQuery('#report_tools_'+eid).append('<div id="ui-jsDialog-'+eid+'" title="Loading"><p><img src="<?php echo DBT_URL; ?>/images/indicator.gif" width="16" height="16" alt="loading" align="absmiddle" /> Loading Form</p></div>');
 	jQuery("#ui-jsDialog-"+eid+"").dialog({
-            position: 'center',
             autoResize: true,
             modal: true,
             buttons: {
@@ -282,7 +275,6 @@ if (file_exists('fieldtypes')) {
 	}
 	jQuery('#report_tools_'+eid).append('<div id="ui-jsDialog-'+eid+'" title="Loading"><p><img src="<?php echo DBT_URL; ?>/images/indicator.gif" width="16" height="16" alt="loading" align="absmiddle" /> Loading Form</p></div>');
 	jQuery("#ui-jsDialog-"+eid+"").dialog({
-            position: 'center',
             autoResize: true,
             modal: true,
             dragStart: function(event, ui) {

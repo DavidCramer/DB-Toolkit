@@ -129,7 +129,7 @@ if (!empty($Config['_Hide_Toolbar'])) {
             //vardump($Config['_ReturnFields']);
            echo dr_toolbarButton($Config['_New_Item_Title'], 'df_buildQuickCaptureForm(\'' . $Media['ID'] . '\', ' . $ajaxSubmit . ', \''.build_query($_GET).'\');return false;','add');
            echo dr_toolbarSeperator();
-            //echo '<div class="fbutton"><div class="button add-new-h2" onclick=""><span class="add">' . $Config['_New_Item_Title'] . '</span></div></div>';
+            //echo '<div><div class="button" onclick=""><span class="add">' . $Config['_New_Item_Title'] . '</span></div></div>';
         }
 
         if (!empty($Config['_Show_Import'])) {
@@ -178,7 +178,7 @@ if (!empty($Config['_Hide_Toolbar'])) {
 
 
         //echo '<div class="btnseparator ui-dialog-tile" style="display:none;"></div>';
-        //echo '<div class="fbutton ui-dialog-tile" style="display:none;"><div class="button add-new-h2"><span class="selectall"  onclick="dialog_tile();">Tile Dialogs</span></div></div>';
+        //echo '<div class="fbutton ui-dialog-tile" style="display:none;"><div class="button"><span class="selectall"  onclick="dialog_tile();">Tile Dialogs</span></div></div>';
 
         if (!empty($Config['_Show_Plugins'])) {
             $ListButtons = loadFolderContents(WP_PLUGIN_DIR . '/db-toolkit/data_report/plugins');

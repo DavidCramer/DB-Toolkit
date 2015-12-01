@@ -176,7 +176,7 @@ if (is_admin ()) {
             $IClass = 'button';
         }
 
-        $return = ' &nbsp;<span class="' . $IClass . '" id="' . $Name . '_' . $Field . '" onclick="df_setToggle(\'' . $Name . '_' . $Field . '\');" title="' . $Name . '"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/' . $Icon . ') left center no-repeat; padding:5px 8px;"></span></span>';
+        $return = ' &nbsp;<span class="' . $IClass . '" id="' . $Name . '_' . $Field . '" onclick="df_setToggle(\'' . $Name . '_' . $Field . '\');" title="' . $Name . '"><span style="background: url(' . DBT_URL . '/data_report/' . $Icon . ') left center no-repeat; padding:5px 8px;"></span></span>';
         $return .= '<input style="display:none;" type="checkbox" name="Data[Content][_' . $Name . '][' . $Field . ']" id="' . $Name . '_' . $Field . '_check" ' . $ISel . ' />';
 
         return $return;
@@ -191,7 +191,7 @@ if (is_admin ()) {
         $addClass = '';
         if (!empty($Config['Content']['_FieldTitle'][$Field])) {
             if (substr($Field, 0, 2) == '__') {
-                $name = '<img src="' . WP_PLUGIN_URL . '/db-toolkit/data_report/copy.png" width="16" height="16" align="absmiddle" /> ' . $Config['Content']['_FieldTitle'][$Field];
+                $name = '<img src="' . DBT_URL . '/data_report/copy.png" width="16" height="16" align="absmiddle" /> ' . $Config['Content']['_FieldTitle'][$Field];
                 if ($Config['Content']['_FieldTitle'][$Field] != $Field) {
                     $name .= ' (' . $Field . ')';
                 }
@@ -208,9 +208,9 @@ if (is_admin ()) {
 
         $PreReturn[$Field] = '<div id="Field_' . $Field . '" class="admin_list_row3 table_sorter postbox ' . $addClass . '" style="width:550px;">';
 
-        $PreReturn[$Field] .= '<img src="' . WP_PLUGIN_URL . '/db-toolkit/images/cancel.png" align="absmiddle" onclick="jQuery(\'#Field_' . $Field . '\').remove();" style="float:right; padding:5px;" />';
+        $PreReturn[$Field] .= '<img src="' . DBT_URL . '/images/cancel.png" align="absmiddle" onclick="jQuery(\'#Field_' . $Field . '\').remove();" style="float:right; padding:5px;" />';
 
-        $PreReturn[$Field] .= '<img src="' . WP_PLUGIN_URL . '/db-toolkit/images/cog.png" align="absmiddle" onclick="jQuery(\'#overide_' . $Field . '\').toggle();" style="float:right; padding:5px;" />';
+        $PreReturn[$Field] .= '<img src="' . DBT_URL . '/images/cog.png" align="absmiddle" onclick="jQuery(\'#overide_' . $Field . '\').toggle();" style="float:right; padding:5px;" />';
 
         $PreReturn[$Field] .= '<h3 class="fieldTypeHandle">' . $name . '</h3>';
 
@@ -330,9 +330,9 @@ if (is_admin ()) {
         $PreReturn[$Field] .= '</div><div class="admin_config_toolbar"> <div style="float:left; width:180px;">' . df_fieldTypes($Field, $Table, $row, $Defaults['_Field']) . '</div>' . dr_reportListTypes($Field, $Defaults['_IndexType'][$Field]);
         // inline settings
         //class="button-primary"
-        $PreReturn[$Field] .= ' &nbsp;<span class="' . $UClass . '" id="unique_' . $Field . '" onclick="df_setToggle(\'unique_' . $Field . '\');" title="Unique"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/unique.png) left center no-repeat; padding:5px 8px;"></span></span>';
-        $PreReturn[$Field] .= ' &nbsp;<span class="' . $RClass . '" id="required_' . $Field . '" onclick="df_setToggle(\'required_' . $Field . '\');" title="Required"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/required.png) left center no-repeat; padding:5px 8px;"></span></span>';
-        $PreReturn[$Field] .= ' &nbsp;<span class="' . $SClass . '" id="issortable_' . $Field . '" onclick="df_setToggle(\'issortable_' . $Field . '\');" title="Sortable"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/table_sort.png) left center no-repeat; padding:5px 8px;"></span></span>';
+        $PreReturn[$Field] .= ' &nbsp;<span class="' . $UClass . '" id="unique_' . $Field . '" onclick="df_setToggle(\'unique_' . $Field . '\');" title="Unique"><span style="background: url(' . DBT_URL . '/data_report/unique.png) left center no-repeat; padding:5px 8px;"></span></span>';
+        $PreReturn[$Field] .= ' &nbsp;<span class="' . $RClass . '" id="required_' . $Field . '" onclick="df_setToggle(\'required_' . $Field . '\');" title="Required"><span style="background: url(' . DBT_URL . '/data_report/required.png) left center no-repeat; padding:5px 8px;"></span></span>';
+        $PreReturn[$Field] .= ' &nbsp;<span class="' . $SClass . '" id="issortable_' . $Field . '" onclick="df_setToggle(\'issortable_' . $Field . '\');" title="Sortable"><span style="background: url(' . DBT_URL . '/data_report/table_sort.png) left center no-repeat; padding:5px 8px;"></span></span>';
 
         //$PreReturn[$Field] .= df_IconToggle($Field, 'Indexes', 'open-bookmark.png', $Config['Content']);
 
@@ -390,7 +390,7 @@ if (is_admin ()) {
 
             $name = df_parseCamelCase($Field);
             //echo '<div id="Field_'.$Field.'" class="'.$Row.' table_sorter" style="padding:3px;"><input type="checkbox" name="null" id="use_'.$Field.'" checked="checked" onclick="dr_enableDisableField(this);" />&nbsp;'.ucwords($name).' : '.df_FilterTypes($Field, $Table, $row).'<span id="ExtraSetting_'.$Field.'"></span></div>';
-            $PreReturn[$Field] .= '<div id="Field_' . $Field . '" class="admin_list_row3 table_sorter postbox cloned" style="width:550px;"><img src="' . WP_PLUGIN_URL . '/db-toolkit/images/cancel.png" align="absmiddle" onclick="jQuery(\'#Field_' . $Field . '\').remove();" style="float:right; padding:5px;" /><img src="' . WP_PLUGIN_URL . '/db-toolkit/images/cog.png" align="absmiddle" onclick="jQuery(\'#overide_' . $Field . '\').toggle();" style="float:right; padding:5px;" /><h3 class="fieldTypeHandle">' . df_parseCamelCase($Field) . '</h3>';
+            $PreReturn[$Field] .= '<div id="Field_' . $Field . '" class="admin_list_row3 table_sorter postbox cloned" style="width:550px;"><img src="' . DBT_URL . '/images/cancel.png" align="absmiddle" onclick="jQuery(\'#Field_' . $Field . '\').remove();" style="float:right; padding:5px;" /><img src="' . DBT_URL . '/images/cog.png" align="absmiddle" onclick="jQuery(\'#overide_' . $Field . '\').toggle();" style="float:right; padding:5px;" /><h3 class="fieldTypeHandle">' . df_parseCamelCase($Field) . '</h3>';
             // Linking Master
             $PreReturn[$Field] .= '<div style="padding:5px;">';
 
@@ -472,9 +472,9 @@ if (is_admin ()) {
 
             $PreReturn[$Field] .= '<div class="admin_config_toolbar"> <div style="float:left; width:180px;">' . df_fieldTypes($Field, $Table, $row, $Defaults['_Field']) . '</div>' . dr_reportListTypes($Field, $Defaults['_IndexType'][$Field]);
 
-            $PreReturn[$Field] .= ' &nbsp;<span class="' . $UClass . '" id="unique_' . $Field . '" onclick="df_setToggle(\'unique_' . $Field . '\');" title="Unique"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/unique.png) left center no-repeat; padding:5px 8px;"></span></span>';
-            $PreReturn[$Field] .= ' &nbsp;<span class="' . $RClass . '" id="required_' . $Field . '" onclick="df_setToggle(\'required_' . $Field . '\');" title="Required"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/required.png) left center no-repeat; padding:5px 8px;"></span></span>';
-            $PreReturn[$Field] .= ' &nbsp;<span class="' . $SClass . '" id="issortable_' . $Field . '" onclick="df_setToggle(\'issortable_' . $Field . '\');" title="Sortable"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/table_sort.png) left center no-repeat; padding:5px 8px;"></span></span>';
+            $PreReturn[$Field] .= ' &nbsp;<span class="' . $UClass . '" id="unique_' . $Field . '" onclick="df_setToggle(\'unique_' . $Field . '\');" title="Unique"><span style="background: url(' . DBT_URL . '/data_report/unique.png) left center no-repeat; padding:5px 8px;"></span></span>';
+            $PreReturn[$Field] .= ' &nbsp;<span class="' . $RClass . '" id="required_' . $Field . '" onclick="df_setToggle(\'required_' . $Field . '\');" title="Required"><span style="background: url(' . DBT_URL . '/data_report/required.png) left center no-repeat; padding:5px 8px;"></span></span>';
+            $PreReturn[$Field] .= ' &nbsp;<span class="' . $SClass . '" id="issortable_' . $Field . '" onclick="df_setToggle(\'issortable_' . $Field . '\');" title="Sortable"><span style="background: url(' . DBT_URL . '/data_report/table_sort.png) left center no-repeat; padding:5px 8px;"></span></span>';
 
             $PreReturn[$Field] .= '<input style="display:none;" type="checkbox" name="Data[Content][_Unique][' . $Field . ']" id="unique_' . $Field . '_check" ' . $USel . ' />';
             $PreReturn[$Field] .= '<input style="display:none;" type="checkbox" name="Data[Content][_Required][' . $Field . ']" id="required_' . $Field . '_check" ' . $RSel . ' />';
@@ -559,7 +559,7 @@ if (is_admin ()) {
 
             foreach ($Ref['Content']['_Field'] as $Field => $FieldSet) {
                 $Row = dais_rowswitch($Row);
-                //$Return .= '<div id="Field_'.$Field.'" class="'.$Row.' table_sorter" style="padding:3px;"><img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_report/arrow_out.png" align="absmiddle" class="OrderSorter" />&nbsp;<img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_report/tag.png" align="absmiddle" onclick="jQuery(\'#overide_'.$Field.'\').toggle();" /><input type="texfield" style="width:40px; display:none;" name="Data[Content][_WidthOverride]['.$Field.']" id="overide_'.$Field.'" /> &nbsp;'.df_parseCamelCase($Field).' : '.df_FilterTypes($Field, $Table, $row).'<span id="ExtraSetting_'.$Field.'"></span></div>';
+                //$Return .= '<div id="Field_'.$Field.'" class="'.$Row.' table_sorter" style="padding:3px;"><img src="'.DB_TOOLKIT.'/data_report/arrow_out.png" align="absmiddle" class="OrderSorter" />&nbsp;<img src="'.DB_TOOLKIT.'/data_report/tag.png" align="absmiddle" onclick="jQuery(\'#overide_'.$Field.'\').toggle();" /><input type="texfield" style="width:40px; display:none;" name="Data[Content][_WidthOverride]['.$Field.']" id="overide_'.$Field.'" /> &nbsp;'.df_parseCamelCase($Field).' : '.df_FilterTypes($Field, $Table, $row).'<span id="ExtraSetting_'.$Field.'"></span></div>';
                 $Return .= '<div id="Field_' . $Field . '" class="' . $Row . ' table_sorter" style="padding:3px;"><img src="' . WP_PLUGIN_DIR . '/db-toolkit/data_report/arrow_out.png" align="absmiddle" class="OrderSorter" />';
                 $Return .= '&nbsp;<img src="' . WP_PLUGIN_DIR . '/db-toolkit/data_report/tag.png" align="absmiddle" onclick="jQuery(\'#overide_' . $Field . '\').toggle();" /><span id="overide_' . $Field . '" style="display:none;">';
                 //New Options
@@ -617,10 +617,10 @@ if (is_admin ()) {
         }
 
 
-        $Return = ' &nbsp;<span class="' . $VClass . '" id="displayTypeV_' . $Field . '" onclick="df_setToggle(\'displayTypeV_' . $Field . '\');" title="Visible"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/eye.png) left center no-repeat; padding:5px 8px;"></span></span>';
+        $Return = ' &nbsp;<span class="' . $VClass . '" id="displayTypeV_' . $Field . '" onclick="df_setToggle(\'displayTypeV_' . $Field . '\');" title="Visible"><span style="background: url(' . DBT_URL . '/data_report/eye.png) left center no-repeat; padding:5px 8px;"></span></span>';
         $Return .= '<input style="display:none;" type="checkbox" name="Data[Content][_IndexType][' . $Field . '][Visibility]" value="show" id="displayTypeV_' . $Field . '_check" ' . $VSel . ' />';
 
-        $Return .= ' &nbsp;<span class="' . $IClass . '" id="displayTypeI_' . $Field . '" onclick="df_setToggle(\'displayTypeI_' . $Field . '\');" title="Searchable"><span style="background: url(' . WP_PLUGIN_URL . '/db-toolkit/data_report/indexed.png) left center no-repeat; padding:5px 8px;"></span></span>';
+        $Return .= ' &nbsp;<span class="' . $IClass . '" id="displayTypeI_' . $Field . '" onclick="df_setToggle(\'displayTypeI_' . $Field . '\');" title="Searchable"><span style="background: url(' . DBT_URL . '/data_report/indexed.png) left center no-repeat; padding:5px 8px;"></span></span>';
         $Return .= '<input style="display:none;" type="checkbox" name="Data[Content][_IndexType][' . $Field . '][Indexed]" value="index" id="displayTypeI_' . $Field . '_check" ' . $ISel . ' />';
 
 
@@ -668,7 +668,7 @@ function dr_toolbarButton($Title, $Script = false, $Class = 'noicon', $Link = fa
     }
 
 
-    return '<span class="fbutton"><div class="button add-new-h2" ' . $onClick . '>' . $linkStart . '<span class="' . $Class . '">' . $Title . '</span>' . $linkEnd . '</div></span>';
+    return '<span><div class="button" ' . $onClick . '>' . $linkStart . '<span class="' . $Class . '">' . $Title . '</span>' . $linkEnd . '</div></span>';
 }
 
 function dr_toolbarSeperator() {
@@ -697,7 +697,7 @@ function dr_buildInterfaceList() {
     foreach ($apps as $app => $settings) {
 
         // for each App
-        $Icon = WP_PLUGIN_URL . '/db-toolkit/data_report/application-home.png';
+        $Icon = DBT_URL . '/data_report/application-home.png';
         $Return .= '<li><a class="child"><img src="' . $Icon . '" align="absmiddle" />' . $settings['name'] . '</a>';
         $Return .= "<ul id=\"\" style=\"visibility: hidden; display: block;\">";
 
@@ -713,7 +713,7 @@ function dr_buildInterfaceList() {
         $Return .= "<li class=\"title\"><h2>Category</h2></li>";
         foreach ($appGroups as $app => $state) {
 
-            $Icon = WP_PLUGIN_URL . '/db-toolkit/data_report/application-home.png';
+            $Icon = DBT_URL . '/data_report/application-home.png';
             $Return .= '<li><a class="child"><img src="' . $Icon . '" align="absmiddle" /> ' . $app . '</a>';
 
             if (!empty($appGroups[$app])) {
@@ -721,7 +721,7 @@ function dr_buildInterfaceList() {
                 $Return .= "<li class=\"title\"><h2>" . $app . "</h2></li>";
                 foreach ($appGroups[$app] as $interface) {
                     //vardump($interface);
-                    $IIcon = WP_PLUGIN_URL . '/db-toolkit/data_report/plus-button.png';
+                    $IIcon = DBT_URL . '/data_report/plus-button.png';
                     $Return .= '<li><a onclick="formSetup_InsertInterface(\'' . $interface['ID'] . '\');"><img src="' . $IIcon . '" align="absmiddle" /> ' . $interface['_ReportDescription'] . '<div><span class="description">' . $interface['_ReportExtendedDescription'] . '</span></div></a>';
                 }
                 $Return .= '</ul>';
@@ -776,25 +776,25 @@ function df_buildSetProcessors($Config) {
             if (!empty($Config['_FormProcessors'][$processID]['_onInsert'])) {
                 $class = 'button-primary"';
             }
-            $Icons = '<span title="Run Process on Insert" onclick="df_setToggle(\'onInsert_' . $processID . '\');" id="onInsert_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/database-insert.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
+            $Icons = '<span title="Run Process on Insert" onclick="df_setToggle(\'onInsert_' . $processID . '\');" id="onInsert_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . DBT_URL . '/data_report/database-insert.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
 
             $class = 'button';
             if (!empty($Config['_FormProcessors'][$processID]['_onUpdate'])) {
                 $class = 'button-primary"';
             }
-            $Icons .= '&nbsp;<span title="Run Process on Update" onclick="df_setToggle(\'onUpdate_' . $processID . '\');" id="onUpdate_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/database-pencil.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
+            $Icons .= '&nbsp;<span title="Run Process on Update" onclick="df_setToggle(\'onUpdate_' . $processID . '\');" id="onUpdate_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . DBT_URL . '/data_report/database-pencil.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
 
             $class = 'button';
             if (!empty($Config['_FormProcessors'][$processID]['_onDelete'])) {
                 $class = 'button-primary"';
             }
-            $Icons .= '&nbsp;<span title="Run Process on Delete" onclick="df_setToggle(\'onDelete_' . $processID . '\');" id="onDelete_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/database-delete.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
+            $Icons .= '&nbsp;<span title="Run Process on Delete" onclick="df_setToggle(\'onDelete_' . $processID . '\');" id="onDelete_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . DBT_URL . '/data_report/database-delete.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
             if (function_exists($func)) {
                 $class = 'button';
                 if (!empty($Config['_FormProcessors'][$processID]['_configPanelOpen'])) {
                     $class = 'button-primary"';
                 }
-                $Icons .= '&nbsp;<span title="Show Configuration Panel" onclick="toggle(\'config_' . $processID . '\'); df_setToggle(\'configirator_' . $processID . '\');" id="configirator_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/gear.png\') no-repeat scroll left center transparent; padding: 5px 8px 5px 20px;">Settings</span></span>';
+                $Icons .= '&nbsp;<span title="Show Configuration Panel" onclick="toggle(\'config_' . $processID . '\'); df_setToggle(\'configirator_' . $processID . '\');" id="configirator_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . DBT_URL . '/data_report/gear.png\') no-repeat scroll left center transparent; padding: 5px 8px 5px 20px;">Settings</span></span>';
                 $Icons .= '<input type="checkbox" value="1" id="configirator_' . $processID . '_check" name="Data[Content][_FormProcessors][' . $processID . '][_configPanelOpen]" ' . $Sel . ' style="display: none;">';
             }
 
@@ -820,7 +820,7 @@ function df_buildSetProcessors($Config) {
 
             $Return .= '<div style="width: 550px; opacity: 1;" class="admin_list_row3 table_sorter postbox" id="' . $processID . '">';
             $Return .= '<input type="hidden" name="Data[Content][_FormProcessors][' . $processID . '][_process]" value="' . $processor . '" />';
-            $Return .= '<img align="absmiddle" style="float: right; padding: 5px;" onclick="jQuery(\'#' . $processID . '\').remove();" src="' . WP_PLUGIN_URL . '/db-toolkit/images/cancel.png">';
+            $Return .= '<img align="absmiddle" style="float: right; padding: 5px;" onclick="jQuery(\'#' . $processID . '\').remove();" src="' . DBT_URL . '/images/cancel.png">';
 
             $Return .= '<h3 class="fieldTypeHandle">' . $Title . '</h3>';
             $Return .= '<div class="admin_config_toolbar">';
@@ -877,13 +877,13 @@ function df_buildSetViewProcessors($Config) {
                 if (!empty($Config['_FormProcessors'][$processID]['_configPanelOpen'])) {
                     $class = 'button-primary"';
                 }
-                $Icons = '&nbsp;<span title="Show Configuration Panel" onclick="toggle(\'config_' . $processID . '\'); df_setToggle(\'configirator_' . $processID . '\');" id="configirator_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/gear.png\') no-repeat scroll left center transparent; padding: 5px 8px 5px 20px;">Settings</span></span>';
+                $Icons = '&nbsp;<span title="Show Configuration Panel" onclick="toggle(\'config_' . $processID . '\'); df_setToggle(\'configirator_' . $processID . '\');" id="configirator_' . $processID . '" class="' . $class . '"><span style="background: url(\'' . DBT_URL . '/data_report/gear.png\') no-repeat scroll left center transparent; padding: 5px 8px 5px 20px;">Settings</span></span>';
                 $Icons .= '<input type="checkbox" value="1" id="configirator_' . $processID . '_check" name="Data[Content][_ViewProcessors][' . $processID . '][_configPanelOpen]" ' . $Sel . ' style="display: none;">';
             }
 
             $Return .= '<div style="width: 750px; opacity: 1;" class="admin_list_row3 table_sorter postbox" id="' . $processID . '">';
             $Return .= '<input type="hidden" name="Data[Content][_ViewProcessors][' . $processID . '][_process]" value="' . $processor . '" />';
-            $Return .= '<img align="absmiddle" style="float: right; padding: 5px;" onclick="jQuery(\'#' . $processID . '\').remove();" src="' . WP_PLUGIN_URL . '/db-toolkit/images/cancel.png">';
+            $Return .= '<img align="absmiddle" style="float: right; padding: 5px;" onclick="jQuery(\'#' . $processID . '\').remove();" src="' . DBT_URL . '/images/cancel.png">';
 
             $Return .= '<h3 class="fieldTypeHandle">' . $ViewTitle . '</h3>';
             $Return .= '<div class="admin_config_toolbar">';
@@ -926,7 +926,7 @@ function df_listProcessors() {
         if ($processor != '.' && $processor != '..' && $processor != 'index.htm') {
             if (file_exists(WP_PLUGIN_DIR . '/db-toolkit/data_form/processors/' . $processor . '/conf.php')) {
                 include(WP_PLUGIN_DIR . '/db-toolkit/data_form/processors/' . $processor . '/conf.php');
-                $Icon = WP_PLUGIN_URL . '/db-toolkit/data_report/arrow_switch.png';
+                $Icon = DBT_URL . '/data_report/arrow_switch.png';
                 $Return .= '<li><a onclick="df_addPRocess(\'' . $processor . '\');"><img src="' . $Icon . '" align="absmiddle" /> ' . $Title . '</a></li>';
             }
         }
@@ -946,7 +946,7 @@ function df_listViewProcessors() {
         if ($processor != '.' && $processor != '..' && $processor != 'index.htm') {
             if (file_exists(WP_PLUGIN_DIR . '/db-toolkit/data_report/processors/' . $processor . '/conf.php')) {
                 include(WP_PLUGIN_DIR . '/db-toolkit/data_report/processors/' . $processor . '/conf.php');
-                $Icon = WP_PLUGIN_URL . '/db-toolkit/data_report/arrow_switch.png';
+                $Icon = DBT_URL . '/data_report/arrow_switch.png';
                 $Return .= '<li><a onclick="df_addViewProcess(\'' . $processor . '\');"><img src="' . $Icon . '" align="absmiddle" /> ' . $ViewTitle . '</a></li>';
             }
         }
@@ -967,11 +967,11 @@ function df_addProcess($processor, $table) {
         $func = 'config_' . $processor;
 
 
-        $Icons = '<span title="Run Process on Insert" onclick="df_setToggle(\'onInsert_' . $processID . '\');" id="onInsert_' . $processID . '" class="button-primary"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/database-insert.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
-        $Icons .= '&nbsp;<span title="Run Process on Update" onclick="df_setToggle(\'onUpdate_' . $processID . '\');" id="onUpdate_' . $processID . '" class="button"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/database-pencil.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
-        $Icons .= '&nbsp;<span title="Run Process on Delete" onclick="df_setToggle(\'onDelete_' . $processID . '\');" id="onDelete_' . $processID . '" class="button"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/database-delete.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
+        $Icons = '<span title="Run Process on Insert" onclick="df_setToggle(\'onInsert_' . $processID . '\');" id="onInsert_' . $processID . '" class="button-primary"><span style="background: url(\'' . DBT_URL . '/data_report/database-insert.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
+        $Icons .= '&nbsp;<span title="Run Process on Update" onclick="df_setToggle(\'onUpdate_' . $processID . '\');" id="onUpdate_' . $processID . '" class="button"><span style="background: url(\'' . DBT_URL . '/data_report/database-pencil.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
+        $Icons .= '&nbsp;<span title="Run Process on Delete" onclick="df_setToggle(\'onDelete_' . $processID . '\');" id="onDelete_' . $processID . '" class="button"><span style="background: url(\'' . DBT_URL . '/data_report/database-delete.png\') no-repeat scroll left center transparent; padding: 5px 8px;"></span></span>';
         if (function_exists($func)) {
-            $Icons .= '&nbsp;<span title="Show Configuration Panel" onclick="toggle(\'config_' . $processID . '\'); df_setToggle(\'configirator_' . $processID . '\');" id="configirator_' . $processID . '" class="button-primary"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/gear.png\') no-repeat scroll left center transparent; padding: 5px 8px 5px 20px;">Settings</span></span>';
+            $Icons .= '&nbsp;<span title="Show Configuration Panel" onclick="toggle(\'config_' . $processID . '\'); df_setToggle(\'configirator_' . $processID . '\');" id="configirator_' . $processID . '" class="button-primary"><span style="background: url(\'' . DBT_URL . '/data_report/gear.png\') no-repeat scroll left center transparent; padding: 5px 8px 5px 20px;">Settings</span></span>';
             $Icons .= '<input type="checkbox" value="1" id="configirator_' . $processID . '_check" name="Data[Content][_FormProcessors][' . $processID . '][_configPanelOpen]" checked="checked" style="display: none;">';
         }
         $Icons .= '<input type="checkbox" value="1" id="onInsert_' . $processID . '_check" name="Data[Content][_FormProcessors][' . $processID . '][_onInsert]" checked="checked" style="display: none;">';
@@ -981,7 +981,7 @@ function df_addProcess($processor, $table) {
 
         $Return .= '<div style="width: 550px; opacity: 1;" class="admin_list_row3 table_sorter postbox" id="' . $processID . '">';
         $Return .= '<input type="hidden" name="Data[Content][_FormProcessors][' . $processID . '][_process]" value="' . $processor . '" />';
-        $Return .= '<img align="absmiddle" style="float: right; padding: 5px;" onclick="jQuery(\'#' . $processID . '\').remove();" src="' . WP_PLUGIN_URL . '/db-toolkit/images/cancel.png">';
+        $Return .= '<img align="absmiddle" style="float: right; padding: 5px;" onclick="jQuery(\'#' . $processID . '\').remove();" src="' . DBT_URL . '/images/cancel.png">';
         $Return .= '<h3 class="fieldTypeHandle">' . $Title . '</h3>';
         $Return .= '<div class="admin_config_toolbar">';
 
@@ -1019,12 +1019,12 @@ function df_addViewProcess($processor, $table) {
 
         $Return .= '<div style="width: 750px; opacity: 1;" class="admin_list_row3 table_sorter postbox" id="' . $processID . '">';
         $Return .= '<input type="hidden" name="Data[Content][_ViewProcessors][' . $processID . '][_process]" value="' . $processor . '" />';
-        $Return .= '<img align="absmiddle" style="float: right; padding: 5px;" onclick="jQuery(\'#' . $processID . '\').remove();" src="' . WP_PLUGIN_URL . '/db-toolkit/images/cancel.png">';
+        $Return .= '<img align="absmiddle" style="float: right; padding: 5px;" onclick="jQuery(\'#' . $processID . '\').remove();" src="' . DBT_URL . '/images/cancel.png">';
         $Return .= '<h3 class="fieldTypeHandle">' . $ViewTitle . '</h3>';
         $Return .= '<div class="admin_config_toolbar">';
         $Icons = '';
         if (function_exists($func)) {
-            $Icons = '&nbsp;<span title="Show Configuration Panel" onclick="toggle(\'config_' . $processID . '\'); df_setToggle(\'configirator_' . $processID . '\');" id="configirator_' . $processID . '" class="button-primary"><span style="background: url(\'' . WP_PLUGIN_URL . '/db-toolkit/data_report/gear.png\') no-repeat scroll left center transparent; padding: 5px 8px 5px 20px;">Settings</span></span>';
+            $Icons = '&nbsp;<span title="Show Configuration Panel" onclick="toggle(\'config_' . $processID . '\'); df_setToggle(\'configirator_' . $processID . '\');" id="configirator_' . $processID . '" class="button-primary"><span style="background: url(\'' . DBT_URL . '/data_report/gear.png\') no-repeat scroll left center transparent; padding: 5px 8px 5px 20px;">Settings</span></span>';
             $Icons .= '<input type="checkbox" value="1" id="configirator_' . $processID . '_check" name="Data[Content][_ViewProcessors][' . $processID . '][_configPanelOpen]" checked="checked" style="display: none;">';
         }
 
@@ -1779,11 +1779,10 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
 
 
     $CountQuery = "SELECT count(" . $countSelect . ") as Total FROM `" . $Config['_main_table'] . "` AS prim \n " . $queryJoin . " \n " . $WhereTag . " \n " . $queryWhere . " \n " . $groupBy . "\n\n " . $countLimit . ";";
-    $CountResult = $wpdb->query($CountQuery);
-
+    $CountResult = $wpdb->get_results($CountQuery, ARRAY_A);
     if (!empty($entryCount)) {
         // Countr Rows
-        while ($prCount = mysqli_fetch_assoc($CountResult)) {
+        foreach( $CountResult as $prCount ){
             $preCount[] = $prCount['Total'];
         }
         if (!empty($preCount)) {
@@ -1796,12 +1795,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
         $Count['Total'] = mysqli_num_rows($CountResult);
     } else {
         // get Count entry
-        if (!empty($CountResult)) {
-            $Count = mysqli_fetch_assoc($CountResult);
-            mysqli_free_result($CountResult);
-        } else {
-            $Count = 0;
-        }
+        $Count = 0;
     }
 
     if (!empty($limitOveride) && $limitOveride != 'full') {
@@ -1820,7 +1814,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
             if ($Page > $TotalPages) {
                 $Page = $TotalPages;
                 $Start = ($Page * $Config['_Items_Per_Page']) - $Config['_Items_Per_Page'];
-                if ($Start < 0) {
+                if ($Start <= 0) {
                     $Start = 1;
                 }
             }
@@ -1884,8 +1878,8 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
     $Query = "SELECT " . $querySelect . " FROM `" . $Config['_main_table'] . "` AS prim \n " . $queryJoin . " \n " . $WhereTag . " \n " . $queryWhere . "\n " . $groupBy . " \n " . $orderStr . " \n " . $queryLimit . ";";
 
     if (strtolower($Format) == 'data') {
-        $dtaRes = $wpdb->query($Query);
-        $Data = mysqli_fetch_assoc($dtaRes);
+        $Data = $wpdb->get_row( $Query, ARRAY_A );
+        //$Data = mysqli_fetch_assoc($dtaRes);
         return $Data;
     }
 
@@ -1944,7 +1938,6 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
 
 
     $Result = $wpdb->get_results($Query, ARRAY_A);
-
     // Run View Processes
 
     if (!empty($Config['_ViewProcessors'])) {
@@ -2080,7 +2073,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
                     if ($ViewLink != '') {
                         $ViewLink .= " ";
                     }
-                    $ViewLink .= '<span style="cursor:pointer;" onclick="dr_BuildUpDateForm(\'' . $EID . '\', \'' . $row['_return_' . $Config['_ReturnFields'][0]] . '\');"><img src="' . WP_PLUGIN_URL . '/db-toolkit/data_report/edit.png" width="16" height="16" alt="Edit" title="Edit" border="0" align="absmiddle" /></span>';
+                    $ViewLink .= '<span style="cursor:pointer;" onclick="dr_BuildUpDateForm(\'' . $EID . '\', \'' . $row['_return_' . $Config['_ReturnFields'][0]] . '\');"><img src="' . DBT_URL . '/data_report/edit.png" width="16" height="16" alt="Edit" title="Edit" border="0" align="absmiddle" /></span>';
                 }
                 if (!empty($Config['_Show_Delete_action'])) {
                     $ActionWidth = $ActionWidth + 16;
@@ -2092,7 +2085,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
                     } else {
                         $hasQuery = false;
                     }
-                    $ViewLink .= '<span style="cursor:pointer;" onclick="dr_deleteItem(\'' . $EID . '\', \'' . $row['_return_' . $Config['_ReturnFields'][0]] . '\',\'' . $hasQuery . '\');"><img src="' . WP_PLUGIN_URL . '/db-toolkit/data_report/delete.png" width="16" height="16" alt="Delete" title="Delete" border="0" align="absmiddle" /></span>';
+                    $ViewLink .= '<span style="cursor:pointer;" onclick="dr_deleteItem(\'' . $EID . '\', \'' . $row['_return_' . $Config['_ReturnFields'][0]] . '\',\'' . $hasQuery . '\');"><img src="' . DBT_URL . '/data_report/delete.png" width="16" height="16" alt="Delete" title="Delete" border="0" align="absmiddle" /></span>';
                 }
                 //vardump($Config);
 
@@ -2107,7 +2100,6 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
 
             // Show Action Panels on left
             //$ReportReturn .= $actionPanels;
-
 
             foreach ($Config['_IndexType'] as $Field => $Type) {
                 //foreach ($row as $Field => $Data) {
@@ -2174,7 +2166,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
                             if (!empty($Config['_InlineEdit'][$Field])) {
                                 $Req = 'inlineedit';
                                 $FieldSet = $Config['_Field'][$Field];
-                                //$ReportReturn .= WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/input.php';
+                                //$ReportReturn .= DB_TOOLKIT.'/data_form/fieldtypes/'.$FieldSet[0].'/input.php';
                                 ob_start();
                                 $Defaults[$Field] = $row['_sourceid_' . $Field];
                                 include(WP_PLUGIN_DIR . '/db-toolkit/data_form/fieldtypes/' . $FieldSet[0] . '/conf.php');
@@ -2492,14 +2484,14 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
             }
             //$ReportReturn .= '<div class="reportFooter_totals">';
             if ($TotalPages > 1) {
-                //$ReportReturn .= '<div class="fbutton" onclick="dr_goToPage('.$EID.', '.$First.');"><div><img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_report/images/resultset_first.png" width="16" height="16" alt="First" align="absmiddle" /></div></div>';
+                //$ReportReturn .= '<div onclick="dr_goToPage('.$EID.', '.$First.');"><div><img src="'.DB_TOOLKIT.'/data_report/images/resultset_first.png" width="16" height="16" alt="First" align="absmiddle" /></div></div>';
 
                 $ReportReturn .= '<a href="?' . $pageLink . 'npage=1" title="Go to the first page" class="first-page" onclick="dr_goToPage(\'' . $EID . '\', 1); return false;">&laquo;</a>';
                 $ReportReturn .= '<a href="?' . $pageLink . 'npage=' . $Prev . '" title="Go to the previous page" class="prev-page" onclick="dr_goToPage(\'' . $EID . '\', ' . $Prev . '); return false;">&lsaquo;</a>';
                 $ReportReturn .= '<span class="paging-input"> ' . $Page . ' of <span class="total-pages">' . $TotalPages . ' </span></span>';
                 $ReportReturn .= '<a href="?' . $pageLink . 'npage=' . $Next . '" title="Go to the next page" class="next-page" onclick="dr_goToPage(\'' . $EID . '\', ' . $Next . '); return false;">&rsaquo;</a>';
                 $ReportReturn .= '<a href="?' . $pageLink . 'npage=' . $TotalPages . '" title="Go to the last page" class="last-page" onclick="dr_goToPage(\'' . $EID . '\', ' . $TotalPages . '); return false;">&raquo;</a>';
-                //$ReportReturn .= '<div class="fbutton" onclick="dr_goToPage('.$EID.', '.$Last.');"><div><img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_report/images/resultset_last.png" width="16" height="16" alt="Last" align="absmiddle" /></div></div>';
+                //$ReportReturn .= '<div onclick="dr_goToPage('.$EID.', '.$Last.');"><div><img src="'.DB_TOOLKIT.'/data_report/images/resultset_last.png" width="16" height="16" alt="Last" align="absmiddle" /></div></div>';
             }
 
 

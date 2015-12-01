@@ -530,7 +530,7 @@ function linked_makeFilterdLinkedField($IDField , $ValueField, $FilterField, $Fi
 		}
 		$Return .= '<option value="'.$row[$IDField].'" '.$Sel.' >'.$row['_Value_Field'].'</option>';
 	}
-	//$Return .= '</select>&nbsp;<a href="'.$Page.'" onclick="df_buildQuickCaptureForm('.$_GET['PageData']['ID'].', '.$RefEle.'); return false;"><img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_form/add.png" width="16" height="16" alt="Add New" align="absmiddle" border="0" /></a>';
+	//$Return .= '</select>&nbsp;<a href="'.$Page.'" onclick="df_buildQuickCaptureForm('.$_GET['PageData']['ID'].', '.$RefEle.'); return false;"><img src="'.DB_TOOLKIT.'/data_form/add.png" width="16" height="16" alt="Add New" align="absmiddle" border="0" /></a>';
 return $Return;
 }
 
@@ -557,7 +557,7 @@ function linked_makeFilterdLinkedFilter($EID, $IDField , $ValueField, $FilterFie
 		$Return .= '<option value="'.$row[$IDField].'" '.$Sel.'>'.$row[$ValueField].'</option>';
 	}
 	$Return .= '</select>';
-//$Return .= '</select>&nbsp;<a href="'.$Page.'" onclick="df_buildQuickCaptureForm('.$_GET['PageData']['ID'].', '.$RefEle.'); return false;"><img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_form/add.png" width="16" height="16" alt="Add New" align="absmiddle" border="0" /></a>';
+//$Return .= '</select>&nbsp;<a href="'.$Page.'" onclick="df_buildQuickCaptureForm('.$_GET['PageData']['ID'].', '.$RefEle.'); return false;"><img src="'.DB_TOOLKIT.'/data_form/add.png" width="16" height="16" alt="Add New" align="absmiddle" border="0" /></a>';
 return $Return;
 }
 

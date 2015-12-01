@@ -86,7 +86,7 @@ if (!empty($Config['_Show_Filters'])) {
 
     }
 ?>            <?php
-            /* <!-- <input type="submit" name="reportFilter[Submit]" id="button add-new-h2" value="Apply Filters" class="buttons" />&nbsp;<input type="button add-new-h2" name="button add-new-h2" id="button add-new-h2" value="Close Panel" class="buttons" onclick="toggle('filterPanel_<?php echo $Media['ID']; ?>'); return false; " />&nbsp;<input type="submit" name="reportFilter[ClearFilters]" id="button add-new-h2" value="Clear Filters" class="buttons" onclick="return confirm('Are you sure you want to clear the filters?');" /></div> --> */
+            /* <!-- <input type="submit" name="reportFilter[Submit]" id="button" value="Apply Filters" class="buttons" />&nbsp;<input type="button" name="button" id="button" value="Close Panel" class="buttons" onclick="toggle('filterPanel_<?php echo $Media['ID']; ?>'); return false; " />&nbsp;<input type="submit" name="reportFilter[ClearFilters]" id="button" value="Clear Filters" class="buttons" onclick="return confirm('Are you sure you want to clear the filters?');" /></div> --> */
             ?>
             <div style="clear:both;"></div>
         </div>

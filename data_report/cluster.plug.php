@@ -80,7 +80,7 @@
                     echo '<div id="dbt-option-2" class="group" style="display: none;">';
                     echo '<h2>Build Cluster Layout</h2>';
 
-                        include(WP_PLUGIN_DIR.'/db-toolkit/data_report/clusterlayout.php');
+                        include(DB_TOOLKIT.'/data_report/clusterlayout.php');
                         
                     echo '</div>';
 

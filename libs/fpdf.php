@@ -7,7 +7,7 @@
 * Author:  Olivier PLATHEY                                                     *
 *******************************************************************************/
 
-define('FPDF_FONTPATH', WP_PLUGIN_DIR.'/db-toolkit/libs/pdffont/');
+define('FPDF_FONTPATH', DB_TOOLKIT.'/libs/pdffont/');
 //echo FPDF_FONTPATH;
 //die;
 define('FPDF_VERSION','1.6');

@@ -26,7 +26,7 @@ function post_process_emailer($Data, $Setup, $Config){
         }
     }
 
-    $version = get_file_data(WP_PLUGIN_DIR.'/db-toolkit/plugincore.php', $default_headers, 'db-toolkit-fieldtype');
+    $version = get_file_data(DB_TOOLKIT.'/plugincore.php', $default_headers, 'db-toolkit-fieldtype');
     $Headers = 'From: '.$Sender . "\r\n" .
                'Reply-To: '.$Sender . "\r\n" .
                'X-Mailer: DB-Toolkit/'.$version['Version'];

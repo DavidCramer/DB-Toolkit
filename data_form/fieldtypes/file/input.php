@@ -183,7 +183,7 @@ if($FieldSet[1] == 'multi'){
 			$FileParts = explode('|', $File);
 			$Ext = pathinfo($FileParts[1]);
 			$icon = '<img src="'.WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/file/icons/file.gif" width="16" height="16" align="absmiddle" />';
-			if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/'.strtolower($Ext['extension']).'.gif')){
+			if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/file/icons/'.strtolower($Ext['extension']).'.gif')){
 				$icon = '<img src="'.WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/file/icons/'.strtolower($Ext['extension']).'.gif" width="16" height="16" align="absmiddle" />';
 			}
 			$entryID = uniqid();

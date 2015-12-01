@@ -131,6 +131,9 @@ function dt_headers() {
     if(is_admin()) {
         ?>
                 var vars = { action : 'dt_ajaxCall',func: ajaxCall.arguments[0]};
+                if( jQuery('#_main_table').length ){
+                    vars.table =  jQuery('#_main_table').val();
+                }
         <?php
     }else {
         ?>
@@ -250,13 +253,13 @@ function dt_styles($preIs = false) {
     $themeURL = get_bloginfo('template_url');
 
     if(!file_exists($themeDir.'/uicustom')){
-            wp_register_style('jqueryUI-core', WP_PLUGIN_URL . '/db-toolkit/jqueryui/jquery-ui.css');
+            wp_register_style('jqueryUI-core', DBT_URL . '/jqueryui/jquery-ui.css');
     }else{
             wp_register_style('jqueryUI-core', $themeURL.'/uicustom/jquery-ui.css');
     }
 
-    wp_register_style('jquery-multiselect', WP_PLUGIN_URL . '/db-toolkit/libs/ui.dropdownchecklist.css');
-    wp_register_style('jquery-validate', WP_PLUGIN_URL . '/db-toolkit/libs/validationEngine.jquery.css');
+    wp_register_style('jquery-multiselect', DBT_URL . '/libs/ui.dropdownchecklist.css');
+    wp_register_style('jquery-validate', DBT_URL . '/libs/validationEngine.jquery.css');
 
     wp_enqueue_style('jqueryUI-core');
     wp_enqueue_style('jquery-multiselect');
@@ -269,7 +272,7 @@ function dt_styles($preIs = false) {
     if(file_exists($themeDir.'/table.css') && !is_admin()) {
         wp_register_style('interface_table_styles', $themeURL.'/table.css');
     }else{
-        wp_register_style('interface_table_styles', WP_PLUGIN_URL . '/db-toolkit/data_report/css/table.css');
+        wp_register_style('interface_table_styles', DBT_URL . '/data_report/css/table.css');
     }
     wp_enqueue_style('interface_table_styles');
     if(file_exists($themeDir.'/toolbar.css') && !is_admin()){
@@ -294,10 +297,10 @@ function dt_styles($preIs = false) {
         <script type="text/javascript" src="<?php echo WP_PLUGIN_URL; ?>/db-toolkit/data_form/js/ui.timepickr.js"></script>
         */
 
-	$Types = loadFolderContents(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes');
+	$Types = loadFolderContents(DB_TOOLKIT.'/data_form/fieldtypes');
 	foreach($Types[0] as $Type){
-		if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/header.php')){
-			include_once(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/header.php');
+		if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/header.php')){
+			include_once(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/header.php');
 		}
 	}
 }
@@ -307,9 +310,9 @@ function dt_styles($preIs = false) {
     if(is_admin()){
         if(!empty($_GET['page']))
         if(substr($_GET['page'],0,4) == 'app_' || substr($_GET['page'],0,8) == 'dt_intfc'){
-            wp_register_style('interface_setup_styles', WP_PLUGIN_URL . '/db-toolkit/data_report/css/launcher.css');
+            wp_register_style('interface_setup_styles', DBT_URL . '/data_report/css/launcher.css');
         }else{
-            wp_register_style('interface_setup_styles', WP_PLUGIN_URL . '/db-toolkit/data_report/css/setup.css');
+            wp_register_style('interface_setup_styles', DBT_URL . '/data_report/css/setup.css');
         }
         wp_enqueue_style('interface_setup_styles');
 
@@ -484,15 +487,15 @@ function dt_scripts($preIs = false) {
     // queue & register scripts
 
         if(is_admin ()){
-            wp_register_script('dbt_jslib', WP_PLUGIN_URL . '/db-toolkit/libs/jslib.js', false, false, true);
+            wp_register_script('dbt_jslib', DBT_URL . '/libs/jslib.js', false, false, true);
             wp_enqueue_script("dbt_jslib");
         }
 
-        wp_register_script('data_report', WP_PLUGIN_URL . '/db-toolkit/data_form/javascript.php', false, false, true);
-        wp_register_script('data_form', WP_PLUGIN_URL . '/db-toolkit/data_report/javascript.php', false, false, true);
-        //wp_register_script('jquery-ui');// , WP_PLUGIN_URL . '/db-toolkit/jqueryui/jquery-ui.min.js');
-        wp_register_script('jquery-multiselect', WP_PLUGIN_URL . '/db-toolkit/libs/ui.dropdownchecklist-min.js', false, false, true);
-        wp_register_script('jquery-validate', WP_PLUGIN_URL . '/db-toolkit/libs/jquery.validationEngine.js');
+        wp_register_script('data_report', DBT_URL . '/data_form/javascript.php', false, false, true);
+        wp_register_script('data_form', DBT_URL . '/data_report/javascript.php', false, false, true);
+        //wp_register_script('jquery-ui');// , DBT_URL . '/jqueryui/jquery-ui.min.js');
+        wp_register_script('jquery-multiselect', DBT_URL . '/libs/ui.dropdownchecklist-min.js', false, false, true);
+        wp_register_script('jquery-validate', DBT_URL . '/libs/jquery.validationEngine.js');
 
         wp_enqueue_script("jquery");
         wp_enqueue_script("jquery-ui-core");
@@ -507,9 +510,9 @@ function dt_scripts($preIs = false) {
         wp_enqueue_script('swfobject');
 
     }
-        /*$Types = loadFolderContents(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes');
+        /*$Types = loadFolderContents(DB_TOOLKIT.'/data_form/fieldtypes');
 	foreach($Types[0] as $Type){
-		if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/javascript.php')){
+		if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/javascript.php')){
                         //wp_register_script('fieldType_'.$Type[1], WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/javascript.php', false, false, true);
                         //wp_enqueue_script('fieldType_'.$Type[1]);
                 }
@@ -1039,14 +1042,14 @@ function dt_ajaxCall() {
     // This protect the system from getting calls to malicios php functions
 
     // include processors libraries
-    $formProcessors = list_files(WP_PLUGIN_DIR.'/db-toolkit/data_form/processors');
+    $formProcessors = list_files(DB_TOOLKIT.'/data_form/processors');
     foreach($formProcessors as $file){
         if(basename($file) == 'functions.php'){
             include_once($file);
         }
     }
 
-    $viewProcessors = list_files(WP_PLUGIN_DIR.'/db-toolkit/data_report/processors');
+    $viewProcessors = list_files(DB_TOOLKIT.'/data_report/processors');
     foreach($viewProcessors as $file){
         if(basename($file) == 'functions.php'){
            include_once($file);
@@ -1072,20 +1075,17 @@ function dt_ajaxCall() {
         }
     }
     if (!empty($func) && function_exists($func)) {
-        header ("Expires: Mon, 21 Nov 1997 05:00:00 GMT");    // Date in the past
-        header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        header ("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
-        header ("Pragma: no-cache");                          // HTTP/1.0
         $Output = call_user_func_array($func, $func_args);
         if(is_array($Output)) {
-            header('Content-type: application/json; charset=UTF-8');
-            //header('Content-type: text/html; charset=UTF-8');
-            echo json_encode($Output);
+            wp_send_json( $Output );
         }else {
-            //header('Content-type: text/html; charset=UTF-8');
+            header ("Expires: Mon, 21 Nov 1997 05:00:00 GMT");    // Date in the past
+            header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+            header ("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
+            header ("Pragma: no-cache");                          // HTTP/1.0
             echo $Output;
+            exit();
         }
-        exit();
     }
 }
 
@@ -1193,7 +1193,7 @@ function dbtoolkit_viewinterface(){
 
     ?>
 <div class="wrap">
-    <div id="icon-themes" class="icon32"></div><h2><?php _e($Title); ?><a class="button add-new-h2" href="admin.php?page=dbt_builder&interface=<?php echo $_GET['page']; ?>">Edit</a></h2>
+    <div id="icon-themes" class="icon32"></div><h2><?php _e($Title); ?><a class="button" href="admin.php?page=dbt_builder&interface=<?php echo $_GET['page']; ?>">Edit</a></h2>
 
     <?php
     $fset = get_option('dt_set_'.$Interface['ID']);
@@ -1775,7 +1775,7 @@ function dt_rendercluster($cluster){
 
 // Render interface from shortcode to front end and view
 function dt_renderInterface($interface){
-
+    global $wpdb;
     if(is_array($interface)) {
         if(!empty($interface['id'])){
             unset($_SESSION['viewitemFilter'][$interface['id']]);
@@ -1931,7 +1931,7 @@ function dt_renderInterface($interface){
     }
 
 
-    if($error = mysqli_error() && $Config['_ViewMode'] != 'form'){
+    if(!empty( $wpdb->last_error ) && $Config['_ViewMode'] != 'form'){
         if(is_admin()){
             $InterfaceData = get_option($Media['ID']);
             $InterfaceDataraw = base64_encode(serialize($InterfaceData));
@@ -2271,12 +2271,12 @@ function dt_remove_dashboard_widgets() {
 
 
 function dt_iconSelector($default = false){
-    $dir = WP_PLUGIN_DIR.'/db-toolkit/images/icons';
+    $dir = DB_TOOLKIT.'/images/icons';
     $icons_dir = opendir($dir);
     ob_start();
     while (($icon = readdir($icons_dir)) !== false) {
         if($icon != '.' && $icon != '..') {
-            $dt = pathinfo(WP_PLUGIN_DIR.'/db-toolkit/images/icons/'.$icon);
+            $dt = pathinfo(DB_TOOLKIT.'/images/icons/'.$icon);
 
             if(strtolower($dt['extension']) == 'png'){
                 $IconID = uniqid('icon_');

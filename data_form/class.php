@@ -1,10 +1,10 @@
 <?php
 
-$FieldTypeFunctions = loadFolderContents(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes');
+$FieldTypeFunctions = loadFolderContents(DB_TOOLKIT.'/data_form/fieldtypes');
 
 foreach($FieldTypeFunctions[0] as $Type) {
-    if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/functions.php')) {
-        include_once(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/functions.php');
+    if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/functions.php')) {
+        include_once(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/functions.php');
     }
 }
 
@@ -149,10 +149,10 @@ if(is_admin()) {
                 if(!empty($Config['Content']['_Required'][$Field])) {
                     $Sel = 'checked="checked"';
                 }
-                echo '<div id="Field_'.$Field.'" class="list_row1 table_sorter" style="padding:3px;"><img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_report/arrow_out.png" align="absmiddle" class="OrderSorter" /><input type="checkbox" name="Data[Content][_Required]['.$Field.']" id="required_'.$Field.'" '.$Sel.' /> '.ucwords($name).' : '.df_fieldTypes($Field, $Table, $row, $Defaults).'<span class="list_row3" id="ExtraSetting_'.$Field.'">';
+                echo '<div id="Field_'.$Field.'" class="list_row1 table_sorter" style="padding:3px;"><img src="'.DB_TOOLKIT.'/data_report/arrow_out.png" align="absmiddle" class="OrderSorter" /><input type="checkbox" name="Data[Content][_Required]['.$Field.']" id="required_'.$Field.'" '.$Sel.' /> '.ucwords($name).' : '.df_fieldTypes($Field, $Table, $row, $Defaults).'<span class="list_row3" id="ExtraSetting_'.$Field.'">';
                 if(!empty($FieldSet[1])) {
-                    if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/conf.php')) {
-                        include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/conf.php');
+                    if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$FieldSet[0].'/conf.php')) {
+                        include(DB_TOOLKIT.'/data_form/fieldtypes/'.$FieldSet[0].'/conf.php');
                         if($FieldTypes[$FieldSet[1]]['func'] != 'null') {
                             echo $FieldTypes[$FieldSet[1]]['func']($Field, $Table, $Config);
                         }
@@ -242,15 +242,15 @@ if(is_admin()) {
         if($Defaults[$Field] == 'hidden' || empty($Defaults[$Field])){
             /*
             // Auto Select the BEST fieldtype for the JOB!
-            $Types = loadFolderContents(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes');
+            $Types = loadFolderContents(DB_TOOLKIT.'/data_form/fieldtypes');
             $Icon = WP_PLUGIN_URL.'/db-toolkit/data_form/wand.png';
             foreach($Types[0] as $Type) {
-                if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/conf.php')) {
-                    include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/conf.php');
+                if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/conf.php')) {
+                    include(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/conf.php');
                     foreach($FieldTypes as $possField=>$conf){
                         if(strtolower($conf['baseType']) == $FieldType){
 
-                        if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/icon.png')) {
+                        if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/icon.png')) {
                             $Icon = WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/icon.png';
                         }
                         echo $Icon.'<br>';
@@ -270,13 +270,13 @@ if(is_admin()) {
             $Return .= '<input type="hidden" name="Data[Content][_Field]['.$Field.']" id="Fieldtype_'.$Field.'" value="'.$Defaults[$Field].'" />';
             return $Return;
         }
-        if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[0].'/conf.php')) {
+        if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[0].'/conf.php')) {
             $Icon = WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtype.png';
-            if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[0].'/icon.png')) {
+            if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[0].'/icon.png')) {
                 $Icon = WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/'.$Type[0].'/icon.png';
             }
 
-            include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[0].'/conf.php');
+            include(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[0].'/conf.php');
             //vardump($FieldTypes[$Type[0]]);
             $Return .= '<span class="button" id="fieldTypeButton_'.$Field.'" onclick="bf_loadFieldTypePanel(\''.$Field.'_FieldTypePanel\', \''.$Table.'\');"><span style="background: url('.$Icon.') left center no-repeat; padding:5px 18px;"> '.$FieldTypes[$Type[1]]['name'].'</span></span> <span style="display:none;" id="'.$Field.'_FieldTypePanel_status"><img src="'.WP_PLUGIN_URL.'/db-toolkit/images/indicator.gif" align="absmiddle" /></span>';
             $Return .= '<input type="hidden" name="Data[Content][_Field]['.$Field.']" id="Fieldtype_'.$Field.'" value="'.$Defaults[$Field].'" />';
@@ -297,7 +297,7 @@ if(is_admin()) {
 
 
 
-        $Types = loadFolderContents(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes');
+        $Types = loadFolderContents(DB_TOOLKIT.'/data_form/fieldtypes');
         //$Return = '<select name="Data[Content][_Field]['.$Field.']" id="Fieldtype_'.$Field.'" >';
         //$Return = '<select name="Data[Content][_Field]['.$Field.']" id="Fieldtype_'.$Field.'" >'
         //$Return .= '<optgroup label="Auto Increment">';
@@ -321,11 +321,11 @@ if(is_admin()) {
         //sort($Types[0]);
         foreach($Types[0] as $Type) {
 
-            if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/conf.php')) {
-                include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/conf.php');
+            if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/conf.php')) {
+                include(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/conf.php');
                 //$Return .= '<optgroup label="'.$FieldTypeTitle.'">';
                 $CIcon = WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtype.png';
-                if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/icon.png')) {
+                if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/icon.png')) {
                     $CIcon = WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/icon.png';
                 }
                 $Return .= '<div style="width:33.33333%; float:left;">';
@@ -355,7 +355,7 @@ if(is_admin()) {
                     */
 
                         $Icon = WP_PLUGIN_URL.'/db-toolkit/data_form/insert.png';
-                        if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/'.$Type[1].'_'.$Key.'.png')) {
+                        if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/'.$Type[1].'_'.$Key.'.png')) {
                             $Icon = WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/'.$Type[1].'_'.$Key.'.png';
                         }
                         $Return .= '<div style="padding:4px; display:'.$fieldDisplay.';" class="'.$fieldClass.'">';
@@ -584,7 +584,7 @@ function df_reloadFormField($EID, $Field, $Default = false){
                 echo $func($Val, $FieldSet[1], $Field, $Config, $Element['ID'], $Defaults);
             }
         }else{
-            include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/input.php');
+            include(DB_TOOLKIT.'/data_form/fieldtypes/'.$FieldSet[0].'/input.php');
         }
         $Pre .= ob_get_clean();
 
@@ -762,9 +762,9 @@ function df_BuildCaptureForm($Element, $Defaults = false, $ViewOnly = false) {
 
                         $FieldSet = explode('_', $Config['_Field'][$Field]);
                         $name = $Config['_FieldTitle'][$Field];
-                        if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/conf.php') && count($FieldSet) == 2) {
+                        if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$FieldSet[0].'/conf.php') && count($FieldSet) == 2) {
 
-                            include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/conf.php');
+                            include(DB_TOOLKIT.'/data_form/fieldtypes/'.$FieldSet[0].'/conf.php');
                             if(!empty($Defaults[$Field])){
                                 $Val = esc_attr($Defaults[$Field]);
                             }else{
@@ -777,7 +777,7 @@ function df_BuildCaptureForm($Element, $Defaults = false, $ViewOnly = false) {
                                     }
 
                                     ob_start();
-                                    include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/input.php');
+                                    include(DB_TOOLKIT.'/data_form/fieldtypes/'.$FieldSet[0].'/input.php');
                                     $inputField = '<div class="control-group '.$isValid.'">';
                                         $inputField .= '<label class="control-label">'.$name.'</label>';
                                         if(empty($Config['_placeHolderTitle'][$Field])){
@@ -806,7 +806,7 @@ function df_BuildCaptureForm($Element, $Defaults = false, $ViewOnly = false) {
                             }
                             if(!empty($FieldTypes[$FieldSet[1]]['hidden'])){
                                     ob_start();
-                                    include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$FieldSet[0].'/input.php');
+                                    include(DB_TOOLKIT.'/data_form/fieldtypes/'.$FieldSet[0].'/input.php');
                                     $Hidden .= ob_get_clean();
                             }
                         }else{
@@ -1003,8 +1003,8 @@ function df_processInsert($EID, $Data) {
                 return $Return;
             }
             if(!empty($Setup['_onInsert'])){
-                if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/processors/'.$Setup['_process'].'/functions.php')){
-                    include_once WP_PLUGIN_DIR.'/db-toolkit/data_form/processors/'.$Setup['_process'].'/functions.php';
+                if(file_exists(DB_TOOLKIT.'/data_form/processors/'.$Setup['_process'].'/functions.php')){
+                    include_once DB_TOOLKIT.'/data_form/processors/'.$Setup['_process'].'/functions.php';
                     $func = 'pre_process_'.$Setup['_process'];
                     if(function_exists($func)){
                         $Data = $func($Data, $Setup, $Config);
@@ -1039,7 +1039,7 @@ function df_processInsert($EID, $Data) {
                         $EntryData = $Data[$Field];
                     }
                 }
-                $Entries[$Field] = "'".mysqli_real_escape_string($EntryData)."'";
+                $Entries[$Field] = $EntryData;
                 //$Entries[$Field] = $EntryData;
             }
         }
@@ -1048,10 +1048,9 @@ function df_processInsert($EID, $Data) {
     if(empty($Entries)){
         $Return['Message'] = 'umm, there was nothing to insert.';
         return $Return;
-    }
-    $Query = "INSERT INTO `".$Config['_main_table']."` (". implode(',',$Fields).") VALUES (".implode(',', $Entries).");";
+    }    
 
-    if($wpdb->query($Query)){
+    if( $wpdb->insert( $Config['_main_table'], $Entries ) ){
         $inserted = true;
         $ID = $wpdb->insert_id;
     }else{
@@ -1133,8 +1132,8 @@ function df_processInsert($EID, $Data) {
         if(!empty($Config['_FormProcessors'])){
             foreach($Config['_FormProcessors'] as $processID=>$Setup){
                 if(!empty($Setup['_onInsert'])){
-                    if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/processors/'.$Setup['_process'].'/functions.php')){
-                        include_once WP_PLUGIN_DIR.'/db-toolkit/data_form/processors/'.$Setup['_process'].'/functions.php';
+                    if(file_exists(DB_TOOLKIT.'/data_form/processors/'.$Setup['_process'].'/functions.php')){
+                        include_once DB_TOOLKIT.'/data_form/processors/'.$Setup['_process'].'/functions.php';
                         $func = 'post_process_'.$Setup['_process'];
                         if(function_exists($func)){
                             $Data = $func($Data, $Setup, $Config);
@@ -1199,6 +1198,8 @@ function df_checkActivity($Act, $create = 0) {
 }
 
 function dr_trackActivity($Act, $EID, $ReturnValue, $Level = 0) {
+    
+    global $wpdb;
     //return;
     $Table = '';
     if(!empty($EID)) {
@@ -1211,18 +1212,15 @@ function dr_trackActivity($Act, $EID, $ReturnValue, $Level = 0) {
     if(!empty($_SESSION['UserBase']['Member']['EmailAddress'])) {
         $UserID = $_SESSION['UserBase']['Member']['EmailAddress'];
     }
-    if(mysqli_query("INSERT INTO `_adittrack_entries` (
-						`ID` ,
-						`User` ,
-						`Activity` ,
-						`Table` ,
-						`Entry` ,
-						`Element`,
-						`Date`
-						)
-						VALUES (
-						NULL , '".$UserID."', '".$Activity."', '".$Table."', '".$ReturnValue."', '".$EID."', '".date('Y-m-d H:i:s')."'
-						);")) {
+    $entry = array(
+        "User" => $UserID,
+        "Activity" => $Activity,
+        "Table" => $Table,
+        "Entry" => $ReturnValue,
+        "Element" => $EID,
+        "Date" => date('Y-m-d H:i:s')
+    );
+    if( @$wpdb->insert( '_adittrack_entries', $entry ) ){
         return true;
     }
     if($Level == 0) {
@@ -1317,9 +1315,14 @@ function dt_buildNewTable($name){
 
 function dt_buildNewField($Field){
 
-
     $Field = str_replace('-', '_', sanitize_title($Field));
-    return df_makeFieldConfigBox($Field, false);
+    $Table = sanitize_text_field( $_POST['table'] );
+    $Config = array(
+        'Content' => array(
+            '_main_table' => $Table
+        )
+    );
+    return df_makeFieldConfigBox($Field, $Config);
 
 
 }

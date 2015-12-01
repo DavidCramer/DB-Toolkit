@@ -62,7 +62,7 @@ switch($Types[1]) {
 
             $Dets = pathinfo($File[1]);
             $ext = strtolower($Dets['extension']);
-            if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/'.$ext.'.gif')){
+            if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/file/icons/'.$ext.'.gif')){
                     $Icon = '<img src="'.WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/file/icons/'.$ext.'.gif" align="absmiddle" />&nbsp;';
             }else{
                     $Icon = '<img src="'.WP_PLUGIN_URL.'/db-toolkit/data_form/fieldtypes/file/icons/file.gif" align="absmiddle" />&nbsp;';
@@ -94,10 +94,10 @@ switch($Types[1]) {
                     //$File = explode('|', $Value);
                     $Dets = pathinfo($File['StoredFilename']);
                     $ext = strtolower($Dets['extension']);
-                    if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/'.$ext.'.gif')) {
-                        $Icon = '<img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/'.$ext.'.gif" border="0" align="absmiddle" title="'.$File['OriganalFileName'].'" /> ';
+                    if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/file/icons/'.$ext.'.gif')) {
+                        $Icon = '<img src="'.DB_TOOLKIT.'/data_form/fieldtypes/file/icons/'.$ext.'.gif" border="0" align="absmiddle" title="'.$File['OriganalFileName'].'" /> ';
                     }else {
-                        $Icon = '<img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/file.gif" border="0" align="absmiddle" title="'.$File['OriganalFileName'].'" /> ';
+                        $Icon = '<img src="'.DB_TOOLKIT.'/data_form/fieldtypes/file/icons/file.gif" border="0" align="absmiddle" title="'.$File['OriganalFileName'].'" /> ';
                     }
                     $Out .= '<div class="'.$Row.'"><a href="'.$File['StoredFilename'].'" target="_blank">'.$Icon.' '.$File['OriganalFileName'].'</a></div>';
 
@@ -113,10 +113,10 @@ switch($Types[1]) {
                 $File = explode('|', $Value);
                 $Dets = pathinfo($File[1]);
                 $ext = strtolower($Dets['extension']);
-                if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/'.$ext.'.gif')) {
-                    $Icon = '<img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/'.$ext.'.gif" border="0" align="absmiddle" title="'.$File[1].'" /> ';
+                if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/file/icons/'.$ext.'.gif')) {
+                    $Icon = '<img src="'.DB_TOOLKIT.'/data_form/fieldtypes/file/icons/'.$ext.'.gif" border="0" align="absmiddle" title="'.$File[1].'" /> ';
                 }else {
-                    $Icon = '<img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/file.gif" border="0" align="absmiddle" title="'.$File[1].'" /> ';
+                    $Icon = '<img src="'.DB_TOOLKIT.'/data_form/fieldtypes/file/icons/file.gif" border="0" align="absmiddle" title="'.$File[1].'" /> ';
                 }
                 $Out .= '<div class="'.$Row.'"><a href="'.$File[0].'" target="_blank">'.$Icon.' '.$Dets['basename'].'</a></div>';
             }
@@ -125,10 +125,10 @@ switch($Types[1]) {
             $File = explode('|', $Value);
             $Dets = pathinfo($File[1]);
             $ext = strtolower($Dets['extension']);
-            if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/'.$ext.'.gif')) {
-                $Icon = '<img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/'.$ext.'.gif" align="absmiddle" /> ';
+            if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/file/icons/'.$ext.'.gif')) {
+                $Icon = '<img src="'.DB_TOOLKIT.'/data_form/fieldtypes/file/icons/'.$ext.'.gif" align="absmiddle" /> ';
             }else {
-                $Icon = '<img src="'.WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/file/icons/file.gif" align="absmiddle" /> ';
+                $Icon = '<img src="'.DB_TOOLKIT.'/data_form/fieldtypes/file/icons/file.gif" align="absmiddle" /> ';
             }
         }
 

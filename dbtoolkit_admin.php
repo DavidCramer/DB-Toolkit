@@ -52,7 +52,7 @@ if(!empty($_GET['renderinterface'])){
         
             if(!empty($user->caps['administrator']) && $appConfig['state'] == 'open'){
         ?>
-        <a class="button add-new-h2" href="admin.php?page=dbt_builder&interface=<?php echo $_GET['renderinterface']; ?>">Edit</a>
+        <a class="button" href="admin.php?page=dbt_builder&interface=<?php echo $_GET['renderinterface']; ?>">Edit</a>
     <?php
             }
     ?></h2>
@@ -140,7 +140,7 @@ if(!empty($_GET['renderinterface'])){
         if($_GET['page'] == 'Add_New'){
         /*    ?>
         <div class="wrap">
-            <div><img src="<?php echo WP_PLUGIN_URL . '/db-toolkit/images/dbtoolkit-logo.png'; ?>" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />Create new Interface
+            <div><img src="<?php echo DBT_URL . '/images/dbtoolkit-logo.png'; ?>" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />Create new Interface
             <div class="clear"></div>
                 <br />
             <div id="poststuff">
@@ -211,7 +211,7 @@ if(!empty($_GET['renderinterface'])){
         if($_GET['page'] == 'New_Cluster'){
         /*    ?>
         <div class="wrap">
-            <div><img src="<?php echo WP_PLUGIN_URL . '/db-toolkit/images/dbtoolkit-logo.png'; ?>" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />Create new Interface
+            <div><img src="<?php echo DBT_URL . '/images/dbtoolkit-logo.png'; ?>" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />Create new Interface
             <div class="clear"></div>
                 <br />
             <div id="poststuff">
@@ -433,20 +433,20 @@ if(!empty($appConfig['imageURL'])){
             <div class="clear"></div>
         </div>
         <div class="save_bar_tools">
-            <span class="fbutton" style="float:right;"><a href="?page=dbt_builder&delete=<?php echo $activeApp; ?>" onclick="return confirm('Are you sure you want to delete this App and all its interfaces? It\'s permanent!')"><div class="button add-new-h2"><span class="delete" style="padding-left: 20px;">Delete Application</span></div></a></span>
-            <span class="fbutton"><a href="admin.php?page=Add_New"><div class="button add-new-h2" id="addNewInterface"><span class="add" style="padding-left: 20px;">New Interface</span></div></a></span>
-            <span class="fbutton"><a href="admin.php?page=New_Cluster"><div class="button add-new-h2"><span class="add" style="padding-left: 20px;">New Cluster</span></div></a></span>
+            <span style="float:right;"><a href="?page=dbt_builder&delete=<?php echo $activeApp; ?>" onclick="return confirm('Are you sure you want to delete this App and all its interfaces? It\'s permanent!')"><div class="button"><span class="delete" style="padding-left: 20px;">Delete Application</span></div></a></span>
+            <span><a href="admin.php?page=Add_New"><div class="button" id="addNewInterface"><span class="add" style="padding-left: 20px;">New Interface</span></div></a></span>
+            <span><a href="admin.php?page=New_Cluster"><div class="button"><span class="add" style="padding-left: 20px;">New Cluster</span></div></a></span>
             <?php
             if(strtolower($activeApp) != 'base'){
             ?>
-                <span class="fbutton"><a href="?page=dbt_builder&exportApp=true"><div class="button add-new-h2"><span class="export" style="padding-left: 20px;" >Export</span></div></a></span>
+                <span><a href="?page=dbt_builder&exportApp=true"><div class="button"><span class="export" style="padding-left: 20px;" >Export</span></div></a></span>
                 <?php
-                //<div class="fbutton"><a href="?page=dbt_builder&exportApp=true&plugin=true"><div class="button add-new-h2"><span class="export" style="padding-left: 20px;" >Export as Plugin</span></div></a></div>
+                //<div><a href="?page=dbt_builder&exportApp=true&plugin=true"><div class="button"><span class="export" style="padding-left: 20px;" >Export as Plugin</span></div></a></div>
                 ?>
             <?php
             }
             ?>
-            <span class="fbutton"><a href="?page=dbt_builder&close=<?php echo $activeApp; ?>"><div class="button add-new-h2"><span class="closefilter" style="padding-left: 20px;">Close Application</span></div></a></span>            
+            <span><a href="?page=dbt_builder&close=<?php echo $activeApp; ?>"><div class="button"><span class="closefilter" style="padding-left: 20px;">Close Application</span></div></a></span>            
 
 
         </div>
@@ -866,7 +866,7 @@ return;
             if(!empty($appConfig['imageURL'])){
                echo '<img src="'.UseImage($appConfig['imageURL'], 7, 200, 100).'" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />';
             }else{
-                echo '<img src="'.WP_PLUGIN_URL . '/db-toolkit/images/dbtoolkit-logo.png" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />';
+                echo '<img src="'.DBT_URL . '/images/dbtoolkit-logo.png" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />';
             }
             ?>
                 <a href="admin.php?page=Add_New" class="button">New Interface</a>&nbsp;

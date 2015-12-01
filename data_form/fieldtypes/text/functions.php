@@ -56,7 +56,7 @@ function text_postProcess($Field, $Input, $Type, $Element, $Data, $ReturnField){
             $default_headers = array(
                 'Version' => 'Version'
             );
-            $version = get_file_data(WP_PLUGIN_DIR.'/db-toolkit/plugincore.php', $default_headers, 'db-toolkit-fieldtype');
+            $version = get_file_data(DB_TOOLKIT.'/plugincore.php', $default_headers, 'db-toolkit-fieldtype');
             $Headers = 'From: '.$Element['Content']['_emailSender'][$Field] . "\r\n" .
                        'Reply-To: '.$Element['Content']['_emailSender'][$Field] . "\r\n" .
                        'X-Mailer: DB-Toolkit/'.$version['Version'];

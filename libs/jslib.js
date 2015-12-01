@@ -260,7 +260,6 @@ function app_dockApp(app){
         //alert(EID);
 	jQuery('body').prepend('<div id="ui-jsDialog-filterlock" title="Save Filter Set"><p>Loading Panel</p></div>');
 	jQuery("#ui-jsDialog-filterlock").dialog({
-            position: 'center',
             autoResize: true,
             width: 330,
             modal: true,
@@ -317,7 +316,6 @@ function app_dockApp(app){
 
 	jQuery('body').prepend('<div id="ui-jsDialog-iconchooser" title="Loading"><p>Loading Icons</p></div>');
 	jQuery("#ui-jsDialog-iconchooser").dialog({
-            position: 'center',
             autoResize: true,
             width: 390,
             modal: true,
@@ -496,7 +494,6 @@ function app_dockApp(app){
 	}
 	jQuery('body').prepend('<div id="ui-jsDialog-'+id+'" title="Create Table"><p>This will add a new table to `<strong>'+db+'</strong>`</p><p><label>Name</lable><input type="text" id="'+id+'_newTable" value="" style="width:98%;" /></p></div>');
 	jQuery("#ui-jsDialog-"+id).dialog({
-            position: 'center',
             title: 'New Table',
             autoResize: true,
             minWidth: 200,
@@ -540,7 +537,6 @@ function app_dockApp(app){
 	}
 	jQuery('body').prepend('<div id="ui-jsDialog-'+id+'" title="Add Field"><p><label>Name</lable><input type="text" id="'+id+'_newField" value="" style="width:98%;" /></p></div>');
 	jQuery("#ui-jsDialog-"+id).dialog({
-            position: 'center',
             title: 'Add Field',
             autoResize: true,
             minWidth: 200,
@@ -603,7 +599,6 @@ function app_dockApp(app){
 	}
 	jQuery('body').prepend('<div id="ui-jsDialog-'+id+'" title="New Application"><p><label>Name</lable><input type="text" id="'+id+'_newTitle" value="" style="width:98%;" /></p><p><label>Description</lable><textarea type="text" id="'+id+'_newDesc" style="width:98%; height:100px;" ></textarea></p></div>');
 	jQuery("#ui-jsDialog-"+id).dialog({
-            position: 'center',
             title: 'New Application',
             autoResize: true,
             minWidth: 200,

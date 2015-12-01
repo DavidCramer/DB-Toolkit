@@ -22,10 +22,10 @@ class PDF extends FPDF {
 	//Page header
 	function Header($or){            
 		if($or == 'L'){
-                    $this->Image(WP_PLUGIN_DIR.'/db-toolkit/images/pdf_l.jpg',0,0, 297);
+                    $this->Image(DB_TOOLKIT.'/images/pdf_l.jpg',0,0, 297);
 		}else{
                     //$this->SetFont('helvetica','',12);
-                    $this->Image(WP_PLUGIN_DIR.'/db-toolkit/images/pdf_p.jpg',0,0, 210);
+                    $this->Image(DB_TOOLKIT.'/images/pdf_p.jpg',0,0, 210);
 		}
                 
 		$this->SetFont('helvetica','B',15);

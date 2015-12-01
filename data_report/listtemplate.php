@@ -168,7 +168,7 @@ Number of items found and displayed (1 - 10 of 200 items)
                             //echo df_listProcessors();
                             if (!empty($Element['Content']['_FieldTitle'])) {
                                 foreach ($Element['Content']['_FieldTitle'] as $FieldKey => $Val) {
-                                    echo '<li><a onclick="dr_addListFieldTemplate(\'' . $FieldKey . '\');"><img align="absmiddle" src="' . WP_PLUGIN_URL . '/db-toolkit/data_report/arrow_switch.png"> ' . $Val . '</a></li>';
+                                    echo '<li><a onclick="dr_addListFieldTemplate(\'' . $FieldKey . '\');"><img align="absmiddle" src="' . DBT_URL . '/data_report/arrow_switch.png"> ' . $Val . '</a></li>';
                                 }
                             }
 ?>

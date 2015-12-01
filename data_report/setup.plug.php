@@ -103,7 +103,7 @@
 
                     echo '<div id="dbt-option-'.$tabIndex.'" class="group" style="display: '.$view.';">';
 
-                        include(WP_PLUGIN_DIR.'/db-toolkit/data_report/'.$File);
+                        include(DB_TOOLKIT.'/data_report/'.$File);
 
                     echo '</div>';
 

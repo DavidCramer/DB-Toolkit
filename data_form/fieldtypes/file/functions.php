@@ -371,9 +371,9 @@ function file_processValue($Value, $Type, $Field, $Config, $EID) {
                             $Dets = pathinfo($File);
                             $ext = strtolower($Dets['extension']);
                             if (file_exists(WP_PLUGIN_DIR . '/db-toolkit/data_form/fieldtypes/file/icons/' . $ext . '.gif')) {
-                                $Icon = '<img src="' . WP_PLUGIN_URL . '/db-toolkit/data_form/fieldtypes/file/icons/' . $ext . '.gif" align="absmiddle" />&nbsp;';
+                                $Icon = '<img src="' . DBT_URL . '/data_form/fieldtypes/file/icons/' . $ext . '.gif" align="absmiddle" />&nbsp;';
                             } else {
-                                $Icon = '<img src="' . WP_PLUGIN_URL . '/db-toolkit/data_form/fieldtypes/file/icons/file.gif" align="absmiddle" />&nbsp;';
+                                $Icon = '<img src="' . DBT_URL . '/data_form/fieldtypes/file/icons/file.gif" align="absmiddle" />&nbsp;';
                             }
                         
                         return '<a href="' . $File . '">' . $Icon . ' ' . basename($File) . '</a>';

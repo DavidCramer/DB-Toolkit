@@ -193,7 +193,6 @@
 	}
 	jQuery('body').prepend('<div id="ui-jsDialog-'+id+'-'+eid+'" title="Loading"><p>Loading Entry</p></div>');
 	jQuery("#ui-jsDialog-"+id+"-"+eid+"").dialog({
-            position: 'center',
             autoResize: true,
             minWidth: 200,
             modal: ismodal,

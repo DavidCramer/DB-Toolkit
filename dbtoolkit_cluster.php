@@ -8,7 +8,7 @@
         if($_GET['page'] == 'New_Cluster'){
             ?>
         <div class="wrap">
-            <div><img src="<?php echo WP_PLUGIN_URL . '/db-toolkit/images/dbtoolkit-logo.png'; ?>" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />Create new Cluster
+            <div><img src="<?php echo DBT_URL . '/images/dbtoolkit-logo.png'; ?>" name="DB-Toolkit" title="DB-Toolkit" align="absmiddle" />Create new Cluster
             <div class="clear"></div>
                 <br />
                 <div id="poststuff">

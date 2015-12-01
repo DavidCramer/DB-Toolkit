@@ -1,8 +1,8 @@
 <?php
-	$Types = loadFolderContents(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes');
+	$Types = loadFolderContents(DB_TOOLKIT.'/data_form/fieldtypes');
 	foreach($Types[0] as $Type){
-		if(file_exists(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/footer.php')){
-			include(WP_PLUGIN_DIR.'/db-toolkit/data_form/fieldtypes/'.$Type[1].'/footer.php');
+		if(file_exists(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/footer.php')){
+			include(DB_TOOLKIT.'/data_form/fieldtypes/'.$Type[1].'/footer.php');
 		}
 	}
 
