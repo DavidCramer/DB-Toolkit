@@ -224,8 +224,8 @@ function text_runCode($Field, $EID, $ID){
 	$Element = getelement($EID);
 	$Config = $Element['Content'];
 	//dump($Config);
-	$Res = mysql_query("SELECT ".$Field." FROM ".$Config['_main_table']." where `".$Config['_ReturnFields'][0]."` = '".$ID."' LIMIT 1;");
-	$Data = mysql_fetch_assoc($Res);
+	$Res = mysqli_query("SELECT ".$Field." FROM ".$Config['_main_table']." where `".$Config['_ReturnFields'][0]."` = '".$ID."' LIMIT 1;");
+	$Data = mysqli_fetch_assoc($Res);
 	ob_start();
 	eval($Data[$Field]);
 	return ob_get_clean();

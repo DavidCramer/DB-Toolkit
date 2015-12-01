@@ -9,9 +9,9 @@ function enum_showFilter($Field, $Type, $Default, $Config, $EID){
 
 	$Return .= '<div class="filterField" '.$Class.'"><h2>'.$FieldTitle.'</h2>';
 	// ------ //
-	$result = mysql_query("SHOW COLUMNS FROM `".$Config['_main_table']."`");
-	if(mysql_num_rows($result) > 0) {
-		while ($row = mysql_fetch_assoc($result)){
+	$result = mysqli_query("SHOW COLUMNS FROM `".$Config['_main_table']."`");
+	if(mysqli_num_rows($result) > 0) {
+		while ($row = mysqli_fetch_assoc($result)){
 			if($row['Field'] == $Field){
 				$Enum = $row['Type'];
 			}

@@ -290,7 +290,7 @@ function api_dencode_string($str) {
 }
 
 function api_Deny() {
-    mysql_close();
+    mysqli_close();
     //header("content-type: text/html");
     echo 'Access Denied';
     exit;

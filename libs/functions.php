@@ -930,7 +930,7 @@ function dt_adminMenus() {
             //if(!empty($AppData['docked'])){
 
                 // add to menu list
-                if(is_array($AppData['interfaces'])){
+                if( !empty( $AppData['interfaces'] ) && is_array($AppData['interfaces'])){
                     foreach($AppData['interfaces'] as $interface=>$access){
                         if(!empty($cfg)){
                             if($cfg['_menuAccess'] == 'null'){
@@ -1491,9 +1491,9 @@ function dt_process() {
         //you should use loadlib here
         //dump($_SESSION['reportFilters'][$Media['ID']]);
         if(!empty($Config['_FilterMode'])){
-        $Res = mysql_query("SELECT ID, Content FROM `dais_elements` WHERE `Element` = 'data_report' AND `ParentDocument` = ".$Element['ParentDocument']." AND `ID` != '".$Media['ID']."';");
+        $Res = mysqli_query("SELECT ID, Content FROM `dais_elements` WHERE `Element` = 'data_report' AND `ParentDocument` = ".$Element['ParentDocument']." AND `ID` != '".$Media['ID']."';");
 
-        while($element = mysql_fetch_assoc($Res)){            //dump($element);
+        while($element = mysqli_fetch_assoc($Res)){            //dump($element);
             $eConfig = unserialize($element['Content']);
             $preReport['ID'] = $element['ID'];
             $preReport['Config'] = $eConfig;
@@ -1586,7 +1586,7 @@ function dt_process() {
                 }
             }
             $report->cf_report_generate_output();
-            mysql_close();
+            mysqli_close();
             exit;
         }
 
@@ -1607,8 +1607,8 @@ function dt_process() {
 			 	$filename = uniqid(date('mdHis')).'.csv';
                                 $out = '';
 				// Gets the data from the database
-				$result = mysql_query($sql_query);
-				$fields_cnt = mysql_num_fields($result);
+				$result = mysqli_query($sql_query);
+				$fields_cnt = mysqli_num_fields($result);
 
                                 //dump($Config['_Field']);
 
@@ -1627,7 +1627,7 @@ function dt_process() {
                                 fputcsv($CSVout, $FieldHeaders, ';')."\r\n";
                                 $out .= ob_get_clean();
 
-                                while($exportData = mysql_fetch_assoc($result)){
+                                while($exportData = mysqli_fetch_assoc($result)){
 
                                     // run each field type on the result
                                     $Row = array();
@@ -1686,7 +1686,7 @@ function dt_process() {
 
                                 //echo '</pre>';
                                 fclose($CSVout);
-                                mysql_close();
+                                mysqli_close();
 				exit;
 
 
@@ -1706,7 +1706,7 @@ function dt_process() {
                 // to do : configure adding plugins to the tool bar
                 if(file_exists(DB_TOOLKIT.'data_report/plugins/'.$exportFormat.'/functions.php')) {
                     include_once(DB_TOOLKIT.'data_report/plugins/'.$exportFormat.'/functions.php');
-                    mysql_close();
+                    mysqli_close();
                     exit;
                 }
             }
@@ -1931,7 +1931,7 @@ function dt_renderInterface($interface){
     }
 
 
-    if($error = mysql_error() && $Config['_ViewMode'] != 'form'){
+    if($error = mysqli_error() && $Config['_ViewMode'] != 'form'){
         if(is_admin()){
             $InterfaceData = get_option($Media['ID']);
             $InterfaceDataraw = base64_encode(serialize($InterfaceData));
@@ -1949,7 +1949,7 @@ function dt_renderInterface($interface){
 
                 if(!empty($Config['_UserQueryOveride']) && !empty($Config['_QueryOveride'])){
 
-                    echo '<div id="interfaceError" class="notice" style="padding:5px;">'.mysql_error().'</div>';
+                    echo '<div id="interfaceError" class="notice" style="padding:5px;">'.mysqli_error().'</div>';
                 }else{
                     echo '<div id="interfaceError" class="notice" style="padding:5px;">An error has been detected while building this interface. Would you like to submit an error report to the developer? <input type="button" class="button" value="Send Report" onclick="dbt_sendError(\''.$Media['ID'].'\', \''.  base64_encode($error).'\');" /></div>';
 
@@ -2507,7 +2507,7 @@ function exportApp($app, $publish=false){
                     $Values = array();
                     foreach ($entries as $field=>$value){
                         $Fields[] = '`'.$field.'`';
-                        $Values[] = "'".mysql_real_escape_string($value)."'";
+                        $Values[] = "'".mysqli_real_escape_string($value)."'";
                     }
                     $output['Data'][] = base64_encode("INSERT INTO `".$tableKey."` (".implode(',', $Fields).") VALUES (".implode(',', $Values).");");
                 }

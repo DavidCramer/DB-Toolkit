@@ -144,13 +144,13 @@ function di_showItem($EID, $Item, $Setup = false) {
     //   $Query = str_replace($Field, '`'.$Field.'`', $Query);
     //}
     // Query Results
-    //$Res = mysql_query($Query);
+    //$Res = mysqli_query($Query);
     //echo $Query.'<br /><br /><br />';
-    //echo mysql_error();
+    //echo mysqli_error();
 
     //vardump($Config['_ReturnFields']);
 
-    //$Data = mysql_fetch_assoc($Res);
+    //$Data = mysqli_fetch_assoc($Res);
     
     $Data = dr_BuildReportGrid($EID, false, false, false, 'data', false, array($Config['_ReturnFields'][0]=>$Item));
 
@@ -419,10 +419,10 @@ function di_showItem($EID, $Item, $Setup = false) {
         //$Return .= '<input type="button" value="Edit" class="close" onclick="dr_BuildUpDateForm('.$EID.', '.$Item.');" />';
     }
     if(!empty($Config['_EnableAudit'])) {
-        $revres = mysql_query("SELECT count(_ID) as Rev FROM `_audit_".$Config['_main_table']."` WHERE `".$Config['_ReturnFields'][0]."` = '".$Data[$Config['_ReturnFields'][0]]."';");
+        $revres = mysqli_query("SELECT count(_ID) as Rev FROM `_audit_".$Config['_main_table']."` WHERE `".$Config['_ReturnFields'][0]."` = '".$Data[$Config['_ReturnFields'][0]]."';");
         if($revres) {
-            if(mysql_num_rows($revres) == 1) {
-                $R = mysql_fetch_assoc($revres);
+            if(mysqli_num_rows($revres) == 1) {
+                $R = mysqli_fetch_assoc($revres);
                 $Return .= '<div class="captions">Revision '.$R['Rev'].'</div>';
             }
         }

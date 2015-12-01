@@ -127,7 +127,7 @@ if(!empty($_GET['taggingAction']) && !empty($_GET['term'])){
     $tagset = sanitize_title_with_dashes($Config['_tagBase'][$_GET['field']]);
     $tagTable = $wpdb->prefix.'dbt_tagbase_'.$tagset;
 
-    $data = $wpdb->get_results("SELECT `id`,`tag` FROM `".$tagTable."` WHERE `tag` LIKE '".mysql_real_escape_string($_GET['term'])."%' LIMIT 10;", ARRAY_N);
+    $data = $wpdb->get_results("SELECT `id`,`tag` FROM `".$tagTable."` WHERE `tag` LIKE '".mysqli_real_escape_string($_GET['term'])."%' LIMIT 10;", ARRAY_N);
     if(!empty($data)){
         foreach($data as $key=>$value){
             $output[$key]['id'] = $value[0];

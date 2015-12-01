@@ -92,7 +92,7 @@ if(is_admin()) {
         /// old select method
 
         global $wpdb;
-
+        $Return = null;
         if(empty($Value))
             $Value = '';
         $Return .= 'Select Table: <select name="Data[Content]['.$TableReference.']" id="'.$TableReference.'" onchange="'.$JFunc.'(\''.$TableReference.'\');">';
@@ -136,10 +136,10 @@ if(is_admin()) {
         //include('configs/upc.cfg.php');
         ob_start();
         echo '<span class="captions">Required</span>';
-        $result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
-        if (mysql_num_rows($result) > 0) {
+        $result = mysqli_query("SHOW COLUMNS FROM `".$Table."`");
+        if (mysqli_num_rows($result) > 0) {
             $Row = 'list_row2';
-            while ($row = mysql_fetch_assoc($result)) {
+            while ($row = mysqli_fetch_assoc($result)) {
                 $FieldSet = explode('_', $Defaults[$row['Field']]);
                 $Row = dais_rowSwitch($Row);
                 $Field = $row['Field'];
@@ -190,11 +190,12 @@ if(is_admin()) {
         if(empty($Table)){
             return;
         }
-        $result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
+        global $wpdb;
+        $result = $wpdb->get_results("SHOW COLUMNS FROM `".$Table."`", ARRAY_A);
         $Return = '<select name="Data[Content]['.$Name.']" id="Return_'.$Table.'">';
         //$Return .= '<option value="false">None</option>';
-        if (mysql_num_rows($result) > 0) {
-            while ($row = mysql_fetch_assoc($result)) {
+        if ( !empty ($result) ) {
+            foreach( $result as $row) {
                 $Sel = '';
                 if($Default == $row['Field']) {
                     $Sel = 'selected="selected"';
@@ -633,15 +634,15 @@ function df_BuildCaptureForm($Element, $Defaults = false, $ViewOnly = false) {
             }
         }
 
-        $defRes = mysql_query("SELECT * FROM `".$Config['_main_table']."` WHERE `".$Config['_ReturnFields'][0]."` = '".$EditID."' ".$hardFilter.";");
+        $defRes = mysqli_query("SELECT * FROM `".$Config['_main_table']."` WHERE `".$Config['_ReturnFields'][0]."` = '".$EditID."' ".$hardFilter.";");
         $Query = "SELECT * FROM `".$Config['_main_table']."` WHERE `".$Config['_ReturnFields'][0]."` = '".$EditID."' ".$hardFilter.";";
-        if(mysql_num_rows($defRes) == 0) {
+        if(mysqli_num_rows($defRes) == 0) {
             $Output['width'] = 220;
             $Output['html'] = '<div style="warning">That does not belong to you!</div>';
             return $Output;
 
         }
-        //$Defaults = mysql_fetch_assoc($defRes);
+        //$Defaults = mysqli_fetch_assoc($defRes);
         $Defaults = $wpdb->get_results($Query, ARRAY_A);
         $Defaults = $Defaults[0];
 
@@ -1038,7 +1039,7 @@ function df_processInsert($EID, $Data) {
                         $EntryData = $Data[$Field];
                     }
                 }
-                $Entries[$Field] = "'".mysql_real_escape_string($EntryData)."'";
+                $Entries[$Field] = "'".mysqli_real_escape_string($EntryData)."'";
                 //$Entries[$Field] = $EntryData;
             }
         }
@@ -1108,22 +1109,22 @@ function df_processInsert($EID, $Data) {
             if(!empty($_SESSION['UserBase']['Member']['ID'])) {
                 $memberID = $_SESSION['UserBase']['Member']['ID'];
             }
-            $lres = mysql_query("SHOW COLUMNS FROM ".$Config['_main_table']);
+            $lres = mysqli_query("SHOW COLUMNS FROM ".$Config['_main_table']);
             $prerows = array();
-            while ($row = mysql_fetch_assoc($lres)) {
+            while ($row = mysqli_fetch_assoc($lres)) {
                 $prerows[] = $row['Field'];
             }
             $rows = implode(',', $prerows);
-			if(mysql_query("CREATE TABLE `_audit_".$Config['_main_table']."` SELECT * FROM `".$Config['_main_table']."` WHERE `".$Config['_ReturnFields'][0]."` = '".$Data[$Config['_ReturnFields'][0]]."' LIMIT 1")){
+			if(mysqli_query("CREATE TABLE `_audit_".$Config['_main_table']."` SELECT * FROM `".$Config['_main_table']."` WHERE `".$Config['_ReturnFields'][0]."` = '".$Data[$Config['_ReturnFields'][0]]."' LIMIT 1")){
 
-				mysql_query("ALTER TABLE `_audit_".$Config['_main_table']."` ADD `_ID` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ,
+				mysqli_query("ALTER TABLE `_audit_".$Config['_main_table']."` ADD `_ID` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ,
 							ADD `_DateInserted` DATETIME NOT NULL AFTER `_ID` ,
 							ADD `_DateModified` DATETIME NOT NULL AFTER `_ID` ,
 							ADD `_User` INT NOT NULL AFTER `_DateModified`  ,
                                                         ADD `_RawData` TEXT NOT NULL AFTER `_DateInserted`");
-                                mysql_query("INSERT INTO `_audit_".$Config['_main_table']."` SET `_DateInserted` = '".date('Y-m-d H:i:s')."', `_User` = '".$memberID."', `_RawData` = '".mysql_real_escape_string(serialize($Data))."', `".$Config['_ReturnFields'][0]."` = '".$ID."'  ;");
+                                mysqli_query("INSERT INTO `_audit_".$Config['_main_table']."` SET `_DateInserted` = '".date('Y-m-d H:i:s')."', `_User` = '".$memberID."', `_RawData` = '".mysqli_real_escape_string(serialize($Data))."', `".$Config['_ReturnFields'][0]."` = '".$ID."'  ;");
 			}else{
-				mysql_query("INSERT INTO `_audit_".$Config['_main_table']."` SET `_DateInserted` = '".date('Y-m-d H:i:s')."', `_User` = '".$memberID."', `_RawData` = '".mysql_real_escape_string(serialize($Data))."', `".$Config['_ReturnFields'][0]."` = '".$ID."'  ;");
+				mysqli_query("INSERT INTO `_audit_".$Config['_main_table']."` SET `_DateInserted` = '".date('Y-m-d H:i:s')."', `_User` = '".$memberID."', `_RawData` = '".mysqli_real_escape_string(serialize($Data))."', `".$Config['_ReturnFields'][0]."` = '".$ID."'  ;");
 			}
         }
          *
@@ -1171,9 +1172,9 @@ function df_loadOutScripts() {
 function df_checkActivity($Act, $create = 0) {
     global $wpdb;
     return;
-    $Res = mysql_query("SELECT ID FROM `_adittrack_activities` WHERE `Activity` = '".$Act."' LIMIT 1");
-    if(mysql_num_rows($Res) == 1) {
-        $Activity = mysql_fetch_assoc($Res);
+    $Res = mysqli_query("SELECT ID FROM `_adittrack_activities` WHERE `Activity` = '".$Act."' LIMIT 1");
+    if(mysqli_num_rows($Res) == 1) {
+        $Activity = mysqli_fetch_assoc($Res);
         return $Activity['ID'];
     }
     $InQu = "INSERT INTO `_adittrack_activities` (
@@ -1183,11 +1184,11 @@ function df_checkActivity($Act, $create = 0) {
 						VALUES (
 						NULL , '".$Act."'
 						);";
-    if(mysql_query($InQu)) {
-        return mysql_insert_id();
+    if(mysqli_query($InQu)) {
+        return mysqli_insert_id();
     }
     if($create == 0) {
-        mysql_query("CREATE TABLE IF NOT EXISTS `_adittrack_activities` (
+        mysqli_query("CREATE TABLE IF NOT EXISTS `_adittrack_activities` (
 		  `ID` int(11) NOT NULL auto_increment,
 		  `Activity` varchar(255) NOT NULL,
 		  PRIMARY KEY  (`ID`)
@@ -1210,7 +1211,7 @@ function dr_trackActivity($Act, $EID, $ReturnValue, $Level = 0) {
     if(!empty($_SESSION['UserBase']['Member']['EmailAddress'])) {
         $UserID = $_SESSION['UserBase']['Member']['EmailAddress'];
     }
-    if(mysql_query("INSERT INTO `_adittrack_entries` (
+    if(mysqli_query("INSERT INTO `_adittrack_entries` (
 						`ID` ,
 						`User` ,
 						`Activity` ,
@@ -1225,7 +1226,7 @@ function dr_trackActivity($Act, $EID, $ReturnValue, $Level = 0) {
         return true;
     }
     if($Level == 0) {
-        mysql_query("CREATE TABLE IF NOT EXISTS `_adittrack_entries` (
+        mysqli_query("CREATE TABLE IF NOT EXISTS `_adittrack_entries` (
 					  `ID` int(11) NOT NULL auto_increment,
 					  `User` varchar(255) NOT NULL,
 					  `Activity` int(11) NOT NULL,
@@ -1250,8 +1251,8 @@ if(!empty($_GET['q_eid'])) {
     $Table = $Config[decodestring($_GET['f_i'])];
     $Setup = $Config[$Table];
 
-    $Res = mysql_query("SELECT ".$Setup['ID'].",".$Setup['Value']." FROM `".$Table."` WHERE `".$Setup['Value']."` LIKE '%".$_GET['q']."%' OR `".$Setup['ID']."` LIKE '%".$_GET['q']."%' ORDER BY `".$Setup['Value']."` ASC;");
-    while($Out = mysql_fetch_assoc($Res)) {
+    $Res = mysqli_query("SELECT ".$Setup['ID'].",".$Setup['Value']." FROM `".$Table."` WHERE `".$Setup['Value']."` LIKE '%".$_GET['q']."%' OR `".$Setup['ID']."` LIKE '%".$_GET['q']."%' ORDER BY `".$Setup['Value']."` ASC;");
+    while($Out = mysqli_fetch_assoc($Res)) {
         echo $Out[$Setup['ID']]." (".$Out[$Setup['Value']].")|".$Out[$Setup['ID']]."\n";
     }
     die;
@@ -1270,15 +1271,15 @@ if(!empty($_GET['validatorUniques'])) {
 
     $Query = "SELECT count(".$Config['_ReturnFields'][0].") as total FROM ".$Config['_main_table']." WHERE `".$Part[2]."` = '".$_POST['validateValue']."' LIMIT 1;";
 
-    $Res = mysql_query($Query);
-    $count = mysql_fetch_assoc($Res);
+    $Res = mysqli_query($Query);
+    $count = mysqli_fetch_assoc($Res);
     if($count['total'] >= 1) {
         echo '{"jsonValidateReturn":["'.$_POST['validateId'].'","ajaxUnique","false"]}';
     }else {
         echo '{"jsonValidateReturn":["'.$_POST['validateId'].'","ajaxUnique","true"]}';
     }
 
-    mysql_close();
+    mysqli_close();
     die;
 }
 
@@ -1308,7 +1309,7 @@ function dt_buildNewTable($name){
         $output['table'] = $wpdb->prefix.'dbt_'.$tablename;
         return $output;
     }else{
-        $return['error'] = mysql_error();
+        $return['error'] = mysqli_error();
     return $return;
     }
 

@@ -57,7 +57,7 @@ function tempdais_fetchPageTreeArray($ID = 0, $Level = 1, $Default = false) {
     //$Query = "SELECT ID, Title, PageType, MettaDesc FROM dais_documents WHERE `ParentID` = '".$ID."' ORDER BY `Title` ASC";
     $Result = $wpdb->get_results( "SELECT ID FROM wp_posts WHERE post_parent = $ID AND post_type='page'" );
     $Tree = '';
-    //while($Page = mysql_fetch_assoc($Result)){
+    //while($Page = mysqli_fetch_assoc($Result)){
     foreach($Result as $Page) {
         switch ($Page['PageType']) {
             case 1:
@@ -117,7 +117,7 @@ function dais_pagetree($SelectType = 'S', $Default=0, $Name = 'My Pages', $callb
         $SelectLight = 'bglight';
     }
     $Result = $wpdb->get_results( "SELECT ID, post_title FROM $wpdb->posts WHERE post_parent = $ID AND post_type='page' AND post_status = 'publish'" );
-    //$Result = mysql_query($Query);
+    //$Result = mysqli_query($Query);
     $Row = 'list_row2';
     $Tree = '';
     foreach($Result as $Page) {

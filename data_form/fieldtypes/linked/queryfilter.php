@@ -127,7 +127,7 @@
                             if(!empty($Config['_Linkedfields'][$Field]['_FilterType'])){
                                 $filterType = $Config['_Linkedfields'][$Field]['_FilterType'];
                             }
-                            $queryWhere[] = $joinIndexSet.".`".$Config['_Linkedfields'][$Field]['_Filter']."` ".$filterType." '".  mysql_real_escape_string($Config['_Linkedfields'][$Field]['_FilterBy'])."'";
+                            $queryWhere[] = $joinIndexSet.".`".$Config['_Linkedfields'][$Field]['_Filter']."` ".$filterType." '".  mysqli_real_escape_string($Config['_Linkedfields'][$Field]['_FilterBy'])."'";
                         }
 
 		}

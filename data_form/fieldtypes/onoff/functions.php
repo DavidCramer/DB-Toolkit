@@ -83,7 +83,7 @@ function onoff_timestamp($Field, $Table, $Config = false){
         if(empty($Table)){
             $Table = $Config['Content']['_main_table'];
         }
-	$result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
+	$result = mysqli_query("SHOW COLUMNS FROM `".$Table."`");
 	$Sel = '';
 	if(!empty($Config['Content']['_onoff'][$Field]['datestamp'])){
 		$Sel = 'checked="checked"';	
@@ -99,8 +99,8 @@ function onoff_timestamp($Field, $Table, $Config = false){
 
 	$Return .= '<div style="padding:3px;" class="list_row3">Enable Date Stamping: <input type="checkbox" name="Data[Content][_onoff]['.$Field.'][datestamp]" id="_autodatestamp_enable" '.$Sel.' /></div>';
 	$Return .= '<div style="padding:3px;" class="list_row3">Date Stamp Field: <select name="Data[Content][_onoff]['.$Field.'][datestampField]" id="_autodatestamp_Field">';
-	if (mysql_num_rows($result) > 0) {
-		while ($row = mysql_fetch_assoc($result)){
+	if (mysqli_num_rows($result) > 0) {
+		while ($row = mysqli_fetch_assoc($result)){
 			$Sel = '';
 			if(!empty($Config['Content']['_onoff'][$Field]['datestampField'])){
 				if($Config['Content']['_onoff'][$Field]['datestampField'] == $row['Field']){

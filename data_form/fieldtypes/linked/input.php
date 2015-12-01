@@ -29,7 +29,7 @@ if($FieldSet[1] == 'linked'){
 				}
 				$outString = 'CONCAT('.implode(',\' \',',$concatvalues).') as outValue';
 				$Query = "SELECT ".$Config['_Linkedfields'][$Field]['ID'].", ".$outString." FROM `".$Config['_Linkedfields'][$Field]['Table']."` ".$Ordering.";";
-			$Res = mysql_query($Query);
+			$Res = mysqli_query($Query);
 			//$Return = '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" class="'.$Req.'">';
 			//if(empty($Defaults[$Field])){
 				//$Return .= '<option value=""></option>';
@@ -38,7 +38,7 @@ if($FieldSet[1] == 'linked'){
 			$checkindex = 0;
 			$Return = '';
                         $Return .= '<div style="max-height: 300px; overflow: auto;" >';
-			while($lrow = mysql_fetch_assoc($Res)){
+			while($lrow = mysqli_fetch_assoc($Res)){
 				$Sel = '';
                                 if(!empty($checkDefault[$lrow[$Config['_Linkedfields'][$Field]['ID']]])){
                                     $Sel = 'checked="checked"';
@@ -62,7 +62,7 @@ if($FieldSet[1] == 'linked'){
 				}
 				$outString = 'CONCAT('.implode(',\' \',',$concatvalues).') as outValue';
 				$Query = "SELECT ".$Config['_Linkedfields'][$Field]['ID'].", ".$outString." FROM `".$Config['_Linkedfields'][$Field]['Table']."` ".$Ordering.";";
-			$Res = mysql_query($Query);
+			$Res = mysqli_query($Query);
 			//$Return = '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" class="'.$Req.'">';
 			//if(empty($Defaults[$Field])){
 				//$Return .= '<option value=""></option>';
@@ -70,7 +70,7 @@ if($FieldSet[1] == 'linked'){
                         //$DefaultChecks = explode(',' $Defaults[$Field]);
 			$checkindex = 0;
 			$Return = '';
-			while($lrow = mysql_fetch_assoc($Res)){
+			while($lrow = mysqli_fetch_assoc($Res)){
 				$Sel = '';
 				if(!empty($Defaults[$Field])){
 					$DefaultArray = core_cleanArray(explode(',',$Defaults[$Field]));
@@ -91,7 +91,7 @@ if($FieldSet[1] == 'linked'){
 				}
 				$outString = 'CONCAT('.implode(',\' \',',$concatvalues).') as outValue';
 				$Query = "SELECT ".$Config['_Linkedfields'][$Field]['ID'].", ".$outString." FROM `".$Config['_Linkedfields'][$Field]['Table']."` ORDER BY `".$Config['_Linkedfields'][$Field]['Value'][0]."` ASC;";
-			$Res = mysql_query($Query);
+			$Res = mysqli_query($Query);
 			//$Return = '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" class="'.$Req.'">';
 			//if(empty($Defaults[$Field])){
 				//$Return .= '<option value=""></option>';
@@ -99,7 +99,7 @@ if($FieldSet[1] == 'linked'){
 			$checkindex = 0;
 			//$Return = 'Listed: <select name="multiselect_'.$Field.'" id="selector_'.$Element['ID'].'_'.$Field.'" class="'.$Req.'">';
 			$Return ='';
-			while($lrow = mysql_fetch_assoc($Res)){
+			while($lrow = mysqli_fetch_assoc($Res)){
 				$Sel = '';
 				if(!empty($Defaults[$Field])){
 					$DefaultArray = core_cleanArray(explode('|',$Defaults[$Field]));
@@ -142,20 +142,20 @@ if($FieldSet[1] == 'linked'){
                                     if(!empty($Config['_Linkedfields'][$Field]['_FilterType'])){
                                         $filterType = $Config['_Linkedfields'][$Field]['_FilterType'];
                                     }
-                                    $Where .= "`".$Config['_Linkedfields'][$Field]['_Filter']."` ".$filterType." '".  mysql_real_escape_string($Config['_Linkedfields'][$Field]['_FilterBy'])."'";
+                                    $Where .= "`".$Config['_Linkedfields'][$Field]['_Filter']."` ".$filterType." '".  mysqli_real_escape_string($Config['_Linkedfields'][$Field]['_FilterBy'])."'";
                                 }
 
 
 
 
 			$QuerySQL = "SELECT ".$Config['_Linkedfields'][$Field]['ID'].", ".$outString." FROM `".$Config['_Linkedfields'][$Field]['Table']."` ".$Where." ".$Ordering.";";
-			$Res = mysql_query($QuerySQL);
+			$Res = mysqli_query($QuerySQL);
 			//cho $QuerySQL;
 			$Return = '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" ref="'.$row['_return_'.$Config['_ReturnFields'][0]].'" class="'.$Req.' '.$Config['_FormFieldWidth'][$Field].'">';
 			if(empty($Defaults[$Field])){
 				$Return .= '<option value=""></option>';
 			}
-			while($lrow = mysql_fetch_assoc($Res)){
+			while($lrow = mysqli_fetch_assoc($Res)){
 				$Sel = '';
 				if(!empty($Defaults[$Field])){
 					if($Defaults[$Field] == $lrow[$Config['_Linkedfields'][$Field]['ID']]){
@@ -197,8 +197,8 @@ if($FieldSet[1] == 'linked'){
 				}
 				$OutValues = implode(', ',$values);
 				$defQuery = "SELECT ".$Config['_Linkedfields'][$Field]['ID'].",".$OutValues." FROM `".$Config['_Linkedfields'][$Field]['Table']."` WHERE `".$Config['_Linkedfields'][$Field]['ID']."` =  '".$Defaults[$Field]."' ;";
-				$Res = mysql_query($defQuery);
-				$Det = mysql_fetch_assoc($Res);
+				$Res = mysqli_query($defQuery);
+				$Det = mysqli_fetch_assoc($Res);
 				$OutString = '';
 				foreach($values as $visValues){
 					$OutString .= $Det[$visValues].' ';

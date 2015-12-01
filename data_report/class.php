@@ -97,11 +97,11 @@ if (is_admin ()) {
         if (empty($Table)) {
             return;
         }
-
-        $result = mysql_query("SHOW COLUMNS FROM `" . $Table . "`");
-        if (mysql_num_rows($result) > 0) {
+        global $wpdb;
+        $result = $wpdb->get_results("SHOW COLUMNS FROM `" . $Table . "`", ARRAY_A);
+        if ( !empty($result) ) {
             $TotalsField = '';
-            while ($row = mysql_fetch_assoc($result)) {
+            foreach( $result as $row) {
                 $TotalsField .= '<option value="' . $row['Field'] . '" {{' . $row['Field'] . '}}>' . $row['Field'] . '</option>';
                 $FieldsClearer[] = $row['Field'];
             }
@@ -217,11 +217,11 @@ if (is_admin ()) {
         // Linking Master
         if (substr($Field, 0, 2) == '__') {
 
-            $result = mysql_query("SHOW COLUMNS FROM `" . $Config['Content']['_main_table'] . "`");
-            // echo mysql_error();
-            if (mysql_num_rows($result) > 0) {
+            $result = $wpdb->query("SHOW COLUMNS FROM `" . $Config['Content']['_main_table'] . "`");
+            // echo mysqli_error();
+            if (mysqli_num_rows($result) > 0) {
                 $Row = 'list_row4';
-                while ($row = mysql_fetch_assoc($result)) {
+                while ($row = mysqli_fetch_assoc($result)) {
                     //$Row = dais_rowSwitch($Row);
                     $FieldList[] = $row['Field'];
                 }
@@ -372,10 +372,10 @@ if (is_admin ()) {
 
         if ($Column == 'Linking') {
 
-            $result = mysql_query("SHOW COLUMNS FROM `" . $Table . "`");
-            if (mysql_num_rows($result) > 0) {
+            $result = $wpdb->query("SHOW COLUMNS FROM `" . $Table . "`");
+            if (mysqli_num_rows($result) > 0) {
                 $Row = 'list_row4';
-                while ($row = mysql_fetch_assoc($result)) {
+                while ($row = mysqli_fetch_assoc($result)) {
                     //$Row = dais_rowSwitch($Row);
                     $FieldList[] = $row['Field'];
                 }
@@ -521,10 +521,11 @@ if (is_admin ()) {
                 parse_str($Defaults['_FormLayout'], $Columns);
             }
             $Return = '';
-            $result = mysql_query("SHOW COLUMNS FROM `" . $Table . "`");
-            if (mysql_num_rows($result) > 0) {
+            $result = $wpdb->get_results("SHOW COLUMNS FROM `" . $Table . "`", ARRAY_A);
+
+            if ( !empty($result) ) {
                 $Row = 'list_row4';
-                while ($row = mysql_fetch_assoc($result)) {
+                foreach( $result as $row) {
                     //$Row = dais_rowSwitch($Row);
                     $FieldList[] = $row['Field'];
                     $Field = $row['Field'];
@@ -1778,11 +1779,11 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
 
 
     $CountQuery = "SELECT count(" . $countSelect . ") as Total FROM `" . $Config['_main_table'] . "` AS prim \n " . $queryJoin . " \n " . $WhereTag . " \n " . $queryWhere . " \n " . $groupBy . "\n\n " . $countLimit . ";";
-    $CountResult = mysql_query($CountQuery);
+    $CountResult = $wpdb->query($CountQuery);
 
     if (!empty($entryCount)) {
         // Countr Rows
-        while ($prCount = mysql_fetch_assoc($CountResult)) {
+        while ($prCount = mysqli_fetch_assoc($CountResult)) {
             $preCount[] = $prCount['Total'];
         }
         if (!empty($preCount)) {
@@ -1792,12 +1793,12 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
         } else {
             $Count['TotalEntries'] = 0;
         }
-        $Count['Total'] = mysql_num_rows($CountResult);
+        $Count['Total'] = mysqli_num_rows($CountResult);
     } else {
         // get Count entry
         if (!empty($CountResult)) {
-            $Count = mysql_fetch_assoc($CountResult);
-            mysql_free_result($CountResult);
+            $Count = mysqli_fetch_assoc($CountResult);
+            mysqli_free_result($CountResult);
         } else {
             $Count = 0;
         }
@@ -1883,8 +1884,8 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
     $Query = "SELECT " . $querySelect . " FROM `" . $Config['_main_table'] . "` AS prim \n " . $queryJoin . " \n " . $WhereTag . " \n " . $queryWhere . "\n " . $groupBy . " \n " . $orderStr . " \n " . $queryLimit . ";";
 
     if (strtolower($Format) == 'data') {
-        $dtaRes = mysql_query($Query);
-        $Data = mysql_fetch_assoc($dtaRes);
+        $dtaRes = $wpdb->query($Query);
+        $Data = mysqli_fetch_assoc($dtaRes);
         return $Data;
     }
 
@@ -1923,9 +1924,9 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
     $_SESSION['queries'][$EID] = $Query;
     if (!empty($Queries[$QueryHash])) {
         $Result = $Queries[$QueryHash];
-        mysql_data_seek($Result, 0);
+        mysqli_data_seek($Result, 0);
     } else {
-        $Result = mysql_query($Query);
+        $Result = $wpdb->query($Query);
         $Queries[$QueryHash] = $Result;
     }
 
@@ -1964,7 +1965,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
         }
     }
     //pre_process_
-    //$Result = mysql_query($Query);
+    //$Result = $wpdb->query($Query);
     if (!empty($Config['_chartOnly'])) {
         return '<div id="chart_' . $ChartID . '" style="height:' . $height . 'px;"></div>'; //$ReportReturn;
     }
@@ -2001,7 +2002,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
             }
         }
 
-        //while($row = mysql_fetch_assoc($Result)) {
+        //while($row = mysqli_fetch_assoc($Result)) {
 
         foreach ($Result as $row) {
             // Switch Row Style
@@ -2425,7 +2426,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
             $rowIndex++;
         }
     }
-    //echo mysql_error();
+    //echo mysqli_error();
 
         // Close off Table end content
         $ReportReturn .= '</tbody>';
@@ -2515,7 +2516,7 @@ function dr_BuildReportGrid($EID, $Page = false, $SortField = false, $SortDir = 
             $ReportReturn .= '<div id="' . $EID . '_queryDebug_panel" style="display:block;">';
             $ReportReturn .= '<textarea style="width:99%; height:200px;">' . $CountQuery . '</textarea><br />';
             $ReportReturn .= '<textarea style="width:99%; height:200px;">' . $Query . '</textarea><br />';
-            $ReportReturn .= 'ERRORS: ' . mysql_error();
+            $ReportReturn .= 'ERRORS: ' . mysqli_error();
             //$ReportReturn .= '</div>';
         }
     }
@@ -2687,8 +2688,8 @@ function df_inlineedit($Entry, $ID, $Value) {
     $part = explode('_', $Entry, 3);
     $Element = getelement($part[1]);
     $Config = $Element['Content'];
-    $preQuery = mysql_query("SELECT * FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $ID . "'");
-    $Data[$part[1]] = mysql_fetch_assoc($preQuery);
+    $preQuery = $wpdb->query("SELECT * FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $ID . "'");
+    $Data[$part[1]] = mysqli_fetch_assoc($preQuery);
     $Data[$Config['_ReturnFields'][0]] = $ID;
     $Data[$part[1]][$part[2]] = $Value;
     $return = df_processupdate($Data, $part[1]);
@@ -2704,8 +2705,8 @@ function df_processupdate($Data, $EID) {
     $Config = $Element['Content'];
     //dump($Config);
     // Load Entry's data for hidden values
-    //$preQuery = mysql_query("SELECT * FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "'");
-    //$PreData = mysql_fetch_assoc($preQuery);
+    //$preQuery = $wpdb->query("SELECT * FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "'");
+    //$PreData = mysqli_fetch_assoc($preQuery);
 
     $preQuery = "SELECT * FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "'";
     $PreData = $wpdb->get_results($preQuery, ARRAY_A);
@@ -2717,34 +2718,34 @@ function df_processupdate($Data, $EID) {
       if (!empty($_SESSION['UserBase']['Member']['ID'])) {
       $memberID = $_SESSION['UserBase']['Member']['ID'];
       }
-      $lres = mysql_query("SHOW COLUMNS FROM " . $Config['_main_table']);
+      $lres = $wpdb->query("SHOW COLUMNS FROM " . $Config['_main_table']);
       $prerows = array();
-      while ($row = mysql_fetch_assoc($lres)) {
+      while ($row = mysqli_fetch_assoc($lres)) {
       $prerows[] = $row['Field'];
       }
       $rows = implode(',', $prerows);
-      if (mysql_query("CREATE TABLE `_audit_" . $Config['_main_table'] . "` SELECT * FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "' LIMIT 1")) {
+      if ($wpdb->query("CREATE TABLE `_audit_" . $Config['_main_table'] . "` SELECT * FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "' LIMIT 1")) {
       // new entry
 
-      mysql_query("ALTER TABLE `_audit_" . $Config['_main_table'] . "` ADD `_ID` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ,
+      $wpdb->query("ALTER TABLE `_audit_" . $Config['_main_table'] . "` ADD `_ID` INT NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST ,
       ADD `_DateInserted` DATETIME NOT NULL AFTER `_ID` ,
       ADD `_DateModified` DATETIME NOT NULL AFTER `_ID` ,
       ADD `_User` INT NOT NULL AFTER `_DateModified` ,
       ADD `_RawData` TEXT NOT NULL AFTER `_DateInserted`");
-      mysql_query("UPDATE `_audit_" . $Config['_main_table'] . "` SET `_DateModified` = '" . date('Y-m-d H:i:s') . "', `_DateInserted` = '" . date('Y-m-d H:i:s') . "', `_User` = '" . $memberID . "', `_RawData` = '" . mysql_real_escape_string(serialize($Data)) . "';");
-      mysql_query("INSERT INTO `_audit_" . $Config['_main_table'] . "` SET `_DateInserted` = '" . date('Y-m-d H:i:s') . "', `_User` = '" . $memberID . "', `_RawData` = '" . mysql_real_escape_string(serialize($Data)) . "', `" . $Config['_ReturnFields'][0] . "`, " . $OldData . " = '" . $Data[$Config['_ReturnFields'][0]] . "'  ;");
-      mysql_query("INSERT INTO `_audit_" . $Config['_main_table'] . "` SET `_DateInserted` = '" . date('Y-m-d H:i:s') . "', `_User` = '" . $memberID . "', `_RawData` = '" . mysql_real_escape_string(serialize($Data)) . "', `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "'  ;");
+      $wpdb->query("UPDATE `_audit_" . $Config['_main_table'] . "` SET `_DateModified` = '" . date('Y-m-d H:i:s') . "', `_DateInserted` = '" . date('Y-m-d H:i:s') . "', `_User` = '" . $memberID . "', `_RawData` = '" . mysqli_real_escape_string(serialize($Data)) . "';");
+      $wpdb->query("INSERT INTO `_audit_" . $Config['_main_table'] . "` SET `_DateInserted` = '" . date('Y-m-d H:i:s') . "', `_User` = '" . $memberID . "', `_RawData` = '" . mysqli_real_escape_string(serialize($Data)) . "', `" . $Config['_ReturnFields'][0] . "`, " . $OldData . " = '" . $Data[$Config['_ReturnFields'][0]] . "'  ;");
+      $wpdb->query("INSERT INTO `_audit_" . $Config['_main_table'] . "` SET `_DateInserted` = '" . date('Y-m-d H:i:s') . "', `_User` = '" . $memberID . "', `_RawData` = '" . mysqli_real_escape_string(serialize($Data)) . "', `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "'  ;");
       } else {
-      $predata = mysql_query("SELECT * FROM " . $Config['_main_table'] . " WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "';");
-      $prerow = mysql_fetch_assoc($predata);
+      $predata = $wpdb->query("SELECT * FROM " . $Config['_main_table'] . " WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "';");
+      $prerow = mysqli_fetch_assoc($predata);
       $OldData = array();
       foreach ($prerow as $Field => $Value) {
-      $OldData[] = "`" . $Field . "` = '" . mysql_real_escape_string($Value) . "' ";
+      $OldData[] = "`" . $Field . "` = '" . mysqli_real_escape_string($Value) . "' ";
       }
       $OldData = implode(', ', $OldData);
-      $UpdateQuery = "UPDATE `_audit_" . $Config['_main_table'] . "` SET `_DateModified` = '" . date('Y-m-d H:i:s') . "', `_User` = '" . $memberID . "', `_RawData` = '" . mysql_real_escape_string(serialize($Data)) . "', " . $OldData . " WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "' ORDER BY `_ID` DESC LIMIT 1;";
-      mysql_query($UpdateQuery);
-      mysql_query("INSERT INTO `_audit_" . $Config['_main_table'] . "` SET `_DateInserted` = '" . date('Y-m-d H:i:s') . "', `_RawData` = '" . mysql_real_escape_string(serialize($Data)) . "', `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "'  ;");
+      $UpdateQuery = "UPDATE `_audit_" . $Config['_main_table'] . "` SET `_DateModified` = '" . date('Y-m-d H:i:s') . "', `_User` = '" . $memberID . "', `_RawData` = '" . mysqli_real_escape_string(serialize($Data)) . "', " . $OldData . " WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "' ORDER BY `_ID` DESC LIMIT 1;";
+      $wpdb->query($UpdateQuery);
+      $wpdb->query("INSERT INTO `_audit_" . $Config['_main_table'] . "` SET `_DateInserted` = '" . date('Y-m-d H:i:s') . "', `_RawData` = '" . mysqli_real_escape_string(serialize($Data)) . "', `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "'  ;");
       }
       }
       //go through the Submitted Data / apply fieldtype filters and add processed value to update queue
@@ -2787,7 +2788,7 @@ function df_processupdate($Data, $EID) {
             }
             if (substr($Field, 0, 2) != '__') {
                 $updateData[$Field] = $newValue;
-                //$updateData[] = "`".$Field."` = '".mysql_real_escape_string($newValue)."' ";
+                //$updateData[] = "`".$Field."` = '".mysqli_real_escape_string($newValue)."' ";
             }
         }
     }
@@ -2850,7 +2851,7 @@ function df_processupdate($Data, $EID) {
     }
 
     //foreach ($updateData as $Field => $newValue) {
-    //    $newData[] = "`" . $Field . "` = '" . mysql_real_escape_string($newValue) . "' ";
+    //    $newData[] = "`" . $Field . "` = '" . mysqli_real_escape_string($newValue) . "' ";
     //}
     //$Updates = implode(', ', $newData);
     //$Query = "UPDATE `" . $Config['_main_table'] . "` SET " . $Updates . " WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "'";
@@ -2870,8 +2871,8 @@ function df_processupdate($Data, $EID) {
 
     if (!empty($Config['_ReturnFields'][0])) {
         $ReturnVals = implode(', ', $Config['_ReturnFields']);
-        //$outq = mysql_query("SELECT " . $ReturnVals . " FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "';");
-        //$dta = mysql_fetch_assoc($outq);
+        //$outq = $wpdb->query("SELECT " . $ReturnVals . " FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "';");
+        //$dta = mysqli_fetch_assoc($outq);
 
         $dta = $wpdb->get_results("SELECT " . $ReturnVals . " FROM `" . $Config['_main_table'] . "` WHERE `" . $Config['_ReturnFields'][0] . "` = '" . $Data[$Config['_ReturnFields'][0]] . "';", ARRAY_A);
         $dta = $dta[0];
@@ -3082,7 +3083,7 @@ function dr_processImport($EID) {
                 foreach ($_SESSION['import_' . $EID]['import']['map'] as $Field => $Value) {
                     if ($Value != 'null') {
                         $Fields[] = '`' . $Field . '`';
-                        $Values[] = "'" . mysql_real_escape_string($data[$Value]) . "'";
+                        $Values[] = "'" . mysqli_real_escape_string($data[$Value]) . "'";
                     }
                 }
                 if (empty($First)) {
@@ -3101,10 +3102,10 @@ function dr_processImport($EID) {
         fclose($handle);
     }
     $Query = $Query . implode(',', $QueryValues);
-    mysql_query($Query);
+    $wpdb->query($Query);
     //vardump($Query);
-    //echo mysql_error();
-    $out['error'] = mysql_error();
+    //echo mysqli_error();
+    $out['error'] = mysqli_error();
     $out['query'] = $Query;
     $out['p'] = round(($_SESSION['import_' . $EID]['startpoint'] / $Total) * 100, 2);
     $out['d'] = $_SESSION['import_' . $EID]['startpoint'];
@@ -3663,7 +3664,7 @@ function dt_runDataSourceImport($Config) {
                         $currentEntry = $currentEntry[$point];
                     }
                 }
-                $insertString[] = "'" . @mysql_real_escape_string($currentEntry) . "'";
+                $insertString[] = "'" . @mysqli_real_escape_string($currentEntry) . "'";
             }
         }
         $query = $prefix . implode(', ', $prefixFields) . ") VALUES (" . implode(', ', $insertString) . ");";

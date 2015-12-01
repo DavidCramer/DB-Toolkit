@@ -251,9 +251,9 @@ function linked_loadfields($Table, $Field, $MainTable, $Defaults = false){
         global $wpdb;
         $WhereField .= '<option value=""></option>';
         $SortField .= '<option value=""></option>';
-	$result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
-	if (mysql_num_rows($result) > 0) {
-		while ($row = mysql_fetch_assoc($result)){
+	$result = mysqli_query("SHOW COLUMNS FROM `".$Table."`");
+	if (mysqli_num_rows($result) > 0) {
+		while ($row = mysqli_fetch_assoc($result)){
 			$Sel = '';
 			if(!empty($Defaults[$Field]['Value'])){
 				if($Defaults[$Field]['Value'][0] == $row['Field']){
@@ -392,16 +392,16 @@ return $IReturn.$VReturn.$URLField.$Types.$LocalURLField;
 }
 function linked_loadAdditionalValue($Table, $Field, $Default = false, $filtered = false){
 	$ElID = rand(1, 999999);
-	$result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
+	$result = mysqli_query("SHOW COLUMNS FROM `".$Table."`");
 	//$Return = '<input type="hidden" name="Data[Content]['.$Field.']" value="'.$Table.'" id="linkedTableRef_'.LinkedField.'" />';
 	$Val = '';
-	if (mysql_num_rows($result) > 0) {
+	if (mysqli_num_rows($result) > 0) {
 		$name = '_Linkedfields';
 		if(!empty($filtered)){
 			$name = '_Linkedfilterfields';
 		}
 	$Val .= '<div class="list_row1" style="padding:3px;" id="'.$ElID.'">Additional Value: <select name="Data[Content]['.$name.']['.$Field.'][Value][]" id="Ref_'.$Table.'">';
-		while ($row = mysql_fetch_assoc($result)){
+		while ($row = mysqli_fetch_assoc($result)){
 			$Sel = '';
 			if(!empty($Default)){
 				if($Default == $row['Field']){
@@ -417,10 +417,10 @@ function linked_loadAdditionalValue($Table, $Field, $Default = false, $filtered 
 	return $Val;
 }
 function linked_loadfilterfields($Table, $Field, $MainTable, $Defaults = false){
-	$result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
+	$result = mysqli_query("SHOW COLUMNS FROM `".$Table."`");
 	//$Return = '<input type="hidden" name="Data[Content]['.$Field.']" value="'.$Table.'" id="linkedTableRef_'.LinkedField.'" />';
-	if (mysql_num_rows($result) > 0) {
-		while ($row = mysql_fetch_assoc($result)){
+	if (mysqli_num_rows($result) > 0) {
+		while ($row = mysqli_fetch_assoc($result)){
 			$Sel = '';
 			if(!empty($Defaults[$Field]['Ref'])){
 				if($Defaults[$Field]['Ref'] == $row['Field']){
@@ -467,11 +467,11 @@ function linked_loadfilterfields($Table, $Field, $MainTable, $Defaults = false){
 	$ValField .= '</div>';
 	
 	
-	$result = mysql_query("SHOW COLUMNS FROM `".$MainTable."`");
+	$result = mysqli_query("SHOW COLUMNS FROM `".$MainTable."`");
 	$FilField = '<select name="Data[Content][_Linkedfilterfields]['.$Field.'][Filter]" id="Filter_'.$Table.'">';
 	$FilField .= '<option value="false">None</option>';
-	if (mysql_num_rows($result) > 0) {
-		while ($row = mysql_fetch_assoc($result)){
+	if (mysqli_num_rows($result) > 0) {
+		while ($row = mysqli_fetch_assoc($result)){
 			$Sel = '';
 			if(!empty($Defaults[$Field]['Filter'])){
 				if($Defaults[$Field]['Filter'] == $row['Field']){
@@ -510,18 +510,18 @@ function linked_makeFilterdLinkedField($IDField , $ValueField, $FilterField, $Fi
             $FilterValue = get_current_user_id();
         }
 	$Query = "SELECT ".$IDField.", ".stripslashes($ValueField)." FROM `".$Table."` WHERE `".$FilterField."` = '".$FilterValue."' ORDER BY _Value_Field ASC;";
-	$Res = mysql_query($Query);
-//	return mysql_error();
+	$Res = mysqli_query($Query);
+//	return mysqli_error();
 	if(empty($Default)){
 		//$Return .= '<option value="null"></option>';
 	}
         $preTitle = '';
-        if(mysql_num_rows($Res) < 1){
+        if(mysqli_num_rows($Res) < 1){
             
             $preTitle = 'No items found';
         }
 	$Return .= '<option value="false">'.$preTitle.'</option>';
-	while($row = mysql_fetch_assoc($Res)){
+	while($row = mysqli_fetch_assoc($Res)){
 		$Sel = '';
 		if(!empty($Default)){
 			if($Default == $row[$IDField]){
@@ -538,7 +538,7 @@ function linked_makeFilterdLinkedFilter($EID, $IDField , $ValueField, $FilterFie
 
 	$Query = "SELECT ".$IDField.", ".$ValueField." FROM `".$Table."` WHERE `".$FilterField."` = '".$FilterValue."' ORDER BY `".$ValueField."` ASC;";
 	//return $Query;
-	$Res = mysql_query($Query);
+	$Res = mysqli_query($Query);
 	if(empty($Default)){
 		//$Return .= '<option value="null"></option>';
 	}
@@ -546,7 +546,7 @@ function linked_makeFilterdLinkedFilter($EID, $IDField , $ValueField, $FilterFie
 	
 	$Return = '<select id="filter_'.$Field.'" name="reportFilter['.$EID.']['.$Field.'][]" multiple="multiple" size="1" class="filterBoxes">';
 	$Return .= '<option></option>';
-	while($row = mysql_fetch_assoc($Res)){
+	while($row = mysqli_fetch_assoc($Res)){
 		$Sel = '';
 		if(!empty($Default)){
 			//dump($Default);
@@ -590,12 +590,12 @@ function linked_showFilter($Field, $Type, $Default, $Config, $EID){
                 $queryWhere = '';
                 if(!empty($Config['_Linkedfields'][$Field]['_Filter']) && !empty($Config['_Linkedfields'][$Field]['_FilterBy'])){
                     
-                    $queryWhere = " WHERE `".$Config['_Linkedfields'][$Field]['_Filter']."` = '".  mysql_real_escape_string($Config['_Linkedfields'][$Field]['_FilterBy'])."'";
+                    $queryWhere = " WHERE `".$Config['_Linkedfields'][$Field]['_Filter']."` = '".  mysqli_real_escape_string($Config['_Linkedfields'][$Field]['_FilterBy'])."'";
                 }
 
 
 
-		$Res = mysql_query("SELECT `".$Config['_Linkedfields'][$Field]['ID']."`, ".$outString." FROM `".$Config['_Linkedfields'][$Field]['Table']."` ".$queryWhere." ORDER BY `out_value` ASC;");
+		$Res = mysqli_query("SELECT `".$Config['_Linkedfields'][$Field]['ID']."`, ".$outString." FROM `".$Config['_Linkedfields'][$Field]['Table']."` ".$queryWhere." ORDER BY `out_value` ASC;");
                 if($Res == false){
                     vardump("SELECT `".$Config['_Linkedfields'][$Field]['ID']."`, ".$outString." FROM `".$Config['_Linkedfields'][$Field]['Table']."` ".$queryWhere." ORDER BY `out_value` ASC;");
                     die;
@@ -607,7 +607,7 @@ function linked_showFilter($Field, $Type, $Default, $Config, $EID){
                 }else{                    
                     $Return .= '<option></option>';
                 }
-		while($row = mysql_fetch_assoc($Res)){
+		while($row = mysqli_fetch_assoc($Res)){
 			$Sel = '';
 			if(!empty($Default[$Field])){
 				if(in_array($row[$Config['_Linkedfields'][$Field]['ID']], $Default[$Field])){
@@ -641,7 +641,7 @@ function linked_showFilter($Field, $Type, $Default, $Config, $EID){
 		}else{
 			$Return .= '<select disabled="disabled" id="filter_'.$Field.'" name="reportFilter['.$EID.']['.$Field.'][]" '.$Multiple.'>';
 			$Return .= '<option>Select '.$Config['_FieldTitle'][$Config['_Linkedfilterfields'][$Field]['Filter']].'</option>';
-		//	while($row = mysql_fetch_assoc($Res)){
+		//	while($row = mysqli_fetch_assoc($Res)){
 		//		$Sel = '';
 		//		if(!empty($Default)){
 		//			if(in_array($row[$Config['_Linkedfilterfields'][$Field]['ID']], $Default[$Field])){
@@ -691,7 +691,7 @@ function linked_autocomplete($eid, $Field, $query){
 	$Value = implode(',', $vals);
 	//$Value = $Config['_Linkedfields'][$Field]['Value'];
 	$Query = "SELECT ".$ID.",".$Value." FROM `".$Table."` WHERE ".$Wheres." `".$ID."` LIKE '%".$query."%' ORDER BY `".$vals[0]."` ASC;";
-	$Res = mysql_query($Query);
+	$Res = mysqli_query($Query);
 	//echo $Query;
 	header ("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 	header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT"); // always modified
@@ -703,7 +703,7 @@ function linked_autocomplete($eid, $Field, $query){
 	//echo '<results>';
 	echo "[";
 	$index = 0;
-	while($Out = mysql_fetch_assoc($Res)){
+	while($Out = mysqli_fetch_assoc($Res)){
 		$OutString = array();
 		$valindex = 0;
 		foreach($vals as $visValues){
@@ -729,7 +729,7 @@ function linked_autocomplete($eid, $Field, $query){
 	echo implode(", ", $arr);
 	echo "]";
 	//echo '</results>';
-	mysql_close();
+	mysqli_close();
 	die;
 }
 

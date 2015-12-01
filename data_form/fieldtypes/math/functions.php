@@ -12,9 +12,9 @@ function math_processValue($Value, $Type, $Field, $Config, $EID, $Data, $Caller 
             //echo $_SESSION['queries'][$EID];
 
 
-            $Res = mysql_query($_SESSION['queries'][$EID]);
-            //mysql_data_seek($Res, 0);
-            while($postData = mysql_fetch_assoc($Res)){
+            $Res = mysqli_query($_SESSION['queries'][$EID]);
+            //mysqli_data_seek($Res, 0);
+            while($postData = mysqli_fetch_assoc($Res)){
                 $Pre[] = $postData[$Field];
                 //dump($postData);
                 //echo $Field;
@@ -116,9 +116,9 @@ function math_loadfields($Table, $Field, $Defaults = false, $Media = false){
 
         
         $Config = $Media['Content'];       
-	$result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
-	if (mysql_num_rows($result) > 0) {
-		while ($row = mysql_fetch_assoc($result)){
+	$result = mysqli_query("SHOW COLUMNS FROM `".$Table."`");
+	if (mysqli_num_rows($result) > 0) {
+		while ($row = mysqli_fetch_assoc($result)){
 			$Sel = '';
                         
 			if(!empty($Defaults['A'])){
@@ -223,11 +223,11 @@ return $IReturn.$VReturn;
 }
 function math_loaddates($Table, $Field, $Config){
 
-	$result = mysql_query("SHOW COLUMNS FROM `".$Table."`");
-	if (mysql_num_rows($result) > 0) {
+	$result = mysqli_query("SHOW COLUMNS FROM `".$Table."`");
+	if (mysqli_num_rows($result) > 0) {
                 $IDReturn .= '<option value="NOW" >NOW</option>';
                 $ValueReturn .= '<option value="NOW" >NOW</option>';
-		while ($row = mysql_fetch_assoc($result)){
+		while ($row = mysqli_fetch_assoc($result)){
 			$Sel = '';
 			if(!empty($Config['Content']['_dateDiff'][$Field]['B'])){
 				if($Config['Content']['_dateDiff'][$Field]['B'] == $row['Field']){
