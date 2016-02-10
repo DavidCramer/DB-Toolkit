@@ -5,7 +5,7 @@
 
 switch ($Config['_SelectType'][$Field]){
     case 'dropdown':
-        echo '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" class="'.$Req.'" >';
+        echo '<select name="dataForm['.$Element['ID'].']['.$Field.']" id="entry_'.$Element['ID'].'_'.$Field.'" class="'.$Req.' '.$Config['_FormFieldWidth'][$Field].'" >';
         foreach($Config['_SelectOptions'][$Field] as $optionValue){
             $sel = '';
             if(!empty($Val)){
